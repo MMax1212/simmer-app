@@ -77,7 +77,7 @@ npm run dev
 
 ## 👥 Team Simmer Roles
 - **Maximo Mora** — Product Owner (PO), Full-Stack Developer
-- **Bryan Moreno** — Scrum Master, DevOps & Backend Developer
-- **Ulises Diaz** — Frontend Developer, UI/UX Lead
-- **John Weaver** — Database Architect, Backend Developer
-- **Benjamin Ong** — QA & Testing Lead, Developer
+- **Bryan Moreno** — Scrum Master, Full-Stack Developer
+- **Ulises Diaz** — Full-Stack Developer
+- **John Weaver** — Full-Stack Developer
+- **Benjamin Ong** — Full-Stack Developer
