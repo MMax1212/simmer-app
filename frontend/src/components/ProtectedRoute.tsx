@@ -8,6 +8,6 @@ export function ProtectedRoute({ children, adminOnly = false }: { children: Reac
 
   if (loading) return <p className="muted">Loading…</p>;
   if (!user) return <Navigate to="/login" replace state={{ from: location.pathname }} />;
-  if (adminOnly && user.role !== "admin") return <Navigate to="/" replace />;
+  if (adminOnly && user.role !== "admin") return <Navigate to="/" replace state={{ notice: "Access denied: administrators only." }} />;
   return <>{children}</>;
 }

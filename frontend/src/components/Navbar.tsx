@@ -11,7 +11,7 @@ export function Navbar() {
       <nav>
         {user ? (
           <>
-            <NavLink to="/recipes/mine">My Recipes</NavLink>
+            <NavLink to="/recipes/my-recipes">My Recipes</NavLink>
             <NavLink to="/recipes/new">New Recipe</NavLink>
             <NavLink to="/profile">Profile</NavLink>
             {user.role === "admin" && <NavLink to="/admin">Admin</NavLink>}

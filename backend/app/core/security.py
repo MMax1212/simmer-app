@@ -2,16 +2,25 @@ from datetime import datetime, timedelta, timezone
 
 import bcrypt
 import jwt
+from argon2 import PasswordHasher
+from argon2.exceptions import VerificationError, InvalidHashError
 
 from app.core.config import settings
 
+password_hasher = PasswordHasher()
+
 
 def hash_password(password: str) -> str:
-    return bcrypt.hashpw(password.encode(), bcrypt.gensalt()).decode()
+    return password_hasher.hash(password)
 
 
 def verify_password(password: str, hashed: str) -> bool:
-    return bcrypt.checkpw(password.encode(), hashed.encode())
+    try:
+        if hashed.startswith("$2"):
+            return len(password.encode()) <= 72 and bcrypt.checkpw(password.encode(), hashed.encode())
+        return password_hasher.verify(hashed, password)
+    except (VerificationError, InvalidHashError, ValueError):
+        return False
 
 
 def create_access_token(user_id: int) -> str:
@@ -24,5 +33,5 @@ def decode_access_token(token: str) -> int | None:
     try:
         payload = jwt.decode(token, settings.secret_key, algorithms=[settings.algorithm])
         return int(payload["sub"])
-    except (jwt.PyJWTError, KeyError, ValueError):
+    except (jwt.PyJWTError, KeyError, ValueError, TypeError):
         return None

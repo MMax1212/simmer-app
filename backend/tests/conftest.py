@@ -18,6 +18,7 @@ def db_session():
     session = TestSession()
     yield session
     session.close()
+    engine.dispose()
 
 
 @pytest.fixture()
@@ -28,12 +29,12 @@ def client(db_session):
 
 
 def register(client, email="ana@example.com", username="ana", password="password123"):
-    return client.post("/api/auth/register", json={"email": email, "username": username, "password": password})
+    return client.post("/api/v1/auth/register", json={"email": email, "username": username, "password": password})
 
 
 def auth_headers(client, email="ana@example.com", username="ana", password="password123"):
     register(client, email, username, password)
-    token = client.post("/api/auth/login", json={"email": email, "password": password}).json()["access_token"]
+    token = client.post("/api/v1/auth/login", json={"username_or_email": email, "password": password}).json()["access_token"]
     return {"Authorization": f"Bearer {token}"}
 
 

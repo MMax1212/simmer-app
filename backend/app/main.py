@@ -1,36 +1,25 @@
-from contextlib import asynccontextmanager
-
 from fastapi import FastAPI
+from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
 
-from app import models  # noqa: F401  (registers tables on Base.metadata)
 from app.api import admin, auth, recipes, users
-from app.core.database import Base, engine
+from app.core.config import settings
 
-
-@asynccontextmanager
-async def lifespan(_: FastAPI):
-    # Creates missing tables on startup. Fine for Sprint 1; switch to Alembic
-    # migrations before the schema starts changing under teammates' feet.
-    Base.metadata.create_all(bind=engine)
-    yield
-
-
-app = FastAPI(
-    title="Simmer API",
-    description="Backend REST API for Simmer Cooking Social Network",
-    version="1.0.0",
-    lifespan=lifespan,
-)
-
-# Allow CORS during local development between frontend (5173) and backend (8000)
+app = FastAPI(title="Simmer API", version="1.0.0")
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173", "http://127.0.0.1:5173"],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
+    allow_origins=settings.cors_origins,
+    allow_credentials=True, allow_methods=["*"], allow_headers=["*"],
 )
+
+
+@app.exception_handler(RequestValidationError)
+async def validation_error_handler(_, exc: RequestValidationError):
+    # Never echo request bodies, passwords, or exception contexts into responses.
+    details = [{"loc": error["loc"], "msg": error["msg"], "type": error["type"]} for error in exc.errors()]
+    return JSONResponse(status_code=422, content={"detail": details})
+
 
 app.include_router(auth.router)
 app.include_router(users.router)
@@ -40,5 +29,4 @@ app.include_router(admin.router)
 
 @app.get("/api/health")
 def health_check():
-    """Health check endpoint to verify backend connectivity."""
     return {"status": "ok", "app": "Simmer Backend", "version": "1.0.0"}

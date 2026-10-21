@@ -1,25 +1,27 @@
 import { useEffect, useState, type ReactNode } from "react";
-import { api, tokenStore, type User } from "../services/api";
+import { api, SESSION_EXPIRED, tokenStore, type User } from "../services/api";
 import { AuthContext } from "./auth";
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
-  // Only "loading" if there's a saved token to check.
   const [loading, setLoading] = useState(() => tokenStore.get() !== null);
 
-  // On page load, if we have a saved token, fetch who it belongs to.
   useEffect(() => {
-    if (!tokenStore.get()) return;
-    api.me()
-      .then(setUser)
-      .catch(() => tokenStore.clear()) // expired or invalid token
-      .finally(() => setLoading(false));
+    let active = true;
+    const expire = () => { setUser(null); setLoading(false); };
+    window.addEventListener(SESSION_EXPIRED, expire);
+    if (tokenStore.get()) {
+      api.me().then((me) => { if (active) setUser(me); })
+        .catch(() => { if (active) { tokenStore.clear(); setUser(null); } })
+        .finally(() => { if (active) setLoading(false); });
+    }
+    return () => { active = false; window.removeEventListener(SESSION_EXPIRED, expire); };
   }, []);
 
-  async function login(email: string, password: string) {
-    const { access_token } = await api.login(email, password);
-    tokenStore.set(access_token);
-    setUser(await api.me());
+  async function login(identifier: string, password: string) {
+    const response = await api.login(identifier, password);
+    tokenStore.set(response.access_token);
+    setUser(response.user);
   }
 
   async function register(email: string, username: string, password: string) {
@@ -32,9 +34,5 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setUser(null);
   }
 
-  return (
-    <AuthContext.Provider value={{ user, loading, login, register, logout, setUser }}>
-      {children}
-    </AuthContext.Provider>
-  );
+  return <AuthContext.Provider value={{ user, loading, login, register, logout, setUser }}>{children}</AuthContext.Provider>;
 }

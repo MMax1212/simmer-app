@@ -34,9 +34,9 @@ export function Register() {
       <label>Email<input type="email" value={form.email} onChange={set("email")} required autoComplete="email" /></label>
       <label>
         Username
-        <input value={form.username} onChange={set("username")} required minLength={3} maxLength={30} pattern="[A-Za-z0-9_]+" title="Letters, numbers and underscores only" autoComplete="username" />
+        <input value={form.username} onChange={set("username")} required minLength={3} maxLength={50} pattern="[A-Za-z0-9_]+" title="Letters, numbers and underscores only" autoComplete="username" />
       </label>
-      <label>Password<input type="password" value={form.password} onChange={set("password")} required minLength={8} autoComplete="new-password" /></label>
+      <label>Password<input type="password" value={form.password} onChange={set("password")} required minLength={8} maxLength={1024} autoComplete="new-password" /></label>
       <label>Confirm password<input type="password" value={form.confirm} onChange={set("confirm")} required autoComplete="new-password" /></label>
       <ErrorMessage error={error} />
       <button type="submit" disabled={busy}>{busy ? "Creating…" : "Sign up"}</button>

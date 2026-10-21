@@ -1,13 +1,13 @@
 import { useState, type FormEvent } from "react";
 import { ErrorMessage } from "../components/ErrorMessage";
 import { useAuth } from "../context/auth";
-import { api, DIETARY_PREFS, errorText } from "../services/api";
+import { api, CULINARY_PREFS, errorText } from "../services/api";
 
 export function Profile() {
   const { user, setUser } = useAuth();
   const [bio, setBio] = useState(user?.bio ?? "");
   const [avatarUrl, setAvatarUrl] = useState(user?.avatar_url ?? "");
-  const [prefs, setPrefs] = useState<string[]>(user?.dietary_prefs ?? []);
+  const [prefs, setPrefs] = useState<string[]>(user?.culinary_preferences ?? []);
   const [error, setError] = useState<string | null>(null);
   const [saved, setSaved] = useState(false);
 
@@ -20,7 +20,7 @@ export function Profile() {
     setError(null);
     setSaved(false);
     try {
-      setUser(await api.updateProfile({ bio: bio || null, avatar_url: avatarUrl || null, dietary_prefs: prefs }));
+      setUser(await api.updateProfile({ bio: bio || null, avatar_url: avatarUrl || null, culinary_preferences: prefs }));
       setSaved(true);
     } catch (err) {
       setError(errorText(err));
@@ -37,11 +37,11 @@ export function Profile() {
         </div>
       </div>
       <label>Bio<textarea value={bio} onChange={(e) => setBio(e.target.value)} maxLength={500} rows={3} placeholder="Tell the community what you love to cook" /></label>
-      <label>Avatar image URL<input type="url" value={avatarUrl} onChange={(e) => setAvatarUrl(e.target.value)} placeholder="https://…" /></label>
+      <label>Avatar image URL<input type="url" value={avatarUrl} onChange={(e) => setAvatarUrl(e.target.value)} placeholder="https://…" maxLength={255} pattern="https?://.*" /></label>
       <fieldset>
-        <legend>Dietary preferences</legend>
+        <legend>Culinary preferences</legend>
         <div className="chips">
-          {DIETARY_PREFS.map((p) => (
+          {Array.from(new Set([...CULINARY_PREFS, ...prefs])).map((p) => (
             <label key={p} className={`chip ${prefs.includes(p) ? "on" : ""}`}>
               <input type="checkbox" checked={prefs.includes(p)} onChange={() => toggle(p)} />
               {p}

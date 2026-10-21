@@ -12,19 +12,24 @@ export function RecipeDetail() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    api.getRecipe(Number(id)).then(setRecipe).catch((e) => setError(errorText(e)));
+    let active = true;
+    setRecipe(null);
+    setError(null);
+    api.getRecipe(Number(id)).then((value) => { if (active) setRecipe(value); })
+      .catch((e) => { if (active) setError(errorText(e)); });
+    return () => { active = false; };
   }, [id]);
 
   if (error) return <ErrorMessage error={error} />;
   if (!recipe) return <p className="muted">Loading…</p>;
 
-  const canEdit = user && (user.id === recipe.owner_id || user.role === "admin");
+  const canEdit = user && (user.id === recipe.author_id || user.role === "admin");
 
   async function onDelete() {
     if (!recipe || !confirm(`Delete "${recipe.title}"?`)) return;
     try {
       await api.deleteRecipe(recipe.id);
-      navigate("/recipes/mine");
+      navigate("/recipes/my-recipes");
     } catch (e) {
       setError(errorText(e));
     }
@@ -33,7 +38,9 @@ export function RecipeDetail() {
   return (
     <article className="card">
       <h1>{recipe.title}</h1>
-      <p className="muted">by {recipe.owner_username}</p>
+      <p className="muted">by {recipe.author_username}</p>
+      {recipe.image_url && <img src={recipe.image_url} alt={recipe.title} className="max-h-80 w-full rounded-lg object-cover" />}
+      <p className="muted">{[recipe.cuisine, recipe.meal_type, recipe.difficulty].filter(Boolean).join(" · ")}</p>
       {recipe.description && <p>{recipe.description}</p>}
       <ul className="meta">
         {recipe.prep_time_mins != null && <li>Prep {recipe.prep_time_mins} min</li>}
@@ -45,13 +52,13 @@ export function RecipeDetail() {
           <h2>Ingredients</h2>
           <ul>
             {recipe.ingredients.map((i) => (
-              <li key={i.id}>{[i.quantity, i.unit, i.name].filter((x) => x != null && x !== "").join(" ")}</li>
+              <li key={i.id}>{[i.amount, i.unit, i.name].filter((x) => x != null && x !== "").join(" ")}</li>
             ))}
           </ul>
         </>
       )}
       <h2>Instructions</h2>
-      <p className="instructions">{recipe.instructions}</p>
+      <ol className="list-decimal pl-6 space-y-3">{recipe.steps.map((step) => <li key={step.id} className="instructions">{step.instruction}</li>)}</ol>
       {canEdit && (
         <div className="row">
           <Link to={`/recipes/${recipe.id}/edit`} className="button">Edit</Link>

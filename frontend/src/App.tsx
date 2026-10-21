@@ -23,7 +23,7 @@ export default function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
-            <Route path="/recipes/mine" element={<ProtectedRoute><MyRecipes /></ProtectedRoute>} />
+            <Route path="/recipes/my-recipes" element={<ProtectedRoute><MyRecipes /></ProtectedRoute>} />
             <Route path="/recipes/new" element={<ProtectedRoute><RecipeForm /></ProtectedRoute>} />
             <Route path="/recipes/:id/edit" element={<ProtectedRoute><RecipeForm /></ProtectedRoute>} />
             <Route path="/recipes/:id" element={<RecipeDetail />} />

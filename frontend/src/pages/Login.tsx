@@ -7,7 +7,7 @@ import { errorText } from "../services/api";
 export function Login() {
   const { login } = useAuth();
   const navigate = useNavigate();
-  const from = (useLocation().state as { from?: string } | null)?.from ?? "/recipes/mine";
+  const from = (useLocation().state as { from?: string } | null)?.from ?? "/recipes/my-recipes";
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
@@ -30,8 +30,8 @@ export function Login() {
   return (
     <form className="card narrow" onSubmit={onSubmit}>
       <h1>Log in</h1>
-      <label>Email<input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required autoComplete="email" /></label>
-      <label>Password<input type="password" value={password} onChange={(e) => setPassword(e.target.value)} required autoComplete="current-password" /></label>
+      <label>Username or email<input type="text" value={email} onChange={(e) => setEmail(e.target.value)} required autoComplete="username" /></label>
+      <label>Password<input type="password" value={password} onChange={(e) => setPassword(e.target.value)} required maxLength={1024} autoComplete="current-password" /></label>
       <ErrorMessage error={error} />
       <button type="submit" disabled={busy}>{busy ? "Logging in…" : "Log in"}</button>
       <p className="muted">New here? <Link to="/register">Create an account</Link></p>
