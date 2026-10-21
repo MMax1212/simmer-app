@@ -81,3 +81,36 @@ npm run dev
 - **Ulises Diaz** — Full-Stack Developer
 - **John Weaver** — Full-Stack Developer
 - **Benjamin Ong** — Full-Stack Developer
+
+---
+
+## Continuous Integration
+
+GitHub Actions runs the `CI` workflow on every push and pull request. It can also
+be started manually from the repository's **Actions** tab once the workflow is
+on the default branch.
+
+- **Backend tests:** installs `backend/requirements.txt` with Python 3.11 and
+  runs `python -m pytest -q` from `backend/`. Tests use an isolated in-memory
+  SQLite database; no Docker, PostgreSQL server, or repository secrets are needed.
+- **Frontend build:** installs the committed lockfile with `npm ci` using
+  Node.js 24, then runs `npm run build` from `frontend/`. This checks TypeScript
+  and creates the production build. There is no frontend test suite yet.
+
+To run the same checks locally, install the dependencies above, then run:
+
+```bash
+cd backend
+python -m pytest -q
+```
+
+```bash
+cd frontend
+npm ci
+npm run build
+```
+
+Open a pull request's **Checks** tab to see each job and any failure details.
+The workflow does not deploy the application. To block merging when checks fail,
+a repository administrator must configure the `Backend tests` and
+`Frontend build` checks as required in the branch rules for `main`.
