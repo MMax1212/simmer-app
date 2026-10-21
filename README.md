@@ -49,8 +49,8 @@ simmer/
 
 ### 1. Clone the Repository
 ```bash
-git clone https://github.com/YOUR_TEAM_OR_ORG/simmer.git
-cd simmer
+git clone https://github.com/MMax1212/simmer-app.git
+cd simmer-app
 ```
 
 ### 2. Run the Backend (Python)

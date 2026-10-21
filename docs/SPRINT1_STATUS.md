@@ -17,7 +17,7 @@ contracts and adds regression and integration coverage.
 | Personal recipe library, pagination and details | Author-filtered list with offset/limit, paginated cards, ordered detail display; cross-user, UI and browser tests |
 | Expired/malformed token handling | Backend 401; client clears token/auth state and protected routes redirect; API/frontend/browser tests |
 | Missing recipe | Backend 404 and displayed error; API/frontend tests |
-| Database migrations | Alembic baseline + data-preserving upgrade; fresh, repeated and existing-unversioned database tests |
+| Database migrations | Alembic baseline + data-preserving upgrade; fresh, repeated, existing-unversioned and failed-upgrade rollback tests |
 | Frontend stack | React 18, TypeScript, React Router, Vite, Tailwind via Vite plugin |
 | CI foundation | Separate backend, frontend tests/build and full-browser jobs on push/PR |
 | Complete user journey | Real Chromium registration, profile save/reload, recipe create/edit/list/reload/delete, logout and username login |

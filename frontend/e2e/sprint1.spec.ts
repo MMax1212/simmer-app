@@ -32,6 +32,7 @@ test("register, edit profile, create/edit recipe, reload library, and delete", a
   await page.getByRole("button", { name: "Save recipe" }).click();
   await expect(page.getByRole("heading", { name: "Browser Pasta" })).toBeVisible();
   await expect(page.getByText("Add tomato sauce", { exact: true })).toBeVisible();
+  await expect(page.locator("article ol")).toHaveCSS("list-style-type", "decimal");
   await page.screenshot({ path: test.info().outputPath("recipe-detail.png"), fullPage: true });
   await page.getByRole("link", { name: "Edit", exact: true }).click();
   await page.getByLabel("Title", { exact: true }).fill("Better Browser Pasta");

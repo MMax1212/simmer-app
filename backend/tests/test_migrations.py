@@ -5,6 +5,8 @@ from alembic.config import Config
 from fastapi.testclient import TestClient
 from sqlalchemy import create_engine, inspect, text
 from sqlalchemy.orm import Session
+from sqlalchemy.exc import IntegrityError
+import pytest
 
 from app.core.database import get_db
 from app.core.security import hash_password
@@ -38,6 +40,26 @@ def test_fresh_database_upgrades_and_can_store_complete_recipe(tmp_path):
                 assert client.post("/api/v1/recipes", headers=h, json=PASTA).status_code == 201
         finally:
             app.dependency_overrides.clear()
+    engine.dispose()
+
+
+def test_failed_upgrade_rolls_back_schema_and_preserves_data(tmp_path):
+    engine = create_engine(f"sqlite:///{tmp_path / 'conflict.db'}")
+    migrate(engine, "0001")
+    with engine.begin() as conn:
+        for index, username in enumerate(["ANA", "ana"], 1):
+            conn.execute(text("""INSERT INTO users
+                (id,email,username,hashed_password,role,is_active,created_at,dietary_prefs)
+                VALUES (:id,:email,:username,'legacy-hash','user',1,'2026-10-12','[]')"""),
+                {"id": index, "email": f"user{index}@example.com", "username": username})
+    with pytest.raises(IntegrityError):
+        migrate(engine)
+    columns = {column["name"] for column in inspect(engine).get_columns("users")}
+    assert "dietary_prefs" in columns and "culinary_preferences" not in columns
+    assert "ingredients" in inspect(engine).get_table_names()
+    with engine.connect() as conn:
+        assert conn.scalar(text("SELECT count(*) FROM users")) == 2
+        assert conn.scalar(text("SELECT version_num FROM alembic_version")) == "0001"
     engine.dispose()
 
 

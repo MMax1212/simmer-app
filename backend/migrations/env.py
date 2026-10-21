@@ -10,7 +10,12 @@ target_metadata = Base.metadata
 
 
 def run_migrations(connection):
-    context.configure(connection=connection, target_metadata=target_metadata, render_as_batch=True)
+    # Python's SQLite driver otherwise auto-commits DDL before its first write.
+    # An explicit transaction lets a failed upgrade restore the original schema/data.
+    if connection.dialect.name == "sqlite" and not connection.connection.driver_connection.in_transaction:
+        connection.exec_driver_sql("BEGIN")
+    context.configure(connection=connection, target_metadata=target_metadata, render_as_batch=True,
+                      transactional_ddl=True)
     with context.begin_transaction():
         context.run_migrations()
 
@@ -23,6 +28,6 @@ else:
     # Programmatic callers (tests) can explicitly supply their own database URL.
     url = config.attributes.get("database_url", settings.database_url)
     engine = create_engine(url, poolclass=pool.NullPool)
-    with engine.connect() as connection:
+    with engine.begin() as connection:
         run_migrations(connection)
     engine.dispose()
