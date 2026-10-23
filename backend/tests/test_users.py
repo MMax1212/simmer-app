@@ -1,6 +1,7 @@
 from tests.conftest import auth_headers
 
 
+# --- US1.3: User Profile Management (Profile Partial Update & Persistence) ---
 def test_update_profile_partial(client):
     h = auth_headers(client)
     res = client.put("/api/v1/users/me", headers=h, json={"bio": "I love pasta", "culinary_preferences": ["vegan", "gluten-free"]})
@@ -12,11 +13,13 @@ def test_update_profile_partial(client):
     assert res.json()["bio"] == "I love pasta"
 
 
+# --- US1.3: User Profile Management (Input Validation on Preferences) ---
 def test_blank_culinary_preference_rejected(client):
     h = auth_headers(client)
     assert client.put("/api/v1/users/me", headers=h, json={"culinary_preferences": [" "]}).status_code == 422
 
 
+# --- US1.3: User Profile Management (Public Profile Privacy - Hiding Email) ---
 def test_public_profile_hides_email(client):
     auth_headers(client)
     res = client.get("/api/v1/users/ana")
@@ -24,6 +27,7 @@ def test_public_profile_hides_email(client):
     assert client.get("/api/v1/users/nobody").status_code == 404
 
 
+# --- US1.2: Admin Account & RBAC (Admin Endpoints Authorization & Deactivation) ---
 def test_admin_endpoints(client, make_admin):
     user_h = auth_headers(client)
     assert client.get("/api/v1/admin/users", headers=user_h).status_code == 403

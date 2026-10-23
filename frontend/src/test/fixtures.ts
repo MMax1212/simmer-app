@@ -1,10 +1,12 @@
 import type { Recipe, User } from "../services/api";
 
+// --- US1.1, US1.2 & US1.3: Mock User Test Fixture ---
 export const user: User = {
   id: 1, username: "ana", email: "ana@example.com", role: "user", is_active: true,
   bio: null, avatar_url: null, culinary_preferences: [], created_at: "2026-10-12",
 };
 
+// --- US1.4 & US1.5: Mock Recipe Test Fixture ---
 export const recipe: Recipe = {
   id: 1, author_id: 1, author_username: "ana", title: "Tomato Pasta", description: "Weeknight dinner",
   cuisine: "Italian", meal_type: "Dinner", difficulty: "easy", image_url: null,

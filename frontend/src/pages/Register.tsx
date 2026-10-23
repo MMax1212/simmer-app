@@ -4,6 +4,7 @@ import { ErrorMessage } from "../components/ErrorMessage";
 import { useAuth } from "../context/auth";
 import { errorText } from "../services/api";
 
+// --- US1.1: User Account Registration & Login (Registration View & Client Validation) ---
 export function Register() {
   const { register } = useAuth();
   const navigate = useNavigate();
@@ -13,6 +14,7 @@ export function Register() {
   const set = (k: keyof typeof form) => (e: ChangeEvent<HTMLInputElement>) =>
     setForm({ ...form, [k]: k === "username" ? e.target.value.replace(/\s/g, "") : e.target.value });
 
+  // --- US1.1: Task 1.5 & Task 1.6: Client-Side Input Validation & API Integration ---
   async function onSubmit(e: FormEvent) {
     e.preventDefault();
     if (form.password !== form.confirm) return setError("Passwords don't match");

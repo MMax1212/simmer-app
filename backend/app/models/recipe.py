@@ -6,6 +6,7 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 from app.core.database import Base
 
 
+# --- US1.4: Recipe Creation & Saving (Core Recipe Model) ---
 class Recipe(Base):
     __tablename__ = "recipes"
 
@@ -32,11 +33,13 @@ class Recipe(Base):
         back_populates="recipe", cascade="all, delete-orphan", order_by="RecipeStep.step_number"
     )
 
+    # --- US1.5: Personal Recipe Tab (Author display helper) ---
     @property
     def author_username(self) -> str:
         return self.owner.username
 
 
+# --- US1.4: Recipe Creation & Saving (Relational Ingredients Model) ---
 class Ingredient(Base):
     __tablename__ = "recipe_ingredients"
 
@@ -49,6 +52,7 @@ class Ingredient(Base):
     recipe: Mapped[Recipe] = relationship(back_populates="ingredients")
 
 
+# --- US1.4: Recipe Creation & Saving (Relational Instruction Steps Model) ---
 class RecipeStep(Base):
     __tablename__ = "recipe_steps"
     __table_args__ = (UniqueConstraint("recipe_id", "step_number", name="uq_recipe_step_number"),)

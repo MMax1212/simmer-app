@@ -3,6 +3,7 @@ import { ErrorMessage } from "../components/ErrorMessage";
 import { useAuth } from "../context/auth";
 import { api, CULINARY_PREFS, errorText } from "../services/api";
 
+// --- US1.3: User Profile Management (Profile Viewing & Editing Interface) ---
 export function Profile() {
   const { user, setUser } = useAuth();
   const [bio, setBio] = useState(user?.bio ?? "");
@@ -15,6 +16,7 @@ export function Profile() {
 
   const toggle = (p: string) => setPrefs(prefs.includes(p) ? prefs.filter((x) => x !== p) : [...prefs, p]);
 
+  // --- US1.3: Task 3.3: Submit Profile Updates to Backend ---
   async function onSubmit(e: FormEvent) {
     e.preventDefault();
     setError(null);

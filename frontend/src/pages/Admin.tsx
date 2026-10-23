@@ -3,12 +3,14 @@ import { ErrorMessage } from "../components/ErrorMessage";
 import { useAuth } from "../context/auth";
 import { api, errorText, type User } from "../services/api";
 
+// --- US1.2: Admin Account & RBAC (Admin User Management Console) ---
 export function Admin() {
   const { user: me } = useAuth();
   const [users, setUsers] = useState<User[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [pending, setPending] = useState<number | null>(null);
 
+  // --- US1.2: Task 2.5: Load User List from Admin API ---
   useEffect(() => {
     let active = true;
     api.adminListUsers().then((items) => { if (active) setUsers(items); })
@@ -16,6 +18,7 @@ export function Admin() {
     return () => { active = false; };
   }, []);
 
+  // --- US1.2: Task 2.4 & 2.5: Update User Status or Role ---
   async function update(user: User, changes: { is_active?: boolean; role?: string }) {
     setError(null);
     setPending(user.id);

@@ -14,6 +14,7 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/v1/auth/token")
 DbSession = Annotated[Session, Depends(get_db)]
 
 
+# --- US1.1: User Account Registration & Login (Bearer Token & Current User Dependency) ---
 def get_current_user(db: DbSession, token: Annotated[str, Depends(oauth2_scheme)]) -> User:
     user_id = decode_access_token(token)
     user = db.get(User, user_id) if user_id is not None else None
@@ -29,6 +30,7 @@ def get_current_user(db: DbSession, token: Annotated[str, Depends(oauth2_scheme)
 CurrentUser = Annotated[User, Depends(get_current_user)]
 
 
+# --- US1.2: Admin Account & RBAC (Admin-Only Role Guard Dependency) ---
 def require_admin(user: CurrentUser) -> User:
     if user.role != "admin":
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Admins only")

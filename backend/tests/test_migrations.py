@@ -23,6 +23,7 @@ def migrate(engine, revision="head"):
         command.upgrade(config, revision)
 
 
+# --- INF-1.1, US1.1 & US1.4: Database Schema Upgrade & Complete Persistence ---
 def test_fresh_database_upgrades_and_can_store_complete_recipe(tmp_path):
     engine = create_engine(f"sqlite:///{tmp_path / 'fresh.db'}")
     migrate(engine)
@@ -43,6 +44,7 @@ def test_fresh_database_upgrades_and_can_store_complete_recipe(tmp_path):
     engine.dispose()
 
 
+# --- INF-1.1 & US1.1: Migration Rollback Safety & Data Preservation on Conflict ---
 def test_failed_upgrade_rolls_back_schema_and_preserves_data(tmp_path):
     engine = create_engine(f"sqlite:///{tmp_path / 'conflict.db'}")
     migrate(engine, "0001")
@@ -63,6 +65,7 @@ def test_failed_upgrade_rolls_back_schema_and_preserves_data(tmp_path):
     engine.dispose()
 
 
+# --- US1.1, US1.3 & US1.4: Legacy Database Adoption & Measurement Preservation ---
 def test_existing_unversioned_database_preserves_accounts_recipes_and_unknown_measurements(tmp_path):
     engine = create_engine(f"sqlite:///{tmp_path / 'legacy.db'}")
     migrate(engine, "0001")

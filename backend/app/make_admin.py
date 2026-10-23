@@ -1,4 +1,4 @@
-"""Promote an existing account to admin.
+"""Promote an existing account to admin (US1.2: Admin Account & RBAC).
 
 Usage (from backend/, venv active):  python -m app.make_admin you@example.com
 """

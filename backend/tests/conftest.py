@@ -28,16 +28,19 @@ def client(db_session):
     app.dependency_overrides.clear()
 
 
+# --- US1.1: Registration Test Helper ---
 def register(client, email="ana@example.com", username="ana", password="password123"):
     return client.post("/api/v1/auth/register", json={"email": email, "username": username, "password": password})
 
 
+# --- US1.1: Authentication Headers Test Helper (Login & JWT Generation) ---
 def auth_headers(client, email="ana@example.com", username="ana", password="password123"):
     register(client, email, username, password)
     token = client.post("/api/v1/auth/login", json={"username_or_email": email, "password": password}).json()["access_token"]
     return {"Authorization": f"Bearer {token}"}
 
 
+# --- US1.2: Admin Promotion Test Fixture ---
 @pytest.fixture()
 def make_admin(db_session):
     def _make(email):

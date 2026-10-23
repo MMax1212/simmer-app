@@ -2,12 +2,14 @@ const API_URL = import.meta.env.VITE_API_URL ?? "";
 const TOKEN_KEY = "simmer_token";
 export const SESSION_EXPIRED = "simmer:session-expired";
 
+// --- US1.3: User Profile Management (Default Culinary Preference Tags) ---
 export const CULINARY_PREFS = [
   "Italian", "Mexican", "Vegan", "Quick & Easy", "Baking",
   "vegetarian", "vegan", "pescatarian", "gluten-free", "dairy-free",
   "nut-free", "halal", "kosher", "low-carb",
 ];
 
+// --- US1.1, US1.2, US1.3: User Profile & Authentication Data Model ---
 export interface User {
   id: number;
   username: string;
@@ -20,6 +22,7 @@ export interface User {
   created_at: string;
 }
 
+// --- US1.4: Recipe Creation & Saving (Ingredient Data Structure) ---
 export interface Ingredient {
   id?: number;
   name: string;
@@ -27,12 +30,14 @@ export interface Ingredient {
   unit: string | null;
 }
 
+// --- US1.4: Recipe Creation & Saving (Recipe Step Data Structure) ---
 export interface RecipeStep {
   id?: number;
   step_number: number;
   instruction: string;
 }
 
+// --- US1.4: Recipe Creation & Saving (Recipe Input Payload) ---
 export interface RecipeInput {
   title: string;
   description: string | null;
@@ -47,6 +52,7 @@ export interface RecipeInput {
   steps: RecipeStep[];
 }
 
+// --- US1.5: Personal Recipe Tab (Full Recipe Entity) ---
 export interface Recipe extends RecipeInput {
   id: number;
   author_id: number;
@@ -59,12 +65,14 @@ export class ApiError extends Error {
   constructor(public status: number, message: string) { super(message); }
 }
 
+// --- US1.1: User Account Registration & Login (Local Token Persistence) ---
 export const tokenStore = {
   get: () => localStorage.getItem(TOKEN_KEY),
   set: (token: string) => localStorage.setItem(TOKEN_KEY, token),
   clear: () => localStorage.removeItem(TOKEN_KEY),
 };
 
+// --- US1.1: HTTP Request Interceptor with Bearer Token & Session Handling ---
 async function request<T>(path: string, options: RequestInit = {}, authenticated = true): Promise<T> {
   const headers = new Headers(options.headers);
   if (options.body) headers.set("Content-Type", "application/json");
@@ -90,6 +98,7 @@ async function request<T>(path: string, options: RequestInit = {}, authenticated
 const json = (body: unknown) => JSON.stringify(body);
 
 export const api = {
+  // --- US1.1: User Account Registration & Login Endpoints ---
   register: (email: string, username: string, password: string) =>
     request<User>("/api/v1/auth/register", { method: "POST", body: json({ email, username, password }) }, false),
   login: (username_or_email: string, password: string) =>
@@ -97,16 +106,26 @@ export const api = {
       method: "POST", body: json({ username_or_email, password }),
     }, false),
   me: () => request<User>("/api/v1/auth/me"),
+
+  // --- US1.3: User Profile Management Endpoint ---
   updateProfile: (changes: Partial<Pick<User, "bio" | "avatar_url" | "culinary_preferences">>) =>
     request<User>("/api/v1/users/me", { method: "PUT", body: json(changes) }),
+
+  // --- US1.5: Personal Recipe Tab & Recipe Detail Endpoints ---
   myRecipes: (offset = 0, limit = 20) =>
     request<Recipe[]>("/api/v1/recipes/my-recipes?offset=" + offset + "&limit=" + limit),
   getRecipe: (id: number) => request<Recipe>("/api/v1/recipes/" + id),
+
+  // --- US1.4: Recipe Creation & Update Endpoints ---
   createRecipe: (recipe: RecipeInput) =>
     request<Recipe>("/api/v1/recipes", { method: "POST", body: json(recipe) }),
   updateRecipe: (id: number, recipe: RecipeInput) =>
     request<Recipe>("/api/v1/recipes/" + id, { method: "PUT", body: json(recipe) }),
+
+  // --- US1.5: Recipe Deletion Endpoint ---
   deleteRecipe: (id: number) => request<void>("/api/v1/recipes/" + id, { method: "DELETE" }),
+
+  // --- US1.2: Admin Account & RBAC Endpoints ---
   adminListUsers: () => request<User[]>("/api/v1/admin/users"),
   adminUpdateUser: (id: number, changes: { is_active?: boolean; role?: string }) =>
     request<User>("/api/v1/admin/users/" + id + "/status", { method: "PATCH", body: json(changes) }),

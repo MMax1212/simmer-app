@@ -1,5 +1,6 @@
 from tests.conftest import auth_headers
 
+# --- US1.4 & US1.5: Recipe Creation & Detail Display Test Fixture ---
 PASTA = {
     "title": "Tomato Pasta",
     "description": "Weeknight classic",
@@ -15,6 +16,7 @@ PASTA = {
 }
 
 
+# --- US1.4 & US1.5: Create Recipe & Read Recipe by ID (HTTP 201 & 404) ---
 def test_create_and_read_recipe(client):
     h = auth_headers(client)
     res = client.post("/api/v1/recipes", headers=h, json=PASTA)
@@ -27,6 +29,7 @@ def test_create_and_read_recipe(client):
     assert client.get("/api/v1/recipes/9999").status_code == 404
 
 
+# --- US1.4: Recipe Creation (Auth Enforcement & Validation Rules) ---
 def test_create_requires_login_and_valid_data(client):
     assert client.post("/api/v1/recipes", json=PASTA).status_code == 401
     h = auth_headers(client)
@@ -34,6 +37,7 @@ def test_create_requires_login_and_valid_data(client):
     assert client.post("/api/v1/recipes", headers=h, json={**PASTA, "cook_time_mins": -5}).status_code == 422
 
 
+# --- US1.4: Recipe Creation & Saving (Full Update & Ingredient Replacement) ---
 def test_update_replaces_ingredients(client):
     h = auth_headers(client)
     rid = client.post("/api/v1/recipes", headers=h, json=PASTA).json()["id"]
@@ -43,6 +47,7 @@ def test_update_replaces_ingredients(client):
     assert [i["name"] for i in res.json()["ingredients"]] == ["penne"]
 
 
+# --- US1.4 & US1.5: Recipe Permissions (Author-Only Edit and Deletion - HTTP 403 & 204) ---
 def test_only_owner_can_edit_or_delete(client):
     owner = auth_headers(client)
     rid = client.post("/api/v1/recipes", headers=owner, json=PASTA).json()["id"]
@@ -53,6 +58,7 @@ def test_only_owner_can_edit_or_delete(client):
     assert client.get(f"/api/v1/recipes/{rid}").status_code == 404
 
 
+# --- US1.5: Personal Recipe Tab (Author Isolation & Chronological Order) ---
 def test_my_recipes_only_shows_mine_newest_first(client):
     ana = auth_headers(client)
     bob = auth_headers(client, email="bob@example.com", username="bob")

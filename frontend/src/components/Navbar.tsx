@@ -11,16 +11,22 @@ export function Navbar() {
       <nav>
         {user ? (
           <>
+            {/* US1.5: Personal Recipe Tab Navigation */}
             <NavLink to="/recipes/my-recipes">My Recipes</NavLink>
+            {/* US1.4: Recipe Creation Navigation */}
             <NavLink to="/recipes/new">New Recipe</NavLink>
+            {/* US1.3: User Profile Navigation */}
             <NavLink to="/profile">Profile</NavLink>
+            {/* US1.2: Admin Console Navigation */}
             {user.role === "admin" && <NavLink to="/admin">Admin</NavLink>}
+            {/* US1.1: User Logout */}
             <button className="link-button" onClick={() => { logout(); navigate("/"); }}>
               Log out
             </button>
           </>
         ) : (
           <>
+            {/* US1.1: User Login & Registration Navigation */}
             <NavLink to="/login">Log in</NavLink>
             <NavLink to="/register" className="button">Sign up</NavLink>
           </>

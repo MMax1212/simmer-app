@@ -6,6 +6,7 @@ from pydantic import BaseModel, ConfigDict, Field, HttpUrl, field_validator, mod
 from app.schemas.user import RequestModel
 
 
+# --- US1.4: Recipe Creation & Saving (Ingredient Input Schema) ---
 class IngredientIn(RequestModel):
     name: str = Field(min_length=1, max_length=100)
     amount: float = Field(gt=0, allow_inf_nan=False)
@@ -19,6 +20,7 @@ class IngredientIn(RequestModel):
         return value.strip()
 
 
+# --- US1.5: Personal Recipe Tab (Ingredient Output Schema) ---
 class IngredientOut(BaseModel):
     model_config = ConfigDict(from_attributes=True)
     id: int
@@ -28,6 +30,7 @@ class IngredientOut(BaseModel):
     unit: str | None
 
 
+# --- US1.4: Recipe Creation & Saving (Recipe Step Input Schema) ---
 class RecipeStepIn(RequestModel):
     step_number: int = Field(ge=1)
     instruction: str = Field(min_length=3, max_length=10000)
@@ -40,6 +43,7 @@ class RecipeStepIn(RequestModel):
         return value.strip()
 
 
+# --- US1.5: Personal Recipe Tab (Recipe Step Output Schema) ---
 class RecipeStepOut(BaseModel):
     model_config = ConfigDict(from_attributes=True)
     id: int
@@ -47,6 +51,7 @@ class RecipeStepOut(BaseModel):
     instruction: str
 
 
+# --- US1.4: Recipe Creation & Saving (Recipe Creation Schema) ---
 class RecipeCreate(RequestModel):
     title: str = Field(min_length=3, max_length=150)
     description: str | None = Field(default=None, max_length=2000)
@@ -79,10 +84,12 @@ class RecipeCreate(RequestModel):
         return self
 
 
+# --- US1.4: Recipe Creation & Saving (Recipe Full Update Schema) ---
 class RecipeUpdate(RecipeCreate):
     """PUT replaces the recipe, ingredients, and ordered steps."""
 
 
+# --- US1.5: Personal Recipe Tab & Recipe Detail (Recipe Output Schema) ---
 class RecipeOut(BaseModel):
     model_config = ConfigDict(from_attributes=True)
     id: int

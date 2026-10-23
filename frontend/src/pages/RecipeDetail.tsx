@@ -4,6 +4,7 @@ import { ErrorMessage } from "../components/ErrorMessage";
 import { useAuth } from "../context/auth";
 import { api, errorText, type Recipe } from "../services/api";
 
+// --- US1.5: Personal Recipe Tab (Recipe Detail Display & Author Actions) ---
 export function RecipeDetail() {
   const { id } = useParams();
   const { user } = useAuth();
@@ -11,6 +12,7 @@ export function RecipeDetail() {
   const [recipe, setRecipe] = useState<Recipe | null>(null);
   const [error, setError] = useState<string | null>(null);
 
+  // --- US1.5: Task 5.4: Fetch Recipe Detail from Backend ---
   useEffect(() => {
     let active = true;
     setRecipe(null);

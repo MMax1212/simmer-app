@@ -4,6 +4,7 @@ import { ErrorMessage } from "../components/ErrorMessage";
 import { useAuth } from "../context/auth";
 import { errorText } from "../services/api";
 
+// --- US1.1: User Account Registration & Login (Login View & Credential Submission) ---
 export function Login() {
   const { login } = useAuth();
   const navigate = useNavigate();
@@ -13,6 +14,7 @@ export function Login() {
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
 
+  // --- US1.1: Task 1.6: Authenticate with Backend & Redirect ---
   async function onSubmit(e: FormEvent) {
     e.preventDefault();
     setBusy(true);

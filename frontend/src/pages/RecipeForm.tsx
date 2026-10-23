@@ -10,6 +10,7 @@ const emptyRecipe = (): RecipeInput => ({
   steps: [{ step_number: 1, instruction: "" }],
 });
 
+// --- US1.4: Recipe Creation & Saving (Recipe Authoring & Editing Form) ---
 export function RecipeForm() {
   const { id } = useParams();
   const editing = id !== undefined;
@@ -45,6 +46,7 @@ export function RecipeForm() {
   const setIngredient = (index: number, changes: Partial<Ingredient>) =>
     setRecipe((current) => ({ ...current, ingredients: current.ingredients.map((item, i) => i === index ? { ...item, ...changes } : item) }));
 
+  // --- US1.4: Task 4.4 & 4.5: Validate Recipe Inputs and Persist to Backend ---
   async function onSubmit(event: FormEvent) {
     event.preventDefault();
     if (!recipe.ingredients.length || !recipe.steps.length) {

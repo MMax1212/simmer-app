@@ -2,6 +2,7 @@ import { useEffect, useState, type ReactNode } from "react";
 import { api, SESSION_EXPIRED, tokenStore, type User } from "../services/api";
 import { AuthContext } from "./auth";
 
+// --- US1.1: User Account Registration & Login (Global Authentication State Provider) ---
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(() => tokenStore.get() !== null);

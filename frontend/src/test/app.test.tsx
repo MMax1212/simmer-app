@@ -22,6 +22,7 @@ function open(path: string, signedIn = false) {
 }
 
 describe("authentication", () => {
+  // --- US1.1: User Account Registration & Login (Client-Side Validation on Submit) ---
   it("rejects invalid registration without sending a request", async () => {
     const actor = userEvent.setup();
     open("/register");
@@ -34,6 +35,7 @@ describe("authentication", () => {
     expect(screen.getByLabelText("Email")).toBeInvalid();
   });
 
+  // --- US1.1: User Account Registration & Login (Client-Side Password Match Check) ---
   it("shows mismatched password errors before calling the API", async () => {
     const actor = userEvent.setup();
     open("/register");
@@ -46,6 +48,7 @@ describe("authentication", () => {
     expect(fetchMock).not.toHaveBeenCalled();
   });
 
+  // --- US1.1 & US1.5: Successful Login & Redirect to "My Recipes" Library ---
   it("logs in using a username, stores the token and opens My Recipes", async () => {
     fetchMock.mockImplementation(async (url) =>
       String(url).includes("/auth/login") ? respond({ access_token: "new-token", user }) : respond([]));
@@ -63,6 +66,7 @@ describe("authentication", () => {
     expect(await screen.findByText("No recipes yet.", { exact: false })).toBeInTheDocument();
   });
 
+  // --- US1.1: Session Management (Expired Token Cleared & Redirect to Login) ---
   it("clears an expired session and redirects to login", async () => {
     fetchMock.mockImplementation(async (url) => String(url).endsWith("/auth/me")
       ? respond(user) : respond({ detail: "Invalid or expired token" }, 401));
@@ -72,6 +76,7 @@ describe("authentication", () => {
     expect(screen.queryByRole("button", { name: "Log out" })).not.toBeInTheDocument();
   });
 
+  // --- US1.2: Admin Account & RBAC (Unauthorized Access to Admin Route Blocked) ---
   it("prevents ordinary users opening the admin screen", async () => {
     fetchMock.mockResolvedValue(respond(user));
     open("/admin", true);
@@ -81,6 +86,7 @@ describe("authentication", () => {
 });
 
 describe("profiles and recipes", () => {
+  // --- US1.2: Admin Account & RBAC (Admin Deactivate/Reactivate & Role Modification) ---
   it("lets admins deactivate/reactivate accounts and update roles", async () => {
     const admin = { ...user, id: 2, username: "boss", role: "admin" as const };
     fetchMock.mockImplementation(async (url, init) => {
@@ -99,6 +105,7 @@ describe("profiles and recipes", () => {
     expect(screen.queryByLabelText("Role for boss")).not.toBeInTheDocument();
   });
 
+  // --- US1.3: User Profile Management (Profile Form Save & API Integration) ---
   it("saves profile fields using the specified contract", async () => {
     fetchMock.mockImplementation(async (_url, init) => init?.method === "PUT"
       ? respond({ ...user, bio: "Home cook", culinary_preferences: ["Italian"] }) : respond(user));
@@ -115,6 +122,7 @@ describe("profiles and recipes", () => {
     });
   });
 
+  // --- US1.4: Recipe Creation & Saving (Dynamic Ingredients & Steps Rows) ---
   it("adds/removes ingredient and step rows without losing the remaining values", async () => {
     fetchMock.mockImplementation(async (url, init) => String(url).endsWith("/auth/me")
       ? respond(user) : init?.method === "POST" ? respond(recipe, 201) : respond(recipe));
@@ -142,6 +150,7 @@ describe("profiles and recipes", () => {
     expect(body).not.toHaveProperty("instructions");
   });
 
+  // --- US1.4: Recipe Creation & Saving (Form Validation on Empty Ingredients/Steps) ---
   it("does not save a recipe with no ingredients or steps", async () => {
     fetchMock.mockResolvedValue(respond(user));
     const actor = userEvent.setup();
@@ -155,6 +164,7 @@ describe("profiles and recipes", () => {
     expect(fetchMock.mock.calls.some(([, init]) => init?.method === "POST")).toBe(false);
   });
 
+  // --- US1.5: Recipe Detail View (Detail Rendering & Missing Recipe Error) ---
   it("renders recipe details and a missing recipe error", async () => {
     fetchMock.mockResolvedValue(respond(recipe));
     open("/recipes/1");
@@ -163,12 +173,14 @@ describe("profiles and recipes", () => {
     expect(screen.getByText("Boil the pasta")).toBeInTheDocument();
   });
 
+  // --- US1.5: Recipe Detail View (HTTP 404 Error Display) ---
   it("shows API failure details", async () => {
     fetchMock.mockResolvedValue(respond({ detail: "Recipe not found" }, 404));
     open("/recipes/999");
     expect(await screen.findByText("Recipe not found")).toBeInTheDocument();
   });
 
+  // --- US1.5: Personal Recipe Tab (Personal Recipe Library Pagination Controls) ---
   it("paginates the personal library", async () => {
     fetchMock.mockImplementation(async (url) => String(url).endsWith("/auth/me") ? respond(user) :
       String(url).includes("offset=20") ? respond([{ ...recipe, id: 22, title: "Last recipe" }]) :
