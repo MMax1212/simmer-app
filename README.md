@@ -73,6 +73,23 @@ npm run dev
 ```
 - Web Application will be live at: [http://localhost:5173](http://localhost:5173)
 
+### 4. Run with Docker Compose
+You can run PostgreSQL, FastAPI, and React together with Docker:
+
+**Production Mode:**
+```bash
+docker compose up --build
+```
+- Frontend: [http://localhost:3000](http://localhost:3000)
+- Backend Docs: [http://localhost:8000/docs](http://localhost:8000/docs)
+
+**Development Mode (Live Code Reload):**
+```bash
+docker compose -f docker-compose.dev.yml up --build
+```
+- Frontend (Vite HMR): [http://localhost:5173](http://localhost:5173)
+- Backend (FastAPI reload): [http://localhost:8000/docs](http://localhost:8000/docs)
+
 ---
 
 ## 👥 Team Simmer Roles
