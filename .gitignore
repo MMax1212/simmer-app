@@ -1,14 +1,11 @@
-# Operating System Files
 .DS_Store
 Thumbs.db
 
-# Environment Variables & Secrets (NEVER COMMIT SECRETS)
 .env
 .env.local
 .env.*.local
 *.env
 
-# Python (Backend)
 backend/.venv/
 .venv/
 venv/
@@ -26,7 +23,6 @@ build/
 *.sqlite3
 *.db
 
-# Node.js & TypeScript (Frontend)
 frontend/node_modules/
 node_modules/
 frontend/dist/
@@ -38,7 +34,6 @@ yarn-error.log*
 frontend/playwright-report/
 frontend/test-results/
 
-# IDE & Editors
 .vscode/
 .idea/
 *.swp
