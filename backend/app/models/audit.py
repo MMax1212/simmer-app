@@ -6,7 +6,7 @@ from sqlalchemy.orm import Mapped, mapped_column
 from app.core.database import Base
 
 
-# --- US1.2: Admin Account & RBAC (Audit Log Model) ---
+
 class AdminAudit(Base):
     __tablename__ = "admin_audit"
     id: Mapped[int] = mapped_column(primary_key=True)
