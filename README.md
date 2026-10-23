@@ -9,7 +9,7 @@ Developed for **CSE 115a / CMPS 115: Software Engineering & Methodology**.
 ## Local experiment scope
 
 This local checkout implements only US1.1 (accounts/login) and US1.2 (admin management).
-Profile and recipe files are retained empty. The full sprint planning documents remain
+Unused profile and recipe placeholder files have been removed. The full sprint planning documents remain
 reference material. Use a fresh `accounts.db`; existing full-sprint databases are unchanged.
 See [local setup](docs/SPRINT1_SETUP.md).
 
