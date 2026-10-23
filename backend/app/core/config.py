@@ -2,9 +2,9 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 class Settings(BaseSettings):
-    """App settings, read from environment variables or backend/.env."""
 
-    database_url: str = "sqlite:///./simmer.db"
+
+    database_url: str = "sqlite:///./accounts.db"
     secret_key: str = "dev-only-insecure-secret-change-me"
     algorithm: str = "HS256"
     access_token_expire_minutes: int = 60 * 24

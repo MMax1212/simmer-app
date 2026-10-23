@@ -5,7 +5,7 @@ from sqlalchemy.orm import DeclarativeBase, Session, sessionmaker
 
 from app.core.config import settings
 
-# check_same_thread is a SQLite-only flag; FastAPI may use the connection across threads.
+
 connect_args = {"check_same_thread": False} if settings.database_url.startswith("sqlite") else {}
 engine = create_engine(settings.database_url, connect_args=connect_args)
 
@@ -22,7 +22,7 @@ class Base(DeclarativeBase):
 
 
 def get_db() -> Generator[Session, None, None]:
-    """FastAPI dependency: one DB session per request, always closed afterwards."""
+
     db = SessionLocal()
     try:
         yield db
