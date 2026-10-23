@@ -1,39 +1,42 @@
 from fastapi import FastAPI
-from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import JSONResponse
 
-from app.api import admin, auth, recipes, users
-from app.core.config import settings
+app = FastAPI(
+    title="Simmer API",
+    description="Backend REST API for Simmer Cooking Social Network",
+    version="1.0.0"
+)
 
-app = FastAPI(title="Simmer API", version="1.0.0")
+# Allow CORS during local development between frontend (5173) and backend (8000)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        "http://localhost:5173",
-        "http://127.0.0.1:5173",
-        "http://localhost:3000",
-        "http://127.0.0.1:3000",
-    ],
+    allow_origins=["http://localhost:5173", "http://127.0.0.1:5173"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-
-@app.exception_handler(RequestValidationError)
-async def validation_error_handler(_, exc: RequestValidationError):
-    # Never echo request bodies, passwords, or exception contexts into responses.
-    details = [{"loc": error["loc"], "msg": error["msg"], "type": error["type"]} for error in exc.errors()]
-    return JSONResponse(status_code=422, content={"detail": details})
-
-
-app.include_router(auth.router)
-app.include_router(users.router)
-app.include_router(recipes.router)
-app.include_router(admin.router)
-
-
 @app.get("/api/health")
 def health_check():
+    """Health check endpoint to verify backend connectivity."""
     return {"status": "ok", "app": "Simmer Backend", "version": "1.0.0"}
+
+@app.get("/api/recipes/placeholder")
+def sample_recipes():
+    """Placeholder endpoint for initial testing."""
+    return [
+        {
+            "id": 1,
+            "title": "Grandma's Rustic Tomato Pasta",
+            "author": "Chef Maximo",
+            "cook_time_mins": 25,
+            "likes": 12
+        },
+        {
+            "id": 2,
+            "title": "Crispy Avocado Toast",
+            "author": "Chef Bryan",
+            "cook_time_mins": 10,
+            "likes": 8
+        }
+    ]
