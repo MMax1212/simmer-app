@@ -71,7 +71,6 @@ All implementations must adhere to the three-tier architecture:
 ## 3. Pydantic Schemas (Data Transfer Objects)
 
 ```python
-# Auth & User Schemas
 class UserRegisterRequest(BaseModel):
     username: str = Field(..., min_length=3, max_length=50)
     email: EmailStr
@@ -101,7 +100,6 @@ class UserProfileUpdateRequest(BaseModel):
     avatar_url: Optional[str] = None
     culinary_preferences: Optional[List[str]] = None
 
-# Recipe Schemas
 class IngredientDTO(BaseModel):
     name: str = Field(..., min_length=1)
     amount: float = Field(..., gt=0)

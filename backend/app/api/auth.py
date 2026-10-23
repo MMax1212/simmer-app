@@ -13,7 +13,7 @@ from app.schemas.user import LoginRequest, Token, UserCreate, UserPrivate
 router = APIRouter(prefix="/api/v1/auth", tags=["auth"])
 
 
-# --- US1.1: User Account Registration & Login (Register Account) ---
+
 @router.post("/register", response_model=UserPrivate, status_code=status.HTTP_201_CREATED)
 def register(body: UserCreate, db: DbSession):
     email = body.email.lower()
@@ -31,7 +31,7 @@ def register(body: UserCreate, db: DbSession):
     return user
 
 
-# --- US1.1: User Account Registration & Login (Authentication Helper) ---
+
 def _authenticate(db: DbSession, identifier: str, password: str) -> Token:
     identifier = identifier.strip().lower()
     user = db.scalar(select(User).where(or_(User.email == identifier, func.lower(User.username) == identifier)))
@@ -39,26 +39,26 @@ def _authenticate(db: DbSession, identifier: str, password: str) -> Token:
         raise HTTPException(status_code=401, detail="Incorrect username/email or password")
     if not user.is_active:
         raise HTTPException(status_code=403, detail="Account is deactivated")
-    # Preserve existing bcrypt accounts and upgrade their hash on successful login.
+
     if user.hashed_password.startswith("$2"):
         user.hashed_password = hash_password(password)
         db.commit()
     return Token(access_token=create_access_token(user.id), user=UserPrivate.model_validate(user))
 
 
-# --- US1.1: User Account Registration & Login (Login via JSON) ---
+
 @router.post("/login", response_model=Token)
 def login(body: LoginRequest, db: DbSession):
     return _authenticate(db, body.username_or_email, body.password)
 
 
-# --- US1.1: User Account Registration & Login (Swagger OAuth2 Form Login) ---
+
 @router.post("/token", response_model=Token, include_in_schema=False)
 def login_form(form: Annotated[OAuth2PasswordRequestForm, Depends()], db: DbSession):
     return _authenticate(db, form.username, form.password)
 
 
-# --- US1.1: User Account Registration & Login (Get Current Authenticated User) ---
+
 @router.get("/me", response_model=UserPrivate)
 def read_me(user: CurrentUser):
     return user
