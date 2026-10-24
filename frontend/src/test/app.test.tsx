@@ -121,3 +121,76 @@ describe("profiles and recipes", () => {
       bio: "Home cook", avatar_url: null, culinary_preferences: ["Italian"],
     });
   });
+
+  // --- US1.4: Recipe Creation & Saving (Dynamic Ingredients & Steps Rows) ---
+  it("adds/removes ingredient and step rows without losing the remaining values", async () => {
+    fetchMock.mockImplementation(async (url, init) => String(url).endsWith("/auth/me")
+      ? respond(user) : init?.method === "POST" ? respond(recipe, 201) : respond(recipe));
+    const actor = userEvent.setup();
+    open("/recipes/new", true);
+    await actor.type(await screen.findByLabelText("Title"), "Tomato Pasta");
+    await actor.type(screen.getByLabelText("Ingredient 1"), "Discard me");
+    await actor.type(screen.getByLabelText("Step 1"), "Discard this step");
+    await actor.click(screen.getByRole("button", { name: "+ Add ingredient" }));
+    await actor.type(screen.getByLabelText("Ingredient 2"), "pasta");
+    await actor.type(screen.getByLabelText("Amount 2"), "200");
+    await actor.type(screen.getByLabelText("Unit 2"), "g");
+    await actor.click(screen.getByRole("button", { name: "Remove ingredient 1" }));
+    await actor.click(screen.getByRole("button", { name: "+ Add step" }));
+    await actor.type(screen.getByLabelText("Step 2"), "Boil the pasta");
+    await actor.click(screen.getByRole("button", { name: "Remove step 1" }));
+    expect(screen.getByLabelText("Ingredient 1")).toHaveValue("pasta");
+    expect(screen.getByLabelText("Step 1")).toHaveValue("Boil the pasta");
+    await actor.click(screen.getByRole("button", { name: "Save recipe" }));
+    expect(await screen.findByRole("heading", { name: "Tomato Pasta" })).toBeInTheDocument();
+    const saved = fetchMock.mock.calls.find(([, init]) => init?.method === "POST")!;
+    const body = JSON.parse(saved[1]!.body as string);
+    expect(body.ingredients).toEqual([{ name: "pasta", amount: 200, unit: "g" }]);
+    expect(body.steps).toEqual([{ step_number: 1, instruction: "Boil the pasta" }]);
+    expect(body).not.toHaveProperty("instructions");
+  });
+
+  // --- US1.4: Recipe Creation & Saving (Form Validation on Empty Ingredients/Steps) ---
+  it("does not save a recipe with no ingredients or steps", async () => {
+    fetchMock.mockResolvedValue(respond(user));
+    const actor = userEvent.setup();
+    open("/recipes/new", true);
+    const title = await screen.findByLabelText("Title");
+    await actor.type(title, "Tomato Pasta");
+    await actor.click(screen.getByRole("button", { name: "Remove ingredient 1" }));
+    await actor.click(screen.getByRole("button", { name: "Remove step 1" }));
+    fireEvent.submit(title.closest("form")!);
+    expect(await screen.findByText("Add at least one ingredient and one step.")).toBeInTheDocument();
+    expect(fetchMock.mock.calls.some(([, init]) => init?.method === "POST")).toBe(false);
+  });
+
+  // --- US1.5: Recipe Detail View (Detail Rendering & Missing Recipe Error) ---
+  it("renders recipe details and a missing recipe error", async () => {
+    fetchMock.mockResolvedValue(respond(recipe));
+    open("/recipes/1");
+    expect(await screen.findByRole("heading", { name: "Tomato Pasta" })).toBeInTheDocument();
+    expect(screen.getByText("200 g pasta")).toBeInTheDocument();
+    expect(screen.getByText("Boil the pasta")).toBeInTheDocument();
+  });
+
+  // --- US1.5: Recipe Detail View (HTTP 404 Error Display) ---
+  it("shows API failure details", async () => {
+    fetchMock.mockResolvedValue(respond({ detail: "Recipe not found" }, 404));
+    open("/recipes/999");
+    expect(await screen.findByText("Recipe not found")).toBeInTheDocument();
+  });
+
+  // --- US1.5: Personal Recipe Tab (Personal Recipe Library Pagination Controls) ---
+  it("paginates the personal library", async () => {
+    fetchMock.mockImplementation(async (url) => String(url).endsWith("/auth/me") ? respond(user) :
+      String(url).includes("offset=20") ? respond([{ ...recipe, id: 22, title: "Last recipe" }]) :
+      respond(Array.from({ length: 21 }, (_, i) => ({ ...recipe, id: i + 1, title: "Recipe " + (i + 1) }))));
+    const actor = userEvent.setup();
+    open("/recipes/my-recipes", true);
+    await actor.click(await screen.findByRole("button", { name: "Next" }));
+    expect(await screen.findByText("Last recipe")).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Next" })).toBeDisabled();
+    await actor.click(screen.getByRole("button", { name: "Previous" }));
+    expect(await screen.findByText("Recipe 1")).toBeInTheDocument();
+  });
+});

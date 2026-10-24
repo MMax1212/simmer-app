@@ -21,6 +21,10 @@ test("register, edit profile, create/edit recipe, reload library, and delete", a
   await expect(page.getByLabel("Bio")).toHaveValue("Learning to cook");
   await expect(page.getByLabel("Italian", { exact: true })).toBeChecked();
 
+  // --- US1.5: Personal Recipe Tab (Initial Empty State) ---
+  await page.getByRole("link", { name: "My Recipes", exact: true }).click();
+  await expect(page.getByText("No recipes yet.", { exact: false })).toBeVisible();
+
   // --- US1.4: Recipe Authoring (Form Fields, Ingredients & Multi-Step Instructions) ---
   await page.getByRole("link", { name: "New Recipe", exact: true }).click();
   await page.getByLabel("Title", { exact: true }).fill("Browser Pasta");
@@ -35,12 +39,26 @@ test("register, edit profile, create/edit recipe, reload library, and delete", a
   await page.getByLabel("Step 2", { exact: true }).fill("Add tomato sauce");
   await page.getByRole("button", { name: "Save recipe" }).click();
 
+  // --- US1.5: Recipe Detail View ---
+  await expect(page.getByRole("heading", { name: "Browser Pasta" })).toBeVisible();
+  await expect(page.getByText("Add tomato sauce", { exact: true })).toBeVisible();
+  await expect(page.locator("article ol")).toHaveCSS("list-style-type", "decimal");
+  await page.screenshot({ path: test.info().outputPath("recipe-detail.png"), fullPage: true });
+
   // --- US1.4: Recipe Editing ---
   await page.getByRole("link", { name: "Edit", exact: true }).click();
   await page.getByLabel("Title", { exact: true }).fill("Better Browser Pasta");
   await page.getByRole("button", { name: "Remove step 1" }).click();
   await page.getByRole("button", { name: "Save recipe" }).click();
   await expect(page.getByRole("heading", { name: "Better Browser Pasta" })).toBeVisible();
+
+  // --- US1.5: Personal Recipe Library Dashboard & Deletion ---
+  await page.getByRole("link", { name: "My Recipes", exact: true }).click();
+  await page.reload();
+  await page.getByRole("heading", { name: "Better Browser Pasta" }).click();
+  page.once("dialog", (dialog) => dialog.accept());
+  await page.getByRole("button", { name: "Delete", exact: true }).click();
+  await expect(page.getByText("No recipes yet.", { exact: false })).toBeVisible();
 
   // --- US1.1: Logout and Login with Username ---
   await page.getByRole("button", { name: "Log out" }).click();

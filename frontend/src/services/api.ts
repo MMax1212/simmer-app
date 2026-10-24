@@ -52,6 +52,14 @@ export interface RecipeInput {
   steps: RecipeStep[];
 }
 
+// --- US1.5: Personal Recipe Tab (Full Recipe Entity) ---
+export interface Recipe extends RecipeInput {
+  id: number;
+  author_id: number;
+  author_username: string;
+  created_at: string;
+  updated_at: string;
+}
 
 export class ApiError extends Error {
   constructor(public status: number, message: string) { super(message); }
@@ -103,11 +111,19 @@ export const api = {
   updateProfile: (changes: Partial<Pick<User, "bio" | "avatar_url" | "culinary_preferences">>) =>
     request<User>("/api/v1/users/me", { method: "PUT", body: json(changes) }),
 
+  // --- US1.5: Personal Recipe Tab & Recipe Detail Endpoints ---
+  myRecipes: (offset = 0, limit = 20) =>
+    request<Recipe[]>("/api/v1/recipes/my-recipes?offset=" + offset + "&limit=" + limit),
+  getRecipe: (id: number) => request<Recipe>("/api/v1/recipes/" + id),
+
   // --- US1.4: Recipe Creation & Update Endpoints ---
   createRecipe: (recipe: RecipeInput) =>
     request<Recipe>("/api/v1/recipes", { method: "POST", body: json(recipe) }),
   updateRecipe: (id: number, recipe: RecipeInput) =>
     request<Recipe>("/api/v1/recipes/" + id, { method: "PUT", body: json(recipe) }),
+
+  // --- US1.5: Recipe Deletion Endpoint ---
+  deleteRecipe: (id: number) => request<void>("/api/v1/recipes/" + id, { method: "DELETE" }),
 
   // --- US1.2: Admin Account & RBAC Endpoints ---
   adminListUsers: () => request<User[]>("/api/v1/admin/users"),

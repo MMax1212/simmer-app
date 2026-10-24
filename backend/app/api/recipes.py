@@ -40,6 +40,22 @@ def create_recipe(body: RecipeCreate, user: CurrentUser, db: DbSession):
     return recipe
 
 
+# --- US1.5: Personal Recipe Tab (Get Author-Filtered Saved Recipes with Pagination) ---
+@router.get("/my-recipes", response_model=list[RecipeOut])
+def my_recipes(user: CurrentUser, db: DbSession, offset: int = Query(default=0, ge=0),
+               limit: int = Query(default=20, ge=1, le=100)):
+    query = (select(Recipe).where(Recipe.author_id == user.id)
+             .options(selectinload(Recipe.ingredients), selectinload(Recipe.steps), selectinload(Recipe.owner))
+             .order_by(Recipe.created_at.desc(), Recipe.id.desc()).offset(offset).limit(limit))
+    return db.scalars(query).all()
+
+
+# --- US1.5: Recipe Detail View (Read Recipe by ID) ---
+@router.get("/{recipe_id}", response_model=RecipeOut)
+def read_recipe(recipe_id: int, db: DbSession):
+    return _get_recipe(db, recipe_id)
+
+
 # --- US1.4: Recipe Creation & Saving (Update Recipe Endpoint) ---
 @router.put("/{recipe_id}", response_model=RecipeOut)
 def update_recipe(recipe_id: int, body: RecipeUpdate, user: CurrentUser, db: DbSession):
@@ -55,3 +71,13 @@ def update_recipe(recipe_id: int, body: RecipeUpdate, user: CurrentUser, db: DbS
     db.commit()
     db.refresh(recipe)
     return recipe
+
+
+# --- US1.5: Recipe Management (Delete Recipe Endpoint) ---
+@router.delete("/{recipe_id}", status_code=204)
+def delete_recipe(recipe_id: int, user: CurrentUser, db: DbSession):
+    recipe = _get_recipe(db, recipe_id)
+    _require_owner(recipe, user)
+    db.delete(recipe)
+    db.commit()
+    return Response(status_code=204)

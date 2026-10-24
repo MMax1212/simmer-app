@@ -4,6 +4,23 @@ import { ErrorMessage } from "../components/ErrorMessage";
 import { useAuth } from "../context/auth";
 import { api, errorText, type Recipe } from "../services/api";
 
+// --- US1.5: Personal Recipe Tab (Recipe Detail Display & Author Actions) ---
+export function RecipeDetail() {
+  const { id } = useParams();
+  const { user } = useAuth();
+  const navigate = useNavigate();
+  const [recipe, setRecipe] = useState<Recipe | null>(null);
+  const [error, setError] = useState<string | null>(null);
+
+  // --- US1.5: Task 5.4: Fetch Recipe Detail from Backend ---
+  useEffect(() => {
+    let active = true;
+    setRecipe(null);
+    setError(null);
+    api.getRecipe(Number(id)).then((value) => { if (active) setRecipe(value); })
+      .catch((e) => { if (active) setError(errorText(e)); });
+    return () => { active = false; };
+  }, [id]);
 
   if (error) return <ErrorMessage error={error} />;
   if (!recipe) return <p className="muted">Loading…</p>;

@@ -20,6 +20,16 @@ class IngredientIn(RequestModel):
         return value.strip()
 
 
+# --- US1.5: Personal Recipe Tab (Ingredient Output Schema) ---
+class IngredientOut(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+    id: int
+    name: str
+    # Preserve unknown measurements in legacy recipes rather than inventing data.
+    amount: float | None
+    unit: str | None
+
+
 # --- US1.4: Recipe Creation & Saving (Recipe Step Input Schema) ---
 class RecipeStepIn(RequestModel):
     step_number: int = Field(ge=1)
@@ -31,6 +41,14 @@ class RecipeStepIn(RequestModel):
         if len(value.strip()) < 3:
             raise ValueError("Instructions must contain at least 3 characters")
         return value.strip()
+
+
+# --- US1.5: Personal Recipe Tab (Recipe Step Output Schema) ---
+class RecipeStepOut(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+    id: int
+    step_number: int
+    instruction: str
 
 
 # --- US1.4: Recipe Creation & Saving (Recipe Creation Schema) ---
@@ -69,3 +87,24 @@ class RecipeCreate(RequestModel):
 # --- US1.4: Recipe Creation & Saving (Recipe Full Update Schema) ---
 class RecipeUpdate(RecipeCreate):
     """PUT replaces the recipe, ingredients, and ordered steps."""
+
+
+# --- US1.5: Personal Recipe Tab & Recipe Detail (Recipe Output Schema) ---
+class RecipeOut(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+    id: int
+    author_id: int
+    author_username: str
+    title: str
+    description: str | None
+    cuisine: str | None
+    meal_type: str | None
+    difficulty: str
+    image_url: str | None
+    prep_time_mins: int
+    cook_time_mins: int
+    servings: int
+    ingredients: list[IngredientOut]
+    steps: list[RecipeStepOut]
+    created_at: datetime
+    updated_at: datetime

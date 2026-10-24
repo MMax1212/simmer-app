@@ -33,6 +33,11 @@ class Recipe(Base):
         back_populates="recipe", cascade="all, delete-orphan", order_by="RecipeStep.step_number"
     )
 
+    # --- US1.5: Personal Recipe Tab (Author display helper) ---
+    @property
+    def author_username(self) -> str:
+        return self.owner.username
+
 
 # --- US1.4: Recipe Creation & Saving (Relational Ingredients Model) ---
 class Ingredient(Base):

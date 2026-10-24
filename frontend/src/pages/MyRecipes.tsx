@@ -6,6 +6,22 @@ import { api, errorText, type Recipe } from "../services/api";
 
 const PAGE_SIZE = 20;
 
+// --- US1.5: Personal Recipe Tab (Personal Recipe Library Dashboard) ---
+export function MyRecipes() {
+  const [recipes, setRecipes] = useState<Recipe[] | null>(null);
+  const [offset, setOffset] = useState(0);
+  const [error, setError] = useState<string | null>(null);
+
+  // --- US1.5: Task 5.2 & 5.3: Fetch and Paginate User-Specific Saved Recipes ---
+  useEffect(() => {
+    let active = true;
+    setRecipes(null);
+    setError(null);
+    api.myRecipes(offset, PAGE_SIZE + 1).then((items) => { if (active) setRecipes(items); })
+      .catch((e) => { if (active) setError(errorText(e)); });
+    return () => { active = false; };
+  }, [offset]);
+
   if (error) return <ErrorMessage error={error} />;
   if (!recipes) return <p className="muted">Loading…</p>;
 
