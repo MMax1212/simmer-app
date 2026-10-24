@@ -8,13 +8,13 @@ from app.schemas.user import AdminUserUpdate, UserPrivate
 router = APIRouter(prefix="/api/v1/admin", tags=["admin"])
 
 
-
+# --- US1.2: Admin Account & RBAC (List All Registered Users) ---
 @router.get("/users", response_model=list[UserPrivate])
 def list_users(_: AdminUser, db: DbSession):
     return db.scalars(select(User).order_by(User.id)).all()
 
 
-
+# --- US1.2: Admin Account & RBAC (Toggle User Active Status & Role with Audit Log) ---
 @router.patch("/users/{user_id}/status", response_model=UserPrivate)
 def update_user(user_id: int, body: AdminUserUpdate, admin: AdminUser, db: DbSession):
     user = db.get(User, user_id)

@@ -56,25 +56,25 @@ The frontend is structured into modular layers to isolate UI layout, state manag
 
 ```
 frontend/src/
-├── components/
-│   ├── common/
-│   ├── recipes/
-│   └── social/
-├── pages/
+├── components/          # Reusable dumb/presentational UI widgets
+│   ├── common/          # Button, Input, Modal, Badge, Navbar, Footer
+│   ├── recipes/         # RecipeCard, IngredientList, CookingTimer
+│   └── social/          # PostCard, CommentSection, LikeButton
+├── pages/               # Top-level screen components (Route targets)
 │   ├── HomeFeedPage.tsx
 │   ├── LoginPage.tsx
 │   ├── RegisterPage.tsx
 │   ├── RecipeDetailPage.tsx
 │   ├── CreateRecipePage.tsx
 │   └── ProfilePage.tsx
-├── services/
-│   ├── api.ts
-│   ├── authService.ts
-│   ├── recipeService.ts
-│   └── socialService.ts
-├── hooks/
-├── context/
-└── types/
+├── services/            # Pure API communication layer (encapsulates fetch/axios)
+│   ├── api.ts           # Base HTTP client with JWT interceptor
+│   ├── authService.ts   # login(), register(), getCurrentUser()
+│   ├── recipeService.ts # getRecipes(), createRecipe(), searchRecipes()
+│   └── socialService.ts # getPosts(), toggleLike(), addComment()
+├── hooks/               # Custom React hooks (useAuth, useRecipes, useDebounce)
+├── context/             # Global React Context providers (AuthContext, ThemeContext)
+└── types/               # TypeScript interfaces & DTO definitions
 ```
 
 ### Component Interaction Flow
@@ -98,31 +98,31 @@ The backend follows the **Controller-Service-Repository** pattern to ensure sepa
 
 ```
 backend/app/
-├── api/
-│   ├── deps.py
+├── api/                 # API Routing Layer (Controllers)
+│   ├── deps.py          # Dependency injection (DB session, current_user)
 │   └── v1/
-│       ├── auth.py
-│       ├── users.py
-│       ├── recipes.py
-│       └── posts.py
-├── core/
-│   ├── config.py
-│   ├── security.py
-│   └── database.py
-├── models/
+│       ├── auth.py      # /api/v1/auth (login, register, token refresh)
+│       ├── users.py     # /api/v1/users (profile viewing, updates)
+│       ├── recipes.py   # /api/v1/recipes (CRUD, search, filtering)
+│       └── posts.py     # /api/v1/posts (social feed, likes, comments)
+├── core/                # Core infrastructure configuration
+│   ├── config.py        # Environment variables (.env schema)
+│   ├── security.py      # Password hashing (bcrypt) & JWT token encoding
+│   └── database.py      # SQLAlchemy engine & session factory
+├── models/              # SQLAlchemy Database Entities (ORM)
 │   ├── user.py
 │   ├── recipe.py
 │   ├── post.py
 │   └── social.py
-├── schemas/
+├── schemas/             # Pydantic Schemas (Data Transfer Objects & Validation)
 │   ├── user_schema.py
 │   ├── recipe_schema.py
 │   └── post_schema.py
-├── services/
+├── services/            # Business Logic Layer
 │   ├── auth_service.py
 │   ├── recipe_service.py
 │   └── grocery_service.py
-└── main.py
+└── main.py              # Application entrypoint & middleware configuration
 ```
 
 ### Backend Request Lifecycle
