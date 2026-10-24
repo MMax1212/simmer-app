@@ -147,7 +147,7 @@ def test_admin_reactivation_roles_audit_and_self_protection(client, make_admin, 
     assert client.patch(path, headers=admin_h, json={"is_active": True}).status_code == 200
     assert client.get("/api/v1/auth/me", headers=user_h).status_code == 200
     assert client.patch(path, headers=admin_h, json={"role": "admin"}).status_code == 200
-    assert client.get("/api/admin/users", headers=user_h).status_code == 200
+    assert client.get("/api/v1/admin/users", headers=user_h).status_code == 200
     assert db_session.query(AdminAudit).count() == 3
     assert client.patch(path, headers=admin_h, json={"is_active": None}).status_code == 422
     assert client.patch(f"/api/v1/admin/users/{aid}/status", headers=admin_h, json={"role": "user"}).status_code == 400
