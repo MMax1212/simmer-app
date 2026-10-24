@@ -56,3 +56,14 @@ def test_only_owner_can_edit_or_delete(client):
     assert client.delete(f"/api/v1/recipes/{rid}", headers=other).status_code == 403
     assert client.delete(f"/api/v1/recipes/{rid}", headers=owner).status_code == 204
     assert client.get(f"/api/v1/recipes/{rid}").status_code == 404
+
+
+# --- US1.5: Personal Recipe Tab (Author Isolation & Chronological Order) ---
+def test_my_recipes_only_shows_mine_newest_first(client):
+    ana = auth_headers(client)
+    bob = auth_headers(client, email="bob@example.com", username="bob")
+    client.post("/api/v1/recipes", headers=ana, json={**PASTA, "title": "First"})
+    client.post("/api/v1/recipes", headers=ana, json={**PASTA, "title": "Second"})
+    client.post("/api/v1/recipes", headers=bob, json={**PASTA, "title": "Bob's"})
+    titles = [r["title"] for r in client.get("/api/v1/recipes/my-recipes", headers=ana).json()]
+    assert titles == ["Second", "First"]

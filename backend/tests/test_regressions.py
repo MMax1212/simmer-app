@@ -107,6 +107,19 @@ def test_recipe_metadata_steps_and_update_are_persisted(client, db_session):
     assert db_session.query(RecipeStep).count() == 0
 
 
+# --- US1.5: Personal Recipe Tab (Stable Author Pagination & Privacy) ---
+def test_my_recipes_pagination_is_stable_and_private(client):
+    h = auth_headers(client)
+    for title in ["First", "Second", "Third"]:
+        client.post("/api/v1/recipes", headers=h, json={**PASTA, "title": title})
+    first = client.get("/api/v1/recipes/my-recipes?limit=2", headers=h).json()
+    second = client.get("/api/v1/recipes/my-recipes?limit=2&offset=2", headers=h).json()
+    assert [r["title"] for r in first + second] == ["Third", "Second", "First"]
+    other = auth_headers(client, email="other@example.com", username="other")
+    assert client.get("/api/v1/recipes/my-recipes", headers=other).json() == []
+    assert client.get("/api/v1/recipes/my-recipes?limit=0", headers=h).status_code == 422
+
+
 # --- US1.1 & US1.2: Security (Expired Token 401 & Role Escalation Rejection) ---
 def test_expired_tokens_and_role_escalation_are_rejected(client):
     h = auth_headers(client)
