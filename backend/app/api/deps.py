@@ -28,3 +28,13 @@ def get_current_user(db: DbSession, token: Annotated[str, Depends(oauth2_scheme)
 
 
 CurrentUser = Annotated[User, Depends(get_current_user)]
+
+
+# --- US1.2: Admin Account & RBAC (Admin-Only Role Guard Dependency) ---
+def require_admin(user: CurrentUser) -> User:
+    if user.role != "admin":
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Admins only")
+    return user
+
+
+AdminUser = Annotated[User, Depends(require_admin)]

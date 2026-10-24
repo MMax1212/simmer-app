@@ -38,3 +38,14 @@ def auth_headers(client, email="ana@example.com", username="ana", password="pass
     register(client, email, username, password)
     token = client.post("/api/v1/auth/login", json={"username_or_email": email, "password": password}).json()["access_token"]
     return {"Authorization": f"Bearer {token}"}
+
+
+# --- US1.2: Admin Promotion Test Fixture ---
+@pytest.fixture()
+def make_admin(db_session):
+    def _make(email):
+        user = db_session.query(User).filter_by(email=email).one()
+        user.role = "admin"
+        db_session.commit()
+
+    return _make

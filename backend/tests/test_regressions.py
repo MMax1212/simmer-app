@@ -53,6 +53,60 @@ def test_existing_bcrypt_account_upgrades_without_losing_access(client, db_sessi
         "username_or_email": "ana@example.com", "password": "password123"}).status_code == 200
     assert user.hashed_password.startswith("$argon2")
 
+
+# --- US1.3: User Profile Management (URL Format, Preference Sorting & Role Guard) ---
+def test_profile_nulls_urls_and_unknown_fields(client):
+    h = auth_headers(client)
+    assert client.put("/api/v1/users/me", headers=h, json={
+        "culinary_preferences": ["Italian", "Baking", "Italian"]}).json()["culinary_preferences"] == ["Baking", "Italian"]
+    assert client.put("/api/v1/users/me", headers=h, json={
+        "culinary_preferences": None}).json()["culinary_preferences"] == []
+    assert client.get("/api/v1/auth/me", headers=h).status_code == 200
+    for url in ["not-a-url", "javascript:alert(1)", "ftp://example.com/a.png"]:
+        assert client.put("/api/v1/users/me", headers=h, json={"avatar_url": url}).status_code == 422
+    assert client.put("/api/v1/users/me", headers=h, json={"role": "admin"}).status_code == 422
+    assert client.get("/api/v1/auth/me", headers=h).json()["role"] == "user"
+
+
+# --- US1.4: Recipe Creation & Saving (Rejection of Incomplete/Unknown Data) ---
+@pytest.mark.parametrize("changes", [
+    {"ingredients": []}, {"steps": []}, {"title": "  "},
+    {"ingredients": [{"name": "Pasta", "amount": 0, "unit": "g"}]},
+    {"ingredients": [{"name": "Pasta", "amount": 1, "unit": " "}]},
+    {"ingredients": [{"name": "Pasta", "quantity": 10, "unit": "g"}]},
+    {"steps": [{"step_number": 2, "instruction": "Boil pasta"}]},
+    {"steps": [{"step_number": 1, "instruction": "  "}]},
+    {"difficulty": "impossible"}, {"image_url": "not-a-url"},
+    {"unknown_field": True},
+])
+def test_recipe_contract_rejects_incomplete_or_unknown_data(client, changes):
+    h = auth_headers(client)
+    assert client.post("/api/v1/recipes", headers=h, json={**deepcopy(PASTA), **changes}).status_code == 422
+
+
+# --- US1.4: Recipe Creation & Saving (Metadata, Step Ordering & Cascade Deletion) ---
+def test_recipe_metadata_steps_and_update_are_persisted(client, db_session):
+    h = auth_headers(client)
+    body = {**PASTA, "cuisine": "Italian", "meal_type": "Dinner",
+            "difficulty": "easy", "image_url": "https://example.com/pasta.png"}
+    recipe = client.post("/api/v1/recipes", headers=h, json=body).json()
+    assert recipe["author_id"] == 1
+    assert recipe["ingredients"][0]["amount"] == 400
+    assert [s["step_number"] for s in recipe["steps"]] == [1, 2, 3]
+    assert all(s["id"] for s in recipe["steps"])
+    rid = recipe["id"]
+    read = client.get(f"/api/v1/recipes/{rid}").json()
+    for field in ["cuisine", "meal_type", "difficulty", "image_url"]:
+        assert read[field] == body[field]
+    updated = client.put(f"/api/v1/recipes/{rid}", headers=h, json={
+        **body, "steps": [{"step_number": 1, "instruction": "Use fresh pasta"}]})
+    assert updated.status_code == 200
+    assert [s["instruction"] for s in updated.json()["steps"]] == ["Use fresh pasta"]
+    assert db_session.query(RecipeStep).count() == 1
+    client.delete(f"/api/v1/recipes/{rid}", headers=h)
+    assert db_session.query(RecipeStep).count() == 0
+
+
 # --- US1.1 & US1.2: Security (Expired Token 401 & Role Escalation Rejection) ---
 def test_expired_tokens_and_role_escalation_are_rejected(client):
     h = auth_headers(client)
@@ -64,6 +118,28 @@ def test_expired_tokens_and_role_escalation_are_rejected(client):
     assert register(client, email="new@example.com", username="new").status_code == 201
     assert client.post("/api/v1/auth/register", json={
         "email": "bad@example.com", "username": "bad", "password": "password123", "role": "admin"}).status_code == 422
+
+
+# --- US1.2: Admin Account & RBAC (Reactivation, Audit Entries & Self-Protection) ---
+def test_admin_reactivation_roles_audit_and_self_protection(client, make_admin, db_session):
+    user_h = auth_headers(client)
+    admin_h = auth_headers(client, email="boss@example.com", username="boss")
+    make_admin("boss@example.com")
+    users = client.get("/api/v1/admin/users", headers=admin_h).json()
+    uid = next(u["id"] for u in users if u["username"] == "ana")
+    aid = next(u["id"] for u in users if u["username"] == "boss")
+    path = f"/api/v1/admin/users/{uid}/status"
+    assert client.patch(path, headers=admin_h, json={"is_active": False}).status_code == 200
+    assert client.get("/api/v1/auth/me", headers=user_h).status_code == 401
+    assert client.patch(path, headers=admin_h, json={"is_active": True}).status_code == 200
+    assert client.get("/api/v1/auth/me", headers=user_h).status_code == 200
+    assert client.patch(path, headers=admin_h, json={"role": "admin"}).status_code == 200
+    assert client.get("/api/admin/users", headers=user_h).status_code == 200
+    assert db_session.query(AdminAudit).count() == 3
+    assert client.patch(path, headers=admin_h, json={"is_active": None}).status_code == 422
+    assert client.patch(f"/api/v1/admin/users/{aid}/status", headers=admin_h, json={"role": "user"}).status_code == 400
+    assert client.patch("/api/v1/admin/users/99999/status", headers=admin_h, json={"is_active": False}).status_code == 404
+
 
 # --- US1.1, US1.3, US1.4, US1.5: End-to-End Vertical Slice Integration Flow ---
 def test_onboarding_profile_recipe_library_flow(client):

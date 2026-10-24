@@ -2,6 +2,13 @@ const API_URL = import.meta.env.VITE_API_URL ?? "";
 const TOKEN_KEY = "simmer_token";
 export const SESSION_EXPIRED = "simmer:session-expired";
 
+// --- US1.3: User Profile Management (Default Culinary Preference Tags) ---
+export const CULINARY_PREFS = [
+  "Italian", "Mexican", "Vegan", "Quick & Easy", "Baking",
+  "vegetarian", "vegan", "pescatarian", "gluten-free", "dairy-free",
+  "nut-free", "halal", "kosher", "low-carb",
+];
+
 // --- US1.1, US1.2, US1.3: User Profile & Authentication Data Model ---
 export interface User {
   id: number;
@@ -14,6 +21,37 @@ export interface User {
   culinary_preferences: string[];
   created_at: string;
 }
+
+// --- US1.4: Recipe Creation & Saving (Ingredient Data Structure) ---
+export interface Ingredient {
+  id?: number;
+  name: string;
+  amount: number | null;
+  unit: string | null;
+}
+
+// --- US1.4: Recipe Creation & Saving (Recipe Step Data Structure) ---
+export interface RecipeStep {
+  id?: number;
+  step_number: number;
+  instruction: string;
+}
+
+// --- US1.4: Recipe Creation & Saving (Recipe Input Payload) ---
+export interface RecipeInput {
+  title: string;
+  description: string | null;
+  cuisine: string | null;
+  meal_type: string | null;
+  difficulty: "easy" | "medium" | "hard";
+  image_url: string | null;
+  prep_time_mins: number;
+  cook_time_mins: number;
+  servings: number;
+  ingredients: Ingredient[];
+  steps: RecipeStep[];
+}
+
 
 export class ApiError extends Error {
   constructor(public status: number, message: string) { super(message); }
@@ -60,6 +98,21 @@ export const api = {
       method: "POST", body: json({ username_or_email, password }),
     }, false),
   me: () => request<User>("/api/v1/auth/me"),
+
+  // --- US1.3: User Profile Management Endpoint ---
+  updateProfile: (changes: Partial<Pick<User, "bio" | "avatar_url" | "culinary_preferences">>) =>
+    request<User>("/api/v1/users/me", { method: "PUT", body: json(changes) }),
+
+  // --- US1.4: Recipe Creation & Update Endpoints ---
+  createRecipe: (recipe: RecipeInput) =>
+    request<Recipe>("/api/v1/recipes", { method: "POST", body: json(recipe) }),
+  updateRecipe: (id: number, recipe: RecipeInput) =>
+    request<Recipe>("/api/v1/recipes/" + id, { method: "PUT", body: json(recipe) }),
+
+  // --- US1.2: Admin Account & RBAC Endpoints ---
+  adminListUsers: () => request<User[]>("/api/v1/admin/users"),
+  adminUpdateUser: (id: number, changes: { is_active?: boolean; role?: string }) =>
+    request<User>("/api/v1/admin/users/" + id + "/status", { method: "PATCH", body: json(changes) }),
 };
 
 export const errorText = (e: unknown) => e instanceof Error ? e.message : "Something went wrong";
