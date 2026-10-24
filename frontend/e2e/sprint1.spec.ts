@@ -21,6 +21,27 @@ test("register, edit profile, create/edit recipe, reload library, and delete", a
   await expect(page.getByLabel("Bio")).toHaveValue("Learning to cook");
   await expect(page.getByLabel("Italian", { exact: true })).toBeChecked();
 
+  // --- US1.4: Recipe Authoring (Form Fields, Ingredients & Multi-Step Instructions) ---
+  await page.getByRole("link", { name: "New Recipe", exact: true }).click();
+  await page.getByLabel("Title", { exact: true }).fill("Browser Pasta");
+  await page.getByLabel("Cuisine").fill("Italian");
+  await page.getByLabel("Meal type").fill("Dinner");
+  await page.getByLabel("Difficulty").selectOption("easy");
+  await page.getByLabel("Amount 1").fill("200");
+  await page.getByLabel("Unit 1").fill("g");
+  await page.getByLabel("Ingredient 1", { exact: true }).fill("pasta");
+  await page.getByLabel("Step 1", { exact: true }).fill("Boil the pasta");
+  await page.getByRole("button", { name: "+ Add step" }).click();
+  await page.getByLabel("Step 2", { exact: true }).fill("Add tomato sauce");
+  await page.getByRole("button", { name: "Save recipe" }).click();
+
+  // --- US1.4: Recipe Editing ---
+  await page.getByRole("link", { name: "Edit", exact: true }).click();
+  await page.getByLabel("Title", { exact: true }).fill("Better Browser Pasta");
+  await page.getByRole("button", { name: "Remove step 1" }).click();
+  await page.getByRole("button", { name: "Save recipe" }).click();
+  await expect(page.getByRole("heading", { name: "Better Browser Pasta" })).toBeVisible();
+
   // --- US1.1: Logout and Login with Username ---
   await page.getByRole("button", { name: "Log out" }).click();
   await page.getByRole("link", { name: "Log in", exact: true }).first().click();

@@ -22,6 +22,40 @@ export interface User {
   created_at: string;
 }
 
+// --- US1.4: Recipe Creation & Saving (Ingredient Data Structure) ---
+export interface Ingredient {
+  id?: number;
+  name: string;
+  amount: number | null;
+  unit: string | null;
+}
+
+// --- US1.4: Recipe Creation & Saving (Recipe Step Data Structure) ---
+export interface RecipeStep {
+  id?: number;
+  step_number: number;
+  instruction: string;
+}
+
+// --- US1.4: Recipe Creation & Saving (Recipe Input Payload) ---
+export interface RecipeInput {
+  title: string;
+  description: string | null;
+  cuisine: string | null;
+  meal_type: string | null;
+  difficulty: "easy" | "medium" | "hard";
+  image_url: string | null;
+  prep_time_mins: number;
+  cook_time_mins: number;
+  servings: number;
+  ingredients: Ingredient[];
+  steps: RecipeStep[];
+}
+
+
+export class ApiError extends Error {
+  constructor(public status: number, message: string) { super(message); }
+}
 
 // --- US1.1: User Account Registration & Login (Local Token Persistence) ---
 export const tokenStore = {
@@ -69,6 +103,11 @@ export const api = {
   updateProfile: (changes: Partial<Pick<User, "bio" | "avatar_url" | "culinary_preferences">>) =>
     request<User>("/api/v1/users/me", { method: "PUT", body: json(changes) }),
 
+  // --- US1.4: Recipe Creation & Update Endpoints ---
+  createRecipe: (recipe: RecipeInput) =>
+    request<Recipe>("/api/v1/recipes", { method: "POST", body: json(recipe) }),
+  updateRecipe: (id: number, recipe: RecipeInput) =>
+    request<Recipe>("/api/v1/recipes/" + id, { method: "PUT", body: json(recipe) }),
 
   // --- US1.2: Admin Account & RBAC Endpoints ---
   adminListUsers: () => request<User[]>("/api/v1/admin/users"),

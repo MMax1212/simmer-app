@@ -6,3 +6,12 @@ export const user: User = {
   bio: null, avatar_url: null, culinary_preferences: [], created_at: "2026-10-12",
 };
 
+// --- US1.4 & US1.5: Mock Recipe Test Fixture ---
+export const recipe: Recipe = {
+  id: 1, author_id: 1, author_username: "ana", title: "Tomato Pasta", description: "Weeknight dinner",
+  cuisine: "Italian", meal_type: "Dinner", difficulty: "easy", image_url: null,
+  prep_time_mins: 10, cook_time_mins: 20, servings: 2,
+  ingredients: [{ id: 10, name: "pasta", amount: 200, unit: "g" }],
+  steps: [{ id: 20, step_number: 1, instruction: "Boil the pasta" }],
+  created_at: "2026-10-12", updated_at: "2026-10-12",
+};

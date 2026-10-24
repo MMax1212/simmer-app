@@ -25,5 +25,9 @@ class User(Base):
     avatar_url: Mapped[str | None] = mapped_column(String(255), default=None)
     culinary_preferences: Mapped[list[str]] = mapped_column(JSON, default=list)
 
+    # --- US1.4: Recipe Creation & Association ---
+    recipes: Mapped[list["Recipe"]] = relationship(back_populates="owner", cascade="all, delete-orphan")  # noqa: F821
+
+
 # --- US1.1: Unique Case-Insensitive Username Index ---
 Index("uq_users_username_lower", func.lower(User.username), unique=True)
