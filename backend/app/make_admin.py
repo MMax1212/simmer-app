@@ -1,8 +1,12 @@
+"""Promote an existing account to admin (US1.2: Admin Account & RBAC).
+
+Usage (from backend/, venv active):  python -m app.make_admin you@example.com
+"""
 import sys
 
 from sqlalchemy import select
 
-from app import models
+from app import models  # noqa: F401
 from app.core.database import SessionLocal
 from app.models import User
 
