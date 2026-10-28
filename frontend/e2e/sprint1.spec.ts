@@ -32,8 +32,10 @@ test("register, edit profile, create/edit recipe, reload library, and delete", a
   await page.getByLabel("Meal type").fill("Dinner");
   await page.getByLabel("Difficulty").selectOption("easy");
   await page.getByLabel("Amount 1").fill("200");
-  await page.getByLabel("Unit 1").fill("g");
+  await page.getByLabel("Unit 1").selectOption("g");
   await page.getByLabel("Ingredient 1", { exact: true }).fill("pasta");
+  await page.getByLabel("Add tool").fill("Large pot");
+  await page.getByLabel("Add tool").press("Enter");
   await page.getByLabel("Step 1", { exact: true }).fill("Boil the pasta");
   await page.getByRole("button", { name: "+ Add step" }).click();
   await page.getByLabel("Step 2", { exact: true }).fill("Add tomato sauce");
@@ -41,6 +43,10 @@ test("register, edit profile, create/edit recipe, reload library, and delete", a
 
   // --- US1.5: Recipe Detail View ---
   await expect(page.getByRole("heading", { name: "Browser Pasta" })).toBeVisible();
+  await page.getByText("Required kitchen tools", { exact: true }).click();
+  await expect(page.getByText("Large pot", { exact: true })).toBeVisible();
+  await page.getByRole("checkbox", { name: "200 g pasta" }).check();
+  await expect(page.getByRole("checkbox", { name: "200 g pasta" })).toBeChecked();
   await expect(page.getByText("Add tomato sauce", { exact: true })).toBeVisible();
   await expect(page.locator("article ol")).toHaveCSS("list-style-type", "decimal");
   await page.screenshot({ path: test.info().outputPath("recipe-detail.png"), fullPage: true });

@@ -10,12 +10,14 @@ export function RecipeDetail() {
   const { user } = useAuth();
   const navigate = useNavigate();
   const [recipe, setRecipe] = useState<Recipe | null>(null);
+  const [checked, setChecked] = useState<number[]>([]);
   const [error, setError] = useState<string | null>(null);
 
   // --- US1.5: Task 5.4: Fetch Recipe Detail from Backend ---
   useEffect(() => {
     let active = true;
     setRecipe(null);
+    setChecked([]);
     setError(null);
     api.getRecipe(Number(id)).then((value) => { if (active) setRecipe(value); })
       .catch((e) => { if (active) setError(errorText(e)); });
@@ -54,11 +56,14 @@ export function RecipeDetail() {
           <h2>Ingredients</h2>
           <ul>
             {recipe.ingredients.map((i) => (
-              <li key={i.id}>{[i.amount, i.unit, i.name].filter((x) => x != null && x !== "").join(" ")}</li>
+              <li key={i.id}><label className="ingredient-check"><input type="checkbox" checked={checked.includes(i.id!)} onChange={(event) => setChecked((current) => event.target.checked ? [...current, i.id!] : current.filter((id) => id !== i.id))} /><span style={{ textDecoration: checked.includes(i.id!) ? "line-through" : "none" }}>{[i.amount, i.unit, i.name].filter((x) => x != null && x !== "").join(" ")}</span></label></li>
             ))}
           </ul>
         </>
       )}
+      <details><summary>Required kitchen tools</summary>
+        {recipe.tools?.length ? <ul>{recipe.tools.map((tool) => <li key={tool}>{tool}</li>)}</ul> : <p className="muted">No special tools listed.</p>}
+      </details>
       <h2>Instructions</h2>
       <ol className="list-decimal pl-6 space-y-3">{recipe.steps.map((step) => <li key={step.id} className="instructions">{step.instruction}</li>)}</ol>
       {canEdit && (

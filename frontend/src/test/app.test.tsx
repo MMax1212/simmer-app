@@ -134,9 +134,12 @@ describe("profiles and recipes", () => {
     await actor.click(screen.getByRole("button", { name: "+ Add ingredient" }));
     await actor.type(screen.getByLabelText("Ingredient 2"), "pasta");
     await actor.type(screen.getByLabelText("Amount 2"), "200");
-    await actor.type(screen.getByLabelText("Unit 2"), "g");
+    await actor.selectOptions(screen.getByLabelText("Unit 2"), "g");
     await actor.click(screen.getByRole("button", { name: "Remove ingredient 1" }));
     await actor.click(screen.getByRole("button", { name: "+ Add step" }));
+    await actor.type(screen.getByLabelText("Add tool"), "Large pot{Enter}");
+    await actor.type(screen.getByLabelText("Add tool"), "Colander,");
+    await actor.click(screen.getByRole("button", { name: "Remove tool Colander" }));
     await actor.type(screen.getByLabelText("Step 2"), "Boil the pasta");
     await actor.click(screen.getByRole("button", { name: "Remove step 1" }));
     expect(screen.getByLabelText("Ingredient 1")).toHaveValue("pasta");
@@ -146,6 +149,7 @@ describe("profiles and recipes", () => {
     const saved = fetchMock.mock.calls.find(([, init]) => init?.method === "POST")!;
     const body = JSON.parse(saved[1]!.body as string);
     expect(body.ingredients).toEqual([{ name: "pasta", amount: 200, unit: "g" }]);
+    expect(body.tools).toEqual(["Large pot"]);
     expect(body.steps).toEqual([{ step_number: 1, instruction: "Boil the pasta" }]);
     expect(body).not.toHaveProperty("instructions");
   });
@@ -157,7 +161,7 @@ describe("profiles and recipes", () => {
     open("/recipes/new", true);
     const title = await screen.findByLabelText("Title");
     await actor.type(title, "Tomato Pasta");
-    await actor.click(screen.getByRole("button", { name: "Remove ingredient 1" }));
+    expect(screen.getByRole("button", { name: "Remove ingredient 1" })).toBeDisabled();
     await actor.click(screen.getByRole("button", { name: "Remove step 1" }));
     fireEvent.submit(title.closest("form")!);
     expect(await screen.findByText("Add at least one ingredient and one step.")).toBeInTheDocument();
@@ -170,6 +174,11 @@ describe("profiles and recipes", () => {
     open("/recipes/1");
     expect(await screen.findByRole("heading", { name: "Tomato Pasta" })).toBeInTheDocument();
     expect(screen.getByText("200 g pasta")).toBeInTheDocument();
+    const ingredient = screen.getByRole("checkbox", { name: "200 g pasta" });
+    fireEvent.click(ingredient);
+    expect(ingredient).toBeChecked();
+    fireEvent.click(ingredient);
+    expect(ingredient).not.toBeChecked();
     expect(screen.getByText("Boil the pasta")).toBeInTheDocument();
   });
 

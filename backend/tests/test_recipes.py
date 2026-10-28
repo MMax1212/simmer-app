@@ -10,7 +10,7 @@ PASTA = {
     "servings": 4,
     "ingredients": [
         {"name": "spaghetti", "amount": 400, "unit": "g"},
-        {"name": "canned tomatoes", "amount": 1, "unit": "can"},
+        {"name": "canned tomatoes", "amount": 1, "unit": "count"},
         {"name": "salt", "amount": 1, "unit": "pinch"},
     ],
 }

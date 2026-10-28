@@ -10,7 +10,7 @@ from app.schemas.user import RequestModel
 class IngredientIn(RequestModel):
     name: str = Field(min_length=1, max_length=100)
     amount: float = Field(gt=0, allow_inf_nan=False)
-    unit: str = Field(min_length=1, max_length=30)
+    unit: Literal["g", "kg", "oz", "lb", "cup", "tbsp", "tsp", "ml", "l", "count", "pinch"]
 
     @field_validator("name", "unit")
     @classmethod
@@ -63,7 +63,20 @@ class RecipeCreate(RequestModel):
     cook_time_mins: int = Field(default=0, ge=0, le=10000)
     servings: int = Field(default=1, ge=1, le=100)
     ingredients: list[IngredientIn] = Field(min_length=1, max_length=200)
+    tools: list[str] = Field(default_factory=list, max_length=50)
     steps: list[RecipeStepIn] = Field(min_length=1, max_length=200)
+
+    @field_validator("tools")
+    @classmethod
+    def clean_tools(cls, values: list[str]) -> list[str]:
+        tools = []
+        for value in values:
+            name = value.strip()
+            if not name or len(name) > 80:
+                raise ValueError("Tool names must contain 1 to 80 characters")
+            if name.casefold() not in {tool.casefold() for tool in tools}:
+                tools.append(name)
+        return tools
 
     @field_validator("title")
     @classmethod
@@ -105,6 +118,7 @@ class RecipeOut(BaseModel):
     cook_time_mins: int
     servings: int
     ingredients: list[IngredientOut]
+    tools: list[str]
     steps: list[RecipeStepOut]
     created_at: datetime
     updated_at: datetime

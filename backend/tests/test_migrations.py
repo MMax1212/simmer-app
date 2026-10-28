@@ -101,3 +101,30 @@ def test_existing_unversioned_database_preserves_accounts_recipes_and_unknown_me
         finally:
             app.dependency_overrides.clear()
     engine.dispose()
+
+
+def test_tools_migration_round_trip(tmp_path):
+    engine = create_engine(f"sqlite:///{tmp_path / 'tools.db'}")
+    migrate(engine, '0002')
+    with engine.begin() as conn:
+        conn.execute(text("PRAGMA foreign_keys=ON"))
+        conn.execute(text("INSERT INTO users (id,email,username,hashed_password,role,is_active,created_at,culinary_preferences) VALUES (1,'cook@example.com','cook','hash','user',1,'2026-10-28','[]')"))
+        conn.execute(text("INSERT INTO recipes (id,author_id,title,prep_time_mins,cook_time_mins,servings,created_at,updated_at) VALUES (1,1,'Existing recipe',0,0,1,'2026-10-28','2026-10-28')"))
+    before = set(inspect(engine).get_table_names())
+    migrate(engine)
+    assert 'recipe_tools' in inspect(engine).get_table_names()
+    with engine.begin() as conn:
+        conn.execute(text("INSERT INTO recipe_tools (recipe_id,name) VALUES (1,'Pot')"))
+        conn.execute(text("DELETE FROM recipes WHERE id=1"))
+        assert conn.scalar(text("SELECT count(*) FROM recipe_tools")) == 0
+    config = Config(str(ROOT / 'alembic.ini'))
+    config.set_main_option('script_location', str(ROOT / 'migrations'))
+    with engine.begin() as connection:
+        config.attributes['connection'] = connection
+        command.downgrade(config, '-1')
+    assert set(inspect(engine).get_table_names()) == before
+    with engine.connect() as conn:
+        assert conn.scalar(text("SELECT username FROM users WHERE id=1")) == 'cook'
+    migrate(engine)
+    assert 'recipe_tools' in inspect(engine).get_table_names()
+    engine.dispose()
