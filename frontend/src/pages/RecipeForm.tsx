@@ -25,6 +25,7 @@ export function RecipeForm() {
   useEffect(() => {
     let active = true;
     setRecipe(emptyRecipe());
+    setToolInput("");
     setError(null);
     setLoading(editing);
     setBusy(false);
@@ -49,18 +50,7 @@ export function RecipeForm() {
   const setIngredient = (index: number, changes: Partial<Ingredient>) =>
     setRecipe((current) => ({ ...current, ingredients: current.ingredients.map((item, i) => i === index ? { ...item, ...changes } : item) }));
 
-  // --- US1.4: Task 4.4 & 4.5: Validate Recipe Inputs and Persist to Backend ---
-  async function onSubmit(event: FormEvent) {
-    event.preventDefault();
-    if (!recipe.ingredients.length || !recipe.steps.length) {
-      setError("Add at least one ingredient and one step.");
-      return;
-    }
-    if (recipe.title.trim().length < 3 || recipe.ingredients.some((i) => !i.name.trim() || !STANDARD_UNITS.includes(i.unit as typeof STANDARD_UNITS[number]) || !(Number(i.amount) > 0)) ||
-        recipe.steps.some((step) => step.instruction.trim().length < 3)) {
-      setError("Enter a title, complete ingredients with positive amounts, and instructions of at least 3 characters.");
-      return;
-    }
+  function collectTools(): string[] | null {
     const tools = [...recipe.tools];
     for (const raw of toolInput.split(",")) {
       const name = raw.trim();
@@ -68,8 +58,25 @@ export function RecipeForm() {
     }
     if (tools.length > 50 || tools.some((tool) => tool.length > 80)) {
       setError("Use at most 50 tools with names of up to 80 characters.");
+      return null;
+    }
+    return tools;
+  }
+
+  // --- US1.4: Task 4.4 & 4.5: Validate Recipe Inputs and Persist to Backend ---
+  async function onSubmit(event: FormEvent) {
+    event.preventDefault();
+    if (!recipe.ingredients.length || !recipe.steps.length) {
+      setError("Add at least one ingredient and one step.");
       return;
     }
+    if (recipe.title.trim().length < 3 || recipe.ingredients.some((i) => !i.name.trim() || !STANDARD_UNITS.includes(i.unit as typeof STANDARD_UNITS[number]) || (!Number.isFinite(i.amount) || !(Number(i.amount) > 0))) ||
+        recipe.steps.some((step) => step.instruction.trim().length < 3)) {
+      setError("Enter a title, complete ingredients with positive amounts, and instructions of at least 3 characters.");
+      return;
+    }
+    const tools = collectTools();
+    if (!tools) return;
     setBusy(true);
     setError(null);
     const body: RecipeInput = {
@@ -124,10 +131,14 @@ export function RecipeForm() {
         <legend>Required kitchen tools</legend>
         <label>Add tool<input value={toolInput} maxLength={80} placeholder="e.g. Large pot" onChange={(e) => setToolInput(e.target.value)} onKeyDown={(e) => {
           if (e.key === "Enter" || e.key === ",") {
+            if (e.nativeEvent.isComposing) return;
             e.preventDefault();
-            const name = toolInput.trim();
-            if (name && recipe.tools.length < 50 && !recipe.tools.some((tool) => tool.toLowerCase() === name.toLowerCase())) set("tools", [...recipe.tools, name]);
-            setToolInput("");
+            const tools = collectTools();
+            if (tools) {
+              set("tools", tools);
+              setToolInput("");
+              setError(null);
+            }
           }
         }} /></label>
         <p className="muted">Press Enter or comma to add a tool. Tools are optional.</p>

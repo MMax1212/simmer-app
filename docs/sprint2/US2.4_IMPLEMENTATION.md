@@ -1,6 +1,6 @@
 # US2.4: Structured ingredients and kitchen tools
 
-This slice starts from main at 71bc13d on codex/ulises-us2.4-ingredients-tools.
+This slice starts from main at 71bc13d on ulises-us2.4-ingredients-tools.
 
 - Ingredient rows use the supported units: g, kg, oz, lb, cup, tbsp, tsp, ml, l, count, pinch.
 - New/updated recipes require finite positive amounts and supported units. Existing measurements remain readable, including unknown legacy units; editing those requires selecting a supported unit.
