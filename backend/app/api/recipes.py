@@ -1,10 +1,10 @@
 from fastapi import APIRouter, HTTPException, Query, Response
-from sqlalchemy import select
+from sqlalchemy import func, select
 from sqlalchemy.orm import selectinload
 
 from app.api.deps import CurrentUser, DbSession
 from app.models import Ingredient, Recipe, RecipeStep, User
-from app.schemas.recipe import RecipeCreate, RecipeOut, RecipeUpdate
+from app.schemas.recipe import RecipeCreate, RecipeOut, RecipeUpdate, RecipeSearchResult
 
 router = APIRouter(prefix="/api/v1/recipes", tags=["recipes"])
 
@@ -38,6 +38,19 @@ def create_recipe(body: RecipeCreate, user: CurrentUser, db: DbSession):
     db.commit()
     db.refresh(recipe)
     return recipe
+
+
+# --- US2.2: Search Endpoint ---
+@router.get("", response_model=RecipeSearchResult)
+def search_recipes(db: DbSession):
+    total = db.scalar(select(func.count(Recipe.id))) or 0
+    items = db.scalars(select(Recipe).options(selectinload(Recipe.owner))).all()
+    return RecipeSearchResult(
+        total=total,
+        limit=20,
+        offset=0,
+        items=items,
+    )
 
 
 # --- US1.5: Personal Recipe Tab (Get Author-Filtered Saved Recipes with Pagination) ---
