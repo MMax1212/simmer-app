@@ -25,6 +25,7 @@ export function RecipeForm() {
   useEffect(() => {
     let active = true;
     setRecipe(emptyRecipe());
+    // A different recipe must not inherit an unfinished tool from the previous form.
     setToolInput("");
     setError(null);
     setLoading(editing);
@@ -50,6 +51,8 @@ export function RecipeForm() {
   const setIngredient = (index: number, changes: Partial<Ingredient>) =>
     setRecipe((current) => ({ ...current, ingredients: current.ingredients.map((item, i) => i === index ? { ...item, ...changes } : item) }));
 
+  // Share parsing between Enter/comma and Save so unfinished input is saved too.
+  // Preserve the input on validation failure, letting the author correct it.
   function collectTools(): string[] | null {
     const tools = [...recipe.tools];
     for (const raw of toolInput.split(",")) {
@@ -118,6 +121,7 @@ export function RecipeForm() {
             <input aria-label={"Amount " + (index + 1)} type="number" min={0.01} step="any" placeholder="Amount" required value={ingredient.amount ?? ""} onChange={(e) => setIngredient(index, { amount: e.target.value === "" ? null : Number(e.target.value) })} />
             <select aria-label={"Unit " + (index + 1)} required value={ingredient.unit ?? ""} onChange={(e) => setIngredient(index, { unit: e.target.value })}>
               <option value="">Choose unit</option>
+              {/* Show unknown legacy units without allowing them on a new save. */}
               {ingredient.unit && !STANDARD_UNITS.includes(ingredient.unit as typeof STANDARD_UNITS[number]) && <option value={ingredient.unit} disabled>{ingredient.unit} (choose a supported unit)</option>}
               {STANDARD_UNITS.map((unit) => <option key={unit} value={unit}>{unit}</option>)}
             </select>
@@ -131,6 +135,7 @@ export function RecipeForm() {
         <legend>Required kitchen tools</legend>
         <label>Add tool<input value={toolInput} maxLength={80} placeholder="e.g. Large pot" onChange={(e) => setToolInput(e.target.value)} onKeyDown={(e) => {
           if (e.key === "Enter" || e.key === ",") {
+            // Let input-method composition finish before interpreting Enter as Add.
             if (e.nativeEvent.isComposing) return;
             e.preventDefault();
             const tools = collectTools();

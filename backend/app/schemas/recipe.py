@@ -10,6 +10,7 @@ from app.schemas.user import RequestModel
 class IngredientIn(RequestModel):
     name: str = Field(min_length=1, max_length=100)
     amount: float = Field(gt=0, allow_inf_nan=False)
+    # US2.4: Restrict new inputs; IngredientOut still accepts legacy unit strings.
     unit: Literal["g", "kg", "oz", "lb", "cup", "tbsp", "tsp", "ml", "l", "count", "pinch"]
 
     @field_validator("name", "unit")
@@ -69,6 +70,7 @@ class RecipeCreate(RequestModel):
     @field_validator("tools")
     @classmethod
     def clean_tools(cls, values: list[str]) -> list[str]:
+        """Trim names and deduplicate case-insensitively, preserving first spelling/order."""
         tools = []
         for value in values:
             name = value.strip()

@@ -9,6 +9,7 @@ depends_on = None
 
 
 def upgrade():
+    # Add tools separately so existing recipes and legacy measurements stay intact.
     op.create_table("recipe_tools",
         sa.Column("id", sa.Integer(), primary_key=True),
         sa.Column("recipe_id", sa.Integer(), sa.ForeignKey("recipes.id", ondelete="CASCADE"), nullable=False),
@@ -17,5 +18,6 @@ def upgrade():
 
 
 def downgrade():
+    # Rollback removes only tool data; the pre-existing recipe tables remain unchanged.
     op.drop_index("ix_recipe_tools_recipe_id", table_name="recipe_tools")
     op.drop_table("recipe_tools")

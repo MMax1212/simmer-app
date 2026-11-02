@@ -26,6 +26,7 @@ def _require_owner(recipe: Recipe, user: User) -> None:
 # --- US1.4: Recipe Creation & Saving Helper (Attach Ingredients & Steps) ---
 def _set_children(recipe: Recipe, body: RecipeCreate) -> None:
     recipe.ingredients = [Ingredient(position=i, **item.model_dump()) for i, item in enumerate(body.ingredients)]
+    # Full recipe updates replace tools too; omitted tools default to an empty list.
     recipe.tool_rows = [RecipeTool(name=name) for name in body.tools]
     recipe.steps = [RecipeStep(**step.model_dump()) for step in body.steps]
 

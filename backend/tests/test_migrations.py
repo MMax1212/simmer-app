@@ -104,6 +104,7 @@ def test_existing_unversioned_database_preserves_accounts_recipes_and_unknown_me
 
 
 def test_tools_migration_round_trip(tmp_path):
+    """Exercise database cascades and reversible schema changes on a real SQLite file."""
     engine = create_engine(f"sqlite:///{tmp_path / 'tools.db'}")
     migrate(engine, '0002')
     with engine.begin() as conn:

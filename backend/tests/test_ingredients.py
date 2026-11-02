@@ -7,6 +7,7 @@ from tests.test_recipes import PASTA
 
 
 def test_tools_round_trip_edit_and_delete(client, db_session):
+    """Cover tool normalization and replacement across the complete recipe lifecycle."""
     headers = auth_headers(client)
     body = {**deepcopy(PASTA), 'tools': [' Large Pot ', 'large pot', 'Colander']}
     created = client.post('/api/v1/recipes', headers=headers, json=body)

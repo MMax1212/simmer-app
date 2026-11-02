@@ -10,6 +10,7 @@ export function RecipeDetail() {
   const { user } = useAuth();
   const navigate = useNavigate();
   const [recipe, setRecipe] = useState<Recipe | null>(null);
+  // Cooking progress is local UI state, not a change to the saved recipe.
   const [checked, setChecked] = useState<number[]>([]);
   const [error, setError] = useState<string | null>(null);
 
@@ -17,6 +18,7 @@ export function RecipeDetail() {
   useEffect(() => {
     let active = true;
     setRecipe(null);
+    // Ingredient IDs and progress belong to the recipe currently being viewed.
     setChecked([]);
     setError(null);
     api.getRecipe(Number(id)).then((value) => { if (active) setRecipe(value); })
