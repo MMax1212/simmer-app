@@ -108,3 +108,23 @@ class RecipeOut(BaseModel):
     steps: list[RecipeStepOut]
     created_at: datetime
     updated_at: datetime
+
+# --- US2.2: Recipe Search & Discovery (Search Result Schemas) --
+class RecipeSummaryOut(BaseModel):
+    """Lightweight recipe summary returned in search grids and listing cards."""
+    model_config = ConfigDict(from_attributes=True)
+    id: int
+    title: str
+    author_username: str
+    cuisine: str | None = None
+    meal_type: str |None = None
+    difficulty: str
+    cook_time_mins: int
+    image_url: str | None = None
+
+class RecipeSearchResult(BaseModel):
+    """Paginated search respinse w/ total hit count and current window"""
+    total: int
+    limit: int
+    offset: int 
+    items: list[RecipeSummaryOut]

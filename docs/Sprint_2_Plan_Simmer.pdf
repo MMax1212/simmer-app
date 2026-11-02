@@ -1,0 +1,4748 @@
+%PDF-1.4
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [3 0 R 4 0 R 5 0 R 6 0 R 7 0 R] /Count 5 >>
+endobj
+3 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Contents 8 0 R /Resources << /Font << /F1 13 0 R /F2 14 0 R >> >> >>
+endobj
+4 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Contents 9 0 R /Resources << /Font << /F1 13 0 R /F2 14 0 R >> >> >>
+endobj
+5 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Contents 10 0 R /Resources << /Font << /F1 13 0 R /F2 14 0 R >> >> >>
+endobj
+6 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Contents 11 0 R /Resources << /Font << /F1 13 0 R /F2 14 0 R >> >> >>
+endobj
+7 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Contents 12 0 R /Resources << /Font << /F1 13 0 R /F2 14 0 R >> >> >>
+endobj
+8 0 obj
+<< /Length 8953 >>
+stream
+q
+0.45 0.5 0.55 rg
+BT
+/F1 8 Tf
+40 26 Td
+(Team Simmer | Revision 1.1 | October 21, 2026) Tj
+512 26 Td
+(Page 1 of 5) Tj
+ET
+0.8 0.83 0.86 RG 0.5 w
+40 34 m
+572 34 l
+S
+Q
+
+q
+0.100 0.150 0.250 rg
+BT
+/F2 18 Tf
+40.00 747.00 Td
+(Sprint 2 Plan — CMPS 115 Software Methodology) Tj
+ET
+Q
+
+q
+0.350 0.400 0.450 rg
+BT
+/F1 10 Tf
+40.00 725.00 Td
+(Product: Simmer | Team: Team Simmer | Sprint Period: Oct 26 - Nov 8, 2026) Tj
+ET
+Q
+
+q
+0.800 0.820 0.850 RG
+1.50 w
+40.00 709.00 m
+572.00 709.00 l
+S
+Q
+
+q
+0.180 0.250 0.380 rg
+0.180 0.250 0.380 RG 1.00 w
+40.00 673.00 532.00 20.00 re
+B
+Q
+
+q
+1.000 1.000 1.000 rg
+BT
+/F2 9 Tf
+45.00 679.00 Td
+(Document Attribute) Tj
+ET
+Q
+
+q
+1.000 1.000 1.000 rg
+BT
+/F2 9 Tf
+195.00 679.00 Td
+(Details) Tj
+ET
+Q
+
+q
+1.000 1.000 1.000 rg
+0.850 0.880 0.910 RG 0.60 w
+40.00 654.00 532.00 19.00 re
+B
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+45.00 661.00 Td
+(Product Name) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+195.00 661.00 Td
+(Simmer — Cooking Social Media Web Application) Tj
+ET
+Q
+
+q
+0.970 0.980 0.990 rg
+0.850 0.880 0.910 RG 0.60 w
+40.00 635.00 532.00 19.00 re
+B
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+45.00 642.00 Td
+(Sprint Target & Workload) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+195.00 642.00 Td
+(Sprint 2 \(Target: 23 Story Points | 112 Ideal Engineering Hours\)) Tj
+ET
+Q
+
+q
+1.000 1.000 1.000 rg
+0.850 0.880 0.910 RG 0.60 w
+40.00 605.00 532.00 30.00 re
+B
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+45.00 623.00 Td
+(Team Members & Roles) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+195.00 623.00 Td
+(Maximo Mora \(PO\), Bryan Moreno \(SM\), Ulises Diaz \(Frontend\), John Weaver \(DB\),) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+195.00 612.00 Td
+(Benjamin Ong \(QA\)) Tj
+ET
+Q
+
+q
+0.970 0.980 0.990 rg
+0.850 0.880 0.910 RG 0.60 w
+40.00 586.00 532.00 19.00 re
+B
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+45.00 593.00 Td
+(Sprint Period & Completion) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+195.00 593.00 Td
+(October 26, 2026 – November 8, 2026 \(Completion Date: November 8, 2026\)) Tj
+ET
+Q
+
+q
+1.000 1.000 1.000 rg
+0.850 0.880 0.910 RG 0.60 w
+40.00 567.00 532.00 19.00 re
+B
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+45.00 574.00 Td
+(Document Revision & Date) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+195.00 574.00 Td
+(Revision 1.1 — October 21, 2026 \(Includes US1.2 Rollover from Sprint 1\)) Tj
+ET
+Q
+
+q
+0.930 0.950 0.980 rg
+0.780 0.840 0.920 RG 0.80 w
+40.00 543.00 532.00 22.00 re
+B
+Q
+
+q
+0.100 0.200 0.350 rg
+BT
+/F2 11 Tf
+48.00 549.00 Td
+(1. Sprint Goal) Tj
+ET
+Q
+
+q
+0.970 0.980 1.000 rg
+0.200 0.450 0.800 RG 1.00 w
+40.00 455.00 532.00 76.00 re
+B
+Q
+
+q
+0.200 0.450 0.800 rg
+40.00 455.00 4.00 76.00 re
+f
+Q
+
+q
+0.100 0.250 0.550 rg
+BT
+/F2 10 Tf
+52.00 517.00 Td
+(Sprint 2 Core Mission) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 9 Tf
+52.00 503.00 Td
+(Complete and deploy the administrative moderation dashboard and role-based access control \(carried) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 9 Tf
+52.00 490.00 Td
+(over from Sprint 1\), while enhancing Simmer's core recipe capabilities through comprehensive) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 9 Tf
+52.00 477.00 Td
+(categorization, multi-criteria keyword search, structured ingredient/tool specifications, personal) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 9 Tf
+52.00 464.00 Td
+(cooking history logging, and conducting an exploratory spike on social feed architectures.) Tj
+ET
+Q
+
+q
+0.930 0.950 0.980 rg
+0.780 0.840 0.920 RG 0.80 w
+40.00 433.00 532.00 22.00 re
+B
+Q
+
+q
+0.100 0.200 0.350 rg
+BT
+/F2 11 Tf
+48.00 439.00 Td
+(2. Intra-Sprint Dependency Analysis) Tj
+ET
+Q
+
+q
+0.200 0.200 0.200 rg
+BT
+/F1 9 Tf
+40.00 411.00 Td
+(The team conducted an intra-sprint dependency analysis during Sprint Planning to establish the optimal execution) Tj
+ET
+Q
+
+q
+0.200 0.200 0.200 rg
+BT
+/F1 9 Tf
+40.00 398.00 Td
+(order and avoid developer blocking:) Tj
+ET
+Q
+
+q
+0.180 0.250 0.380 rg
+0.180 0.250 0.380 RG 1.00 w
+40.00 361.00 532.00 20.00 re
+B
+Q
+
+q
+1.000 1.000 1.000 rg
+BT
+/F2 9 Tf
+45.00 367.00 Td
+(User Story / Item) Tj
+ET
+Q
+
+q
+1.000 1.000 1.000 rg
+BT
+/F2 9 Tf
+165.00 367.00 Td
+(Dependency Status) Tj
+ET
+Q
+
+q
+1.000 1.000 1.000 rg
+BT
+/F2 9 Tf
+260.00 367.00 Td
+(Technical Rationale & Mitigation Strategy) Tj
+ET
+Q
+
+q
+1.000 1.000 1.000 rg
+0.850 0.880 0.910 RG 0.60 w
+40.00 309.00 532.00 52.00 re
+B
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+45.00 349.00 Td
+(US1.2: Admin Account) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+45.00 338.00 Td
+(\(5 pts - {P1} Rollover\)) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+165.00 349.00 Td
+(CARRIED OVER) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+165.00 338.00 Td
+(\(Sprint 1) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+165.00 327.00 Td
+(Foundation\)) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+260.00 349.00 Td
+(Relies on Sprint 1 user authentication. Establishes role-based) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+260.00 338.00 Td
+(access control \(RBAC: role == 'admin'\) across all routes. Scheduled) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+260.00 327.00 Td
+(early in Week 1 so admin permission guards protect all new recipe) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+260.00 316.00 Td
+(management endpoints.) Tj
+ET
+Q
+
+q
+0.970 0.980 0.990 rg
+0.850 0.880 0.910 RG 0.60 w
+40.00 246.00 532.00 63.00 re
+B
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+45.00 297.00 Td
+(US2.2: Recipe Search) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+45.00 286.00 Td
+(\(5 pts - {P1}\)) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+165.00 297.00 Td
+(DEPENDS ON) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+165.00 286.00 Td
+(US2.1 & US2.4) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+260.00 297.00 Td
+(While basic title matching can be built independently, multi-facet) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+260.00 286.00 Td
+(keyword search relies directly on category indexes \(US2.1: cuisine,) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+260.00 275.00 Td
+(meal type, difficulty\) and ingredient arrays \(US2.4\). Strategy: John) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+260.00 264.00 Td
+(and Ulises deliver schemas in Week 1; Maximo connects faceted search) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+260.00 253.00 Td
+(in Week 2.) Tj
+ET
+Q
+
+q
+1.000 1.000 1.000 rg
+0.850 0.880 0.910 RG 0.60 w
+40.00 194.00 532.00 52.00 re
+B
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+45.00 234.00 Td
+(US2.3: Cooking History) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+45.00 223.00 Td
+(\(3 pts - {P1}\)) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+165.00 234.00 Td
+(DEPENDS ON) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+165.00 223.00 Td
+(US2.4) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+260.00 234.00 Td
+(Logging a cooked recipe and rendering completion cards on user) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+260.00 223.00 Td
+(profiles requires structured recipe metadata \(ingredients and tools) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+260.00 212.00 Td
+(used\). Strategy: Recipe presentation components from US2.4 are reused) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+260.00 201.00 Td
+(in the history log.) Tj
+ET
+Q
+
+q
+0.970 0.980 0.990 rg
+0.850 0.880 0.910 RG 0.60 w
+40.00 153.00 532.00 41.00 re
+B
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+45.00 182.00 Td
+(SPK-2.1: Social Spike) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+45.00 171.00 Td
+(\(2 pts - {P2}\)) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+165.00 182.00 Td
+(INDEPENDENT) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+165.00 171.00 Td
+(\(Spike\)) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+260.00 182.00 Td
+(Exploratory research evaluating fan-out-on-read vs. fan-out-on-write) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+260.00 171.00 Td
+(feed architectures in preparation for Sprint 3. Conducted on an) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+260.00 160.00 Td
+(isolated research branch without blocking feature work.) Tj
+ET
+Q
+
+q
+1.000 1.000 1.000 rg
+0.850 0.880 0.910 RG 0.60 w
+40.00 112.00 532.00 41.00 re
+B
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+45.00 141.00 Td
+(US2.1: Categorization) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+45.00 130.00 Td
+(\(3 pts - {P1}\)) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+165.00 141.00 Td
+(INDEPENDENT) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+165.00 130.00 Td
+(\(Foundational\)) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+260.00 141.00 Td
+(Extends the baseline recipe data model established in Sprint 1.) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+260.00 130.00 Td
+(Scheduled for immediate Day 1 deployment to unblock search query) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+260.00 119.00 Td
+(integration.) Tj
+ET
+Q
+
+q
+0.930 0.950 0.980 rg
+0.780 0.840 0.920 RG 0.80 w
+40.00 88.00 532.00 22.00 re
+B
+Q
+
+q
+0.100 0.200 0.350 rg
+BT
+/F2 11 Tf
+48.00 94.00 Td
+(3. Task Listing \(Organized by User Story in Priority Order\)) Tj
+ET
+Q
+
+q
+0.200 0.200 0.200 rg
+BT
+/F1 8.5 Tf
+40.00 66.00 Td
+(All engineering tasks conform to the CMPS 115 guideline of <= 6 ideal hours. Priority order: {P1} to {P2}.) Tj
+ET
+Q
+
+endstream
+endobj
+9 0 obj
+<< /Length 11882 >>
+stream
+q
+0.45 0.5 0.55 rg
+BT
+/F1 8 Tf
+40 764 Td
+(Simmer — Sprint 2 Plan | CSE 115a / CMPS 115) Tj
+ET
+0.8 0.83 0.86 RG 0.5 w
+40 760 m
+572 760 l
+S
+Q
+
+q
+0.45 0.5 0.55 rg
+BT
+/F1 8 Tf
+40 26 Td
+(Team Simmer | Revision 1.1 | October 21, 2026) Tj
+512 26 Td
+(Page 2 of 5) Tj
+ET
+0.8 0.83 0.86 RG 0.5 w
+40 34 m
+572 34 l
+S
+Q
+
+q
+0.150 0.250 0.400 rg
+BT
+/F2 10.5 Tf
+40.00 747.00 Td
+(US1.2: Admin Account, Moderation Dashboard & RBAC) Tj
+ET
+Q
+
+q
+0.800 0.300 0.100 rg
+BT
+/F2 9.5 Tf
+492.00 747.00 Td
+([5 pts | 23 hrs \(Rollover\)]) Tj
+ET
+Q
+
+q
+0.180 0.250 0.380 rg
+0.180 0.250 0.380 RG 1.00 w
+40.00 713.00 532.00 20.00 re
+B
+Q
+
+q
+1.000 1.000 1.000 rg
+BT
+/F2 9 Tf
+45.00 719.00 Td
+(Task ID) Tj
+ET
+Q
+
+q
+1.000 1.000 1.000 rg
+BT
+/F2 9 Tf
+105.00 719.00 Td
+(Engineering Task Description) Tj
+ET
+Q
+
+q
+1.000 1.000 1.000 rg
+BT
+/F2 9 Tf
+417.00 719.00 Td
+(Est. Hours) Tj
+ET
+Q
+
+q
+1.000 1.000 1.000 rg
+BT
+/F2 9 Tf
+482.00 719.00 Td
+(Assigned Owner) Tj
+ET
+Q
+
+q
+1.000 1.000 1.000 rg
+0.850 0.880 0.910 RG 0.60 w
+40.00 683.00 532.00 30.00 re
+B
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+45.00 701.00 Td
+(Task 2.1) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+105.00 701.00 Td
+(Design administrative navigation and user management console) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+105.00 690.00 Td
+(interface) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+417.00 701.00 Td
+(3 hrs) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+482.00 701.00 Td
+(Maximo Mora) Tj
+ET
+Q
+
+q
+0.970 0.980 0.990 rg
+0.850 0.880 0.910 RG 0.60 w
+40.00 653.00 532.00 30.00 re
+B
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+45.00 671.00 Td
+(Task 2.2) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+105.00 671.00 Td
+(Extend database schema with user roles, privileges, and admin audit) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+105.00 660.00 Td
+(flags) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+417.00 671.00 Td
+(3 hrs) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+482.00 671.00 Td
+(John Weaver) Tj
+ET
+Q
+
+q
+1.000 1.000 1.000 rg
+0.850 0.880 0.910 RG 0.60 w
+40.00 623.00 532.00 30.00 re
+B
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+45.00 641.00 Td
+(Task 2.3) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+105.00 641.00 Td
+(Implement role-based access control \(RBAC\) middleware and token) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+105.00 630.00 Td
+(validation) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+417.00 641.00 Td
+(4 hrs) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+482.00 641.00 Td
+(Bryan Moreno) Tj
+ET
+Q
+
+q
+0.970 0.980 0.990 rg
+0.850 0.880 0.910 RG 0.60 w
+40.00 604.00 532.00 19.00 re
+B
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+45.00 611.00 Td
+(Task 2.4) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+105.00 611.00 Td
+(Build admin management API endpoints \(view users, flag/edit status\)) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+417.00 611.00 Td
+(5 hrs) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+482.00 611.00 Td
+(Bryan Moreno) Tj
+ET
+Q
+
+q
+1.000 1.000 1.000 rg
+0.850 0.880 0.910 RG 0.60 w
+40.00 574.00 532.00 30.00 re
+B
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+45.00 592.00 Td
+(Task 2.5) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+105.00 592.00 Td
+(Connect admin frontend view to admin management endpoints with) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+105.00 581.00 Td
+(error handling) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+417.00 592.00 Td
+(3 hrs) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+482.00 592.00 Td
+(Maximo Mora) Tj
+ET
+Q
+
+q
+0.970 0.980 0.990 rg
+0.850 0.880 0.910 RG 0.60 w
+40.00 555.00 532.00 19.00 re
+B
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+45.00 562.00 Td
+(Task 2.6) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+105.00 562.00 Td
+(Conduct end-to-end security and role escalation testing) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+417.00 562.00 Td
+(5 hrs) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+482.00 562.00 Td
+(Benjamin Ong) Tj
+ET
+Q
+
+q
+0.150 0.250 0.400 rg
+BT
+/F2 10.5 Tf
+40.00 541.00 Td
+(US2.1: Recipe Categorization by Cuisine, Meal Type & Difficulty) Tj
+ET
+Q
+
+q
+0.800 0.300 0.100 rg
+BT
+/F2 9.5 Tf
+492.00 541.00 Td
+([3 pts | 18 hrs]) Tj
+ET
+Q
+
+q
+0.180 0.250 0.380 rg
+0.180 0.250 0.380 RG 1.00 w
+40.00 507.00 532.00 20.00 re
+B
+Q
+
+q
+1.000 1.000 1.000 rg
+BT
+/F2 9 Tf
+45.00 513.00 Td
+(Task ID) Tj
+ET
+Q
+
+q
+1.000 1.000 1.000 rg
+BT
+/F2 9 Tf
+105.00 513.00 Td
+(Engineering Task Description) Tj
+ET
+Q
+
+q
+1.000 1.000 1.000 rg
+BT
+/F2 9 Tf
+417.00 513.00 Td
+(Est. Hours) Tj
+ET
+Q
+
+q
+1.000 1.000 1.000 rg
+BT
+/F2 9 Tf
+482.00 513.00 Td
+(Assigned Owner) Tj
+ET
+Q
+
+q
+1.000 1.000 1.000 rg
+0.850 0.880 0.910 RG 0.60 w
+40.00 477.00 532.00 30.00 re
+B
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+45.00 495.00 Td
+(Task 1.1) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+105.00 495.00 Td
+(Update database schema with category fields and write Alembic) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+105.00 484.00 Td
+(migration script) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+417.00 495.00 Td
+(3 hrs) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+482.00 495.00 Td
+(John Weaver) Tj
+ET
+Q
+
+q
+0.970 0.980 0.990 rg
+0.850 0.880 0.910 RG 0.60 w
+40.00 447.00 532.00 30.00 re
+B
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+45.00 465.00 Td
+(Task 1.2) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+105.00 465.00 Td
+(Design and implement frontend category badge selector and tag pills) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+105.00 454.00 Td
+(in recipe creation form) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+417.00 465.00 Td
+(4 hrs) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+482.00 465.00 Td
+(Ulises Diaz) Tj
+ET
+Q
+
+q
+1.000 1.000 1.000 rg
+0.850 0.880 0.910 RG 0.60 w
+40.00 417.00 532.00 30.00 re
+B
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+45.00 435.00 Td
+(Task 1.3) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+105.00 435.00 Td
+(Update backend recipe CRUD endpoints to validate and persist) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+105.00 424.00 Td
+(category enumerations) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+417.00 435.00 Td
+(3 hrs) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+482.00 435.00 Td
+(Bryan Moreno) Tj
+ET
+Q
+
+q
+0.970 0.980 0.990 rg
+0.850 0.880 0.910 RG 0.60 w
+40.00 398.00 532.00 19.00 re
+B
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+45.00 405.00 Td
+(Task 1.4) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+105.00 405.00 Td
+(Build frontend category filter bar on recipe library/discovery page) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+417.00 405.00 Td
+(4 hrs) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+482.00 405.00 Td
+(Ulises Diaz) Tj
+ET
+Q
+
+q
+1.000 1.000 1.000 rg
+0.850 0.880 0.910 RG 0.60 w
+40.00 368.00 532.00 30.00 re
+B
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+45.00 386.00 Td
+(Task 1.5) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+105.00 386.00 Td
+(Write automated unit and integration tests for category validation) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+105.00 375.00 Td
+(and tag query filters) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+417.00 386.00 Td
+(4 hrs) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+482.00 386.00 Td
+(Benjamin Ong) Tj
+ET
+Q
+
+q
+0.150 0.250 0.400 rg
+BT
+/F2 10.5 Tf
+40.00 354.00 Td
+(US2.2: Search Recipes by Title and Keywords) Tj
+ET
+Q
+
+q
+0.800 0.300 0.100 rg
+BT
+/F2 9.5 Tf
+492.00 354.00 Td
+([5 pts | 22 hrs]) Tj
+ET
+Q
+
+q
+0.180 0.250 0.380 rg
+0.180 0.250 0.380 RG 1.00 w
+40.00 320.00 532.00 20.00 re
+B
+Q
+
+q
+1.000 1.000 1.000 rg
+BT
+/F2 9 Tf
+45.00 326.00 Td
+(Task ID) Tj
+ET
+Q
+
+q
+1.000 1.000 1.000 rg
+BT
+/F2 9 Tf
+105.00 326.00 Td
+(Engineering Task Description) Tj
+ET
+Q
+
+q
+1.000 1.000 1.000 rg
+BT
+/F2 9 Tf
+417.00 326.00 Td
+(Est. Hours) Tj
+ET
+Q
+
+q
+1.000 1.000 1.000 rg
+BT
+/F2 9 Tf
+482.00 326.00 Td
+(Assigned Owner) Tj
+ET
+Q
+
+q
+1.000 1.000 1.000 rg
+0.850 0.880 0.910 RG 0.60 w
+40.00 290.00 532.00 30.00 re
+B
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+45.00 308.00 Td
+(Task 3.1) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+105.00 308.00 Td
+(Implement backend search endpoint with text indexing and) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+105.00 297.00 Td
+(case-insensitive SQL query logic) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+417.00 308.00 Td
+(5 hrs) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+482.00 308.00 Td
+(Bryan Moreno) Tj
+ET
+Q
+
+q
+0.970 0.980 0.990 rg
+0.850 0.880 0.910 RG 0.60 w
+40.00 260.00 532.00 30.00 re
+B
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+45.00 278.00 Td
+(Task 3.2) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+105.00 278.00 Td
+(Design and implement responsive search input component with) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+105.00 267.00 Td
+(debounce and loading spinner) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+417.00 278.00 Td
+(4 hrs) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+482.00 278.00 Td
+(Maximo Mora) Tj
+ET
+Q
+
+q
+1.000 1.000 1.000 rg
+0.850 0.880 0.910 RG 0.60 w
+40.00 230.00 532.00 30.00 re
+B
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+45.00 248.00 Td
+(Task 3.3) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+105.00 248.00 Td
+(Integrate multi-facet filtering \(combining text search with US2.1) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+105.00 237.00 Td
+(categories & US2.4 ingredients\)) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+417.00 248.00 Td
+(5 hrs) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+482.00 248.00 Td
+(Maximo Mora) Tj
+ET
+Q
+
+q
+0.970 0.980 0.990 rg
+0.850 0.880 0.910 RG 0.60 w
+40.00 200.00 532.00 30.00 re
+B
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+45.00 218.00 Td
+(Task 3.4) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+105.00 218.00 Td
+(Build search results grid with empty state \('No recipes found'\) and) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+105.00 207.00 Td
+(active filter clear buttons) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+417.00 218.00 Td
+(3 hrs) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+482.00 218.00 Td
+(Ulises Diaz) Tj
+ET
+Q
+
+q
+1.000 1.000 1.000 rg
+0.850 0.880 0.910 RG 0.60 w
+40.00 170.00 532.00 30.00 re
+B
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+45.00 188.00 Td
+(Task 3.5) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+105.00 188.00 Td
+(Automated test suite for search query edge cases, SQL injection) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+105.00 177.00 Td
+(prevention, and empty results) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+417.00 188.00 Td
+(5 hrs) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+482.00 188.00 Td
+(Benjamin Ong) Tj
+ET
+Q
+
+q
+0.150 0.250 0.400 rg
+BT
+/F2 10.5 Tf
+40.00 156.00 Td
+(US2.3: Mark and Log Completed Recipes \(Cooking History\)) Tj
+ET
+Q
+
+q
+0.800 0.300 0.100 rg
+BT
+/F2 9.5 Tf
+492.00 156.00 Td
+([3 pts | 17 hrs]) Tj
+ET
+Q
+
+q
+0.180 0.250 0.380 rg
+0.180 0.250 0.380 RG 1.00 w
+40.00 122.00 532.00 20.00 re
+B
+Q
+
+q
+1.000 1.000 1.000 rg
+BT
+/F2 9 Tf
+45.00 128.00 Td
+(Task ID) Tj
+ET
+Q
+
+q
+1.000 1.000 1.000 rg
+BT
+/F2 9 Tf
+105.00 128.00 Td
+(Engineering Task Description) Tj
+ET
+Q
+
+q
+1.000 1.000 1.000 rg
+BT
+/F2 9 Tf
+417.00 128.00 Td
+(Est. Hours) Tj
+ET
+Q
+
+q
+1.000 1.000 1.000 rg
+BT
+/F2 9 Tf
+482.00 128.00 Td
+(Assigned Owner) Tj
+ET
+Q
+
+q
+1.000 1.000 1.000 rg
+0.850 0.880 0.910 RG 0.60 w
+40.00 92.00 532.00 30.00 re
+B
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+45.00 110.00 Td
+(Task 4.1) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+105.00 110.00 Td
+(Design and create completed_recipes database join table \(user_id,) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+105.00 99.00 Td
+(recipe_id, timestamp, notes\)) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+417.00 110.00 Td
+(3 hrs) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+482.00 110.00 Td
+(John Weaver) Tj
+ET
+Q
+
+q
+0.970 0.980 0.990 rg
+0.850 0.880 0.910 RG 0.60 w
+40.00 62.00 532.00 30.00 re
+B
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+45.00 80.00 Td
+(Task 4.2) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+105.00 80.00 Td
+(Build backend API endpoints to log a recipe as cooked \(POST) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+105.00 69.00 Td
+(/recipes/{id}/complete\) and fetch history) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+417.00 80.00 Td
+(4 hrs) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+482.00 80.00 Td
+(John Weaver) Tj
+ET
+Q
+
+endstream
+endobj
+10 0 obj
+<< /Length 9895 >>
+stream
+q
+0.45 0.5 0.55 rg
+BT
+/F1 8 Tf
+40 764 Td
+(Simmer — Sprint 2 Plan | CSE 115a / CMPS 115) Tj
+ET
+0.8 0.83 0.86 RG 0.5 w
+40 760 m
+572 760 l
+S
+Q
+
+q
+0.45 0.5 0.55 rg
+BT
+/F1 8 Tf
+40 26 Td
+(Team Simmer | Revision 1.1 | October 21, 2026) Tj
+512 26 Td
+(Page 3 of 5) Tj
+ET
+0.8 0.83 0.86 RG 0.5 w
+40 34 m
+572 34 l
+S
+Q
+
+q
+1.000 1.000 1.000 rg
+0.850 0.880 0.910 RG 0.60 w
+40.00 717.00 532.00 30.00 re
+B
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+45.00 735.00 Td
+(Task 4.3) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+105.00 735.00 Td
+(Design 'I Cooked This!' interactive button and date-logged popup) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+105.00 724.00 Td
+(modal in React) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+417.00 735.00 Td
+(3 hrs) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+482.00 735.00 Td
+(Ulises Diaz) Tj
+ET
+Q
+
+q
+0.970 0.980 0.990 rg
+0.850 0.880 0.910 RG 0.60 w
+40.00 687.00 532.00 30.00 re
+B
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+45.00 705.00 Td
+(Task 4.4) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+105.00 705.00 Td
+(Build 'Cooking History' log tab on User Profile page displaying) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+105.00 694.00 Td
+(completed recipe cards and dates) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+417.00 705.00 Td
+(4 hrs) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+482.00 705.00 Td
+(Maximo Mora) Tj
+ET
+Q
+
+q
+1.000 1.000 1.000 rg
+0.850 0.880 0.910 RG 0.60 w
+40.00 657.00 532.00 30.00 re
+B
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+45.00 675.00 Td
+(Task 4.5) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+105.00 675.00 Td
+(Integration tests for cooking history persistence and prevention of) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+105.00 664.00 Td
+(duplicate timestamps) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+417.00 675.00 Td
+(3 hrs) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+482.00 675.00 Td
+(Benjamin Ong) Tj
+ET
+Q
+
+q
+0.150 0.250 0.400 rg
+BT
+/F2 10.5 Tf
+40.00 643.00 Td
+(US2.4: Specify Structured Ingredient Lists & Required Kitchen Tools) Tj
+ET
+Q
+
+q
+0.800 0.300 0.100 rg
+BT
+/F2 9.5 Tf
+492.00 643.00 Td
+([5 pts | 24 hrs]) Tj
+ET
+Q
+
+q
+0.180 0.250 0.380 rg
+0.180 0.250 0.380 RG 1.00 w
+40.00 609.00 532.00 20.00 re
+B
+Q
+
+q
+1.000 1.000 1.000 rg
+BT
+/F2 9 Tf
+45.00 615.00 Td
+(Task ID) Tj
+ET
+Q
+
+q
+1.000 1.000 1.000 rg
+BT
+/F2 9 Tf
+105.00 615.00 Td
+(Engineering Task Description) Tj
+ET
+Q
+
+q
+1.000 1.000 1.000 rg
+BT
+/F2 9 Tf
+417.00 615.00 Td
+(Est. Hours) Tj
+ET
+Q
+
+q
+1.000 1.000 1.000 rg
+BT
+/F2 9 Tf
+482.00 615.00 Td
+(Assigned Owner) Tj
+ET
+Q
+
+q
+1.000 1.000 1.000 rg
+0.850 0.880 0.910 RG 0.60 w
+40.00 579.00 532.00 30.00 re
+B
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+45.00 597.00 Td
+(Task 5.1) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+105.00 597.00 Td
+(Design and migrate relational database schema for) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+105.00 586.00 Td
+(recipe_ingredients and kitchen_tools) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+417.00 597.00 Td
+(4 hrs) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+482.00 597.00 Td
+(John Weaver) Tj
+ET
+Q
+
+q
+0.970 0.980 0.990 rg
+0.850 0.880 0.910 RG 0.60 w
+40.00 549.00 532.00 30.00 re
+B
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+45.00 567.00 Td
+(Task 5.2) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+105.00 567.00 Td
+(Build dynamic 'Add Ingredient' row component with unit dropdowns) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+105.00 556.00 Td
+(\(g, oz, cup, tbsp\) in React) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+417.00 567.00 Td
+(5 hrs) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+482.00 567.00 Td
+(Ulises Diaz) Tj
+ET
+Q
+
+q
+1.000 1.000 1.000 rg
+0.850 0.880 0.910 RG 0.60 w
+40.00 519.00 532.00 30.00 re
+B
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+45.00 537.00 Td
+(Task 5.3) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+105.00 537.00 Td
+(Build 'Required Kitchen Tools' tag input selector in the recipe) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+105.00 526.00 Td
+(authoring interface) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+417.00 537.00 Td
+(3 hrs) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+482.00 537.00 Td
+(Ulises Diaz) Tj
+ET
+Q
+
+q
+0.970 0.980 0.990 rg
+0.850 0.880 0.910 RG 0.60 w
+40.00 489.00 532.00 30.00 re
+B
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+45.00 507.00 Td
+(Task 5.4) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+105.00 507.00 Td
+(Update backend recipe ingestion service to parse, sanitize, and) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+105.00 496.00 Td
+(persist structured ingredients) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+417.00 507.00 Td
+(4 hrs) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+482.00 507.00 Td
+(John Weaver) Tj
+ET
+Q
+
+q
+1.000 1.000 1.000 rg
+0.850 0.880 0.910 RG 0.60 w
+40.00 459.00 532.00 30.00 re
+B
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+45.00 477.00 Td
+(Task 5.5) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+105.00 477.00 Td
+(Render formatted ingredient checklist and required tools drawer on) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+105.00 466.00 Td
+(the Recipe Detail view) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+417.00 477.00 Td
+(4 hrs) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+482.00 477.00 Td
+(Maximo Mora) Tj
+ET
+Q
+
+q
+0.970 0.980 0.990 rg
+0.850 0.880 0.910 RG 0.60 w
+40.00 429.00 532.00 30.00 re
+B
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+45.00 447.00 Td
+(Task 5.6) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+105.00 447.00 Td
+(Write automated test cases for structured ingredient validation,) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+105.00 436.00 Td
+(unit conversions, and tool lists) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+417.00 447.00 Td
+(4 hrs) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+482.00 447.00 Td
+(Benjamin Ong) Tj
+ET
+Q
+
+q
+0.150 0.250 0.400 rg
+BT
+/F2 10.5 Tf
+40.00 415.00 Td
+(SPK-2.1: Spike: Evaluate Social Activity Feed Data Models) Tj
+ET
+Q
+
+q
+0.800 0.300 0.100 rg
+BT
+/F2 9.5 Tf
+492.00 415.00 Td
+([2 pts | 8 hrs]) Tj
+ET
+Q
+
+q
+0.180 0.250 0.380 rg
+0.180 0.250 0.380 RG 1.00 w
+40.00 381.00 532.00 20.00 re
+B
+Q
+
+q
+1.000 1.000 1.000 rg
+BT
+/F2 9 Tf
+45.00 387.00 Td
+(Task ID) Tj
+ET
+Q
+
+q
+1.000 1.000 1.000 rg
+BT
+/F2 9 Tf
+105.00 387.00 Td
+(Engineering Task Description) Tj
+ET
+Q
+
+q
+1.000 1.000 1.000 rg
+BT
+/F2 9 Tf
+417.00 387.00 Td
+(Est. Hours) Tj
+ET
+Q
+
+q
+1.000 1.000 1.000 rg
+BT
+/F2 9 Tf
+482.00 387.00 Td
+(Assigned Owner) Tj
+ET
+Q
+
+q
+1.000 1.000 1.000 rg
+0.850 0.880 0.910 RG 0.60 w
+40.00 351.00 532.00 30.00 re
+B
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+45.00 369.00 Td
+(Task 6.1) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+105.00 369.00 Td
+(Research and benchmark fan-out-on-read vs. fan-out-on-write feed) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+105.00 358.00 Td
+(architectures for social delivery) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+417.00 369.00 Td
+(4 hrs) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+482.00 369.00 Td
+(Bryan Moreno) Tj
+ET
+Q
+
+q
+0.970 0.980 0.990 rg
+0.850 0.880 0.910 RG 0.60 w
+40.00 321.00 532.00 30.00 re
+B
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+45.00 339.00 Td
+(Task 6.2) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+105.00 339.00 Td
+(Create prototype spike branch testing follower-based query) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+105.00 328.00 Td
+(performance in SQLite/PostgreSQL) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+417.00 339.00 Td
+(4 hrs) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+482.00 339.00 Td
+(Bryan Moreno) Tj
+ET
+Q
+
+q
+0.930 0.950 0.980 rg
+0.780 0.840 0.920 RG 0.80 w
+40.00 297.00 532.00 22.00 re
+B
+Q
+
+q
+0.100 0.200 0.350 rg
+BT
+/F2 11 Tf
+48.00 303.00 Td
+(4. Workload Summary & Academic Capacity) Tj
+ET
+Q
+
+q
+0.180 0.250 0.380 rg
+0.180 0.250 0.380 RG 1.00 w
+40.00 255.00 532.00 20.00 re
+B
+Q
+
+q
+1.000 1.000 1.000 rg
+BT
+/F2 9 Tf
+45.00 261.00 Td
+(Metric) Tj
+ET
+Q
+
+q
+1.000 1.000 1.000 rg
+BT
+/F2 9 Tf
+155.00 261.00 Td
+(Value) Tj
+ET
+Q
+
+q
+1.000 1.000 1.000 rg
+BT
+/F2 9 Tf
+265.00 261.00 Td
+(Agile & Academic Context) Tj
+ET
+Q
+
+q
+1.000 1.000 1.000 rg
+0.850 0.880 0.910 RG 0.60 w
+40.00 225.00 532.00 30.00 re
+B
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+45.00 243.00 Td
+(Total Workload) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+155.00 243.00 Td
+(112 Ideal Hours) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+265.00 243.00 Td
+(Encompasses 16 core feature pts + 5 rollover pts + 2 spike pts \(23) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+265.00 232.00 Td
+(total points\).) Tj
+ET
+Q
+
+q
+0.970 0.980 0.990 rg
+0.850 0.880 0.910 RG 0.60 w
+40.00 206.00 532.00 19.00 re
+B
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+45.00 213.00 Td
+(Team Size) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+155.00 213.00 Td
+(5 Developers) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+265.00 213.00 Td
+(Maximo Mora, Bryan Moreno, Ulises Diaz, John Weaver, Benjamin Ong.) Tj
+ET
+Q
+
+q
+1.000 1.000 1.000 rg
+0.850 0.880 0.910 RG 0.60 w
+40.00 176.00 532.00 30.00 re
+B
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+45.00 194.00 Td
+(Average Workload) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+155.00 194.00 Td
+(22.4 Hours / Member) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+265.00 194.00 Td
+(Equivalent to ~11.2 ideal engineering hours per week per student) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+265.00 183.00 Td
+(over 2 weeks.) Tj
+ET
+Q
+
+q
+0.970 0.980 0.990 rg
+0.850 0.880 0.910 RG 0.60 w
+40.00 135.00 532.00 41.00 re
+B
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+45.00 164.00 Td
+(Scope Reconciliation) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+155.00 164.00 Td
+(US1.2 Rollover) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+265.00 164.00 Td
+(US1.2 was deferred from Sprint 1 to establish database stability.) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+265.00 153.00 Td
+(Rolling it into Sprint 2 brings the sprint to 112h, perfectly) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+265.00 142.00 Td
+(matching full team capacity.) Tj
+ET
+Q
+
+q
+0.930 0.950 0.980 rg
+0.780 0.840 0.920 RG 0.80 w
+40.00 111.00 532.00 22.00 re
+B
+Q
+
+q
+0.100 0.200 0.350 rg
+BT
+/F2 11 Tf
+48.00 117.00 Td
+(5. Team Roles for Sprint 2) Tj
+ET
+Q
+
+endstream
+endobj
+11 0 obj
+<< /Length 9282 >>
+stream
+q
+0.45 0.5 0.55 rg
+BT
+/F1 8 Tf
+40 764 Td
+(Simmer — Sprint 2 Plan | CSE 115a / CMPS 115) Tj
+ET
+0.8 0.83 0.86 RG 0.5 w
+40 760 m
+572 760 l
+S
+Q
+
+q
+0.45 0.5 0.55 rg
+BT
+/F1 8 Tf
+40 26 Td
+(Team Simmer | Revision 1.1 | October 21, 2026) Tj
+512 26 Td
+(Page 4 of 5) Tj
+ET
+0.8 0.83 0.86 RG 0.5 w
+40 34 m
+572 34 l
+S
+Q
+
+q
+0.180 0.250 0.380 rg
+0.180 0.250 0.380 RG 1.00 w
+40.00 727.00 532.00 20.00 re
+B
+Q
+
+q
+1.000 1.000 1.000 rg
+BT
+/F2 9 Tf
+45.00 733.00 Td
+(Team Member) Tj
+ET
+Q
+
+q
+1.000 1.000 1.000 rg
+BT
+/F2 9 Tf
+155.00 733.00 Td
+(Sprint Role\(s\)) Tj
+ET
+Q
+
+q
+1.000 1.000 1.000 rg
+BT
+/F2 9 Tf
+295.00 733.00 Td
+(Primary Sprint Responsibilities) Tj
+ET
+Q
+
+q
+1.000 1.000 1.000 rg
+0.850 0.880 0.910 RG 0.60 w
+40.00 697.00 532.00 30.00 re
+B
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+45.00 715.00 Td
+(Maximo Mora) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+155.00 715.00 Td
+(Product Owner, Full-Stack) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+155.00 704.00 Td
+(Dev) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+295.00 715.00 Td
+(Admin console UI \(US1.2\), search UI integration, filter) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+295.00 704.00 Td
+(logic, acceptance testing.) Tj
+ET
+Q
+
+q
+0.970 0.980 0.990 rg
+0.850 0.880 0.910 RG 0.60 w
+40.00 667.00 532.00 30.00 re
+B
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+45.00 685.00 Td
+(Bryan Moreno) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+155.00 685.00 Td
+(Scrum Master, DevOps /) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+155.00 674.00 Td
+(Backend) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+295.00 685.00 Td
+(RBAC token validation & admin APIs \(US1.2\), search query) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+295.00 674.00 Td
+(optimization, SPK-2.1 lead.) Tj
+ET
+Q
+
+q
+1.000 1.000 1.000 rg
+0.850 0.880 0.910 RG 0.60 w
+40.00 637.00 532.00 30.00 re
+B
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+45.00 655.00 Td
+(Ulises Diaz) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+155.00 655.00 Td
+(Frontend Dev, UI/UX Lead) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+295.00 655.00 Td
+(Dynamic ingredient/tool components, category badges, profile) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+295.00 644.00 Td
+(cooking history tab.) Tj
+ET
+Q
+
+q
+0.970 0.980 0.990 rg
+0.850 0.880 0.910 RG 0.60 w
+40.00 607.00 532.00 30.00 re
+B
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+45.00 625.00 Td
+(John Weaver) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+155.00 625.00 Td
+(Database Architect, Backend) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+295.00 625.00 Td
+(User roles schema \(US1.2\), categories, structured) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+295.00 614.00 Td
+(ingredients/tools, completed_recipes DB.) Tj
+ET
+Q
+
+q
+1.000 1.000 1.000 rg
+0.850 0.880 0.910 RG 0.60 w
+40.00 577.00 532.00 30.00 re
+B
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+45.00 595.00 Td
+(Benjamin Ong) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+155.00 595.00 Td
+(QA & Testing Lead, Developer) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+295.00 595.00 Td
+(Admin security & role escalation tests \(US1.2\), search test) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+295.00 584.00 Td
+(suite, regression tests.) Tj
+ET
+Q
+
+q
+0.930 0.950 0.980 rg
+0.780 0.840 0.920 RG 0.80 w
+40.00 553.00 532.00 22.00 re
+B
+Q
+
+q
+0.100 0.200 0.350 rg
+BT
+/F2 11 Tf
+48.00 559.00 Td
+(6. Initial Task Assignment \(Day 1 Start\)) Tj
+ET
+Q
+
+q
+0.180 0.250 0.380 rg
+0.180 0.250 0.380 RG 1.00 w
+40.00 511.00 532.00 20.00 re
+B
+Q
+
+q
+1.000 1.000 1.000 rg
+BT
+/F2 9 Tf
+45.00 517.00 Td
+(Team Member) Tj
+ET
+Q
+
+q
+1.000 1.000 1.000 rg
+BT
+/F2 9 Tf
+145.00 517.00 Td
+(Assigned Item) Tj
+ET
+Q
+
+q
+1.000 1.000 1.000 rg
+BT
+/F2 9 Tf
+255.00 517.00 Td
+(Initial Task Assignment) Tj
+ET
+Q
+
+q
+1.000 1.000 1.000 rg
+BT
+/F2 9 Tf
+517.00 517.00 Td
+(Est. Hours) Tj
+ET
+Q
+
+q
+1.000 1.000 1.000 rg
+0.850 0.880 0.910 RG 0.60 w
+40.00 481.00 532.00 30.00 re
+B
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+45.00 499.00 Td
+(Bryan Moreno) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+145.00 499.00 Td
+(US1.2 \(Admin RBAC\)) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+255.00 499.00 Td
+(Task 2.3: Implement role-based access control \(RBAC\)) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+255.00 488.00 Td
+(middleware & token validation) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+517.00 499.00 Td
+(4 hrs) Tj
+ET
+Q
+
+q
+0.970 0.980 0.990 rg
+0.850 0.880 0.910 RG 0.60 w
+40.00 451.00 532.00 30.00 re
+B
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+45.00 469.00 Td
+(Maximo Mora) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+145.00 469.00 Td
+(US1.2 \(Admin UI\)) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+255.00 469.00 Td
+(Task 2.1: Design administrative navigation and user) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+255.00 458.00 Td
+(management console interface) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+517.00 469.00 Td
+(3 hrs) Tj
+ET
+Q
+
+q
+1.000 1.000 1.000 rg
+0.850 0.880 0.910 RG 0.60 w
+40.00 421.00 532.00 30.00 re
+B
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+45.00 439.00 Td
+(John Weaver) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+145.00 439.00 Td
+(US1.2 \(Admin DB\)) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+255.00 439.00 Td
+(Task 2.2: Extend database schema with user roles,) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+255.00 428.00 Td
+(privileges, and admin audit flags) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+517.00 439.00 Td
+(3 hrs) Tj
+ET
+Q
+
+q
+0.970 0.980 0.990 rg
+0.850 0.880 0.910 RG 0.60 w
+40.00 391.00 532.00 30.00 re
+B
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+45.00 409.00 Td
+(Ulises Diaz) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+145.00 409.00 Td
+(US2.4 \(Ingredients\)) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+255.00 409.00 Td
+(Task 5.2: Build dynamic 'Add Ingredient' row component) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+255.00 398.00 Td
+(with unit dropdowns in React) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+517.00 409.00 Td
+(5 hrs) Tj
+ET
+Q
+
+q
+1.000 1.000 1.000 rg
+0.850 0.880 0.910 RG 0.60 w
+40.00 361.00 532.00 30.00 re
+B
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+45.00 379.00 Td
+(Benjamin Ong) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+145.00 379.00 Td
+(US2.1 \(Categories\)) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+255.00 379.00 Td
+(Task 1.5: Write automated unit tests for category) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+255.00 368.00 Td
+(validation and tag query filters) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+517.00 379.00 Td
+(4 hrs) Tj
+ET
+Q
+
+q
+0.930 0.950 0.980 rg
+0.780 0.840 0.920 RG 0.80 w
+40.00 337.00 532.00 22.00 re
+B
+Q
+
+q
+0.100 0.200 0.350 rg
+BT
+/F2 11 Tf
+48.00 343.00 Td
+(7. Initial Burnup Chart) Tj
+ET
+Q
+
+q
+0.970 0.980 1.000 rg
+0.200 0.450 0.800 RG 1.00 w
+40.00 249.00 532.00 76.00 re
+B
+Q
+
+q
+0.200 0.450 0.800 rg
+40.00 249.00 4.00 76.00 re
+f
+Q
+
+q
+0.100 0.250 0.550 rg
+BT
+/F2 10 Tf
+52.00 311.00 Td
+(Burnup Tracking Specification) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 9 Tf
+52.00 297.00 Td
+(Document Label: Simmer — Sprint 2 Initial Burnup Chart Baseline Scope: 112 ideal hours / 23 story) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 9 Tf
+52.00 284.00 Td
+(points \(16 feature points + 5 rollover points + 2 spike points\). Tracking Location: Maintained live in) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 9 Tf
+52.00 271.00 Td
+(GitHub Projects; physical duplicate posted on the CSE 115 Lab board. Daily hours completed are plotted) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 9 Tf
+52.00 258.00 Td
+(at the conclusion of each Daily Scrum.) Tj
+ET
+Q
+
+q
+0.930 0.950 0.980 rg
+0.780 0.840 0.920 RG 0.80 w
+40.00 227.00 532.00 22.00 re
+B
+Q
+
+q
+0.100 0.200 0.350 rg
+BT
+/F2 11 Tf
+48.00 233.00 Td
+(8. Initial Scrum Board \(Sprint Task Board\)) Tj
+ET
+Q
+
+q
+0.180 0.250 0.380 rg
+0.180 0.250 0.380 RG 1.00 w
+40.00 185.00 532.00 20.00 re
+B
+Q
+
+q
+1.000 1.000 1.000 rg
+BT
+/F2 9 Tf
+45.00 191.00 Td
+(User Story / Item) Tj
+ET
+Q
+
+q
+1.000 1.000 1.000 rg
+BT
+/F2 9 Tf
+140.00 191.00 Td
+(Tasks Not Started) Tj
+ET
+Q
+
+q
+1.000 1.000 1.000 rg
+BT
+/F2 9 Tf
+310.00 191.00 Td
+(Tasks in Progress) Tj
+ET
+Q
+
+q
+1.000 1.000 1.000 rg
+BT
+/F2 9 Tf
+517.00 191.00 Td
+(Tasks Completed) Tj
+ET
+Q
+
+q
+1.000 1.000 1.000 rg
+0.850 0.880 0.910 RG 0.60 w
+40.00 111.00 532.00 74.00 re
+B
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+45.00 173.00 Td
+(US1.2: Admin) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+45.00 162.00 Td
+(Account) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+45.00 151.00 Td
+(\(5 pts - Rollover\)) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+140.00 173.00 Td
+(• Task 2.4: Admin management API) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+140.00 162.00 Td
+(\(5h\)) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+140.00 151.00 Td
+(• Task 2.5: Connect admin frontend) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+140.00 140.00 Td
+(\(3h\)) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+140.00 129.00 Td
+(• Task 2.6: Security & escalation) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+140.00 118.00 Td
+(test \(5h\)) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+310.00 173.00 Td
+(• Task 2.1: Admin UI console [Maximo, 3h]) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+310.00 162.00 Td
+(• Task 2.2: User roles DB [John, 3h]) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+310.00 151.00 Td
+(• Task 2.3: RBAC middleware [Bryan, 4h]) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+517.00 173.00 Td
+(None) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+517.00 162.00 Td
+(\(Day 1\)) Tj
+ET
+Q
+
+endstream
+endobj
+12 0 obj
+<< /Length 8903 >>
+stream
+q
+0.45 0.5 0.55 rg
+BT
+/F1 8 Tf
+40 764 Td
+(Simmer — Sprint 2 Plan | CSE 115a / CMPS 115) Tj
+ET
+0.8 0.83 0.86 RG 0.5 w
+40 760 m
+572 760 l
+S
+Q
+
+q
+0.45 0.5 0.55 rg
+BT
+/F1 8 Tf
+40 26 Td
+(Team Simmer | Revision 1.1 | October 21, 2026) Tj
+512 26 Td
+(Page 5 of 5) Tj
+ET
+0.8 0.83 0.86 RG 0.5 w
+40 34 m
+572 34 l
+S
+Q
+
+q
+0.970 0.980 0.990 rg
+0.850 0.880 0.910 RG 0.60 w
+40.00 673.00 532.00 74.00 re
+B
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+45.00 735.00 Td
+(US2.1: Categories) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+45.00 724.00 Td
+(\(3 pts\)) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+140.00 735.00 Td
+(• Task 1.1: Category DB schema \(3h\)) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+140.00 724.00 Td
+(• Task 1.2: Badge selector UI \(4h\)) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+140.00 713.00 Td
+(• Task 1.3: Backend CRUD update) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+140.00 702.00 Td
+(\(3h\)) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+140.00 691.00 Td
+(• Task 1.4: Filter bar on discovery) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+140.00 680.00 Td
+(\(4h\)) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+310.00 735.00 Td
+(• Task 1.5: Category test suite [Benjamin,) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+310.00 724.00 Td
+(4h]) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+517.00 735.00 Td
+(None) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+517.00 724.00 Td
+(\(Day 1\)) Tj
+ET
+Q
+
+q
+1.000 1.000 1.000 rg
+0.850 0.880 0.910 RG 0.60 w
+40.00 566.00 532.00 107.00 re
+B
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+45.00 661.00 Td
+(US2.2: Search) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+45.00 650.00 Td
+(\(5 pts\)) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+140.00 661.00 Td
+(• Task 3.1: Backend search endpoint) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+140.00 650.00 Td
+(\(5h\)) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+140.00 639.00 Td
+(• Task 3.2: Responsive search input) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+140.00 628.00 Td
+(UI \(4h\)) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+140.00 617.00 Td
+(• Task 3.3: Multi-facet filtering) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+140.00 606.00 Td
+(\(5h\)) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+140.00 595.00 Td
+(• Task 3.4: Results grid & empty) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+140.00 584.00 Td
+(state \(3h\)) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+140.00 573.00 Td
+(• Task 3.5: Search test suite \(5h\)) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+310.00 661.00 Td
+(\(Scheduled after US2.1 category setup\)) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+517.00 661.00 Td
+(None) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+517.00 650.00 Td
+(\(Day 1\)) Tj
+ET
+Q
+
+q
+0.970 0.980 0.990 rg
+0.850 0.880 0.910 RG 0.60 w
+40.00 459.00 532.00 107.00 re
+B
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+45.00 554.00 Td
+(US2.3: History) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+45.00 543.00 Td
+(\(3 pts\)) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+140.00 554.00 Td
+(• Task 4.1: Join table schema \(3h\)) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+140.00 543.00 Td
+(• Task 4.2: Complete recipe API) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+140.00 532.00 Td
+(\(4h\)) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+140.00 521.00 Td
+(• Task 4.3: 'I Cooked This' modal) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+140.00 510.00 Td
+(\(3h\)) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+140.00 499.00 Td
+(• Task 4.4: Cooking history profile) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+140.00 488.00 Td
+(tab \(4h\)) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+140.00 477.00 Td
+(• Task 4.5: Cooking log test suite) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+140.00 466.00 Td
+(\(3h\)) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+310.00 554.00 Td
+(\(Scheduled to start in Week 1, Day 3 after) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+310.00 543.00 Td
+(US2.1 DB setup\)) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+517.00 554.00 Td
+(None) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+517.00 543.00 Td
+(\(Day 1\)) Tj
+ET
+Q
+
+q
+1.000 1.000 1.000 rg
+0.850 0.880 0.910 RG 0.60 w
+40.00 341.00 532.00 118.00 re
+B
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+45.00 447.00 Td
+(US2.4: Ingredients) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+45.00 436.00 Td
+(\(5 pts\)) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+140.00 447.00 Td
+(• Task 5.1: Ingredients DB schema) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+140.00 436.00 Td
+(\(4h\)) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+140.00 425.00 Td
+(• Task 5.3: Kitchen tools tag) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+140.00 414.00 Td
+(selector \(3h\)) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+140.00 403.00 Td
+(• Task 5.4: Ingestion parsing) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+140.00 392.00 Td
+(service \(4h\)) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+140.00 381.00 Td
+(• Task 5.5: Checklist on recipe) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+140.00 370.00 Td
+(detail \(4h\)) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+140.00 359.00 Td
+(• Task 5.6: Ingredient test suite) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+140.00 348.00 Td
+(\(4h\)) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+310.00 447.00 Td
+(• Task 5.2: Dynamic 'Add Ingredient' row UI) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+310.00 436.00 Td
+(component [Ulises, 5h]) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+517.00 447.00 Td
+(None) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+517.00 436.00 Td
+(\(Day 1\)) Tj
+ET
+Q
+
+q
+0.970 0.980 0.990 rg
+0.850 0.880 0.910 RG 0.60 w
+40.00 289.00 532.00 52.00 re
+B
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+45.00 329.00 Td
+(SPK-2.1: Spike) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+45.00 318.00 Td
+(\(2 pts\)) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+140.00 329.00 Td
+(• Task 6.1: Research feed) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+140.00 318.00 Td
+(architectures \(4h\)) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+140.00 307.00 Td
+(• Task 6.2: Prototype spike branch) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+140.00 296.00 Td
+(testing query performance \(4h\)) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+310.00 329.00 Td
+(\(Scheduled to start in Week 2\)) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+517.00 329.00 Td
+(None) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+517.00 318.00 Td
+(\(Day 1\)) Tj
+ET
+Q
+
+q
+0.930 0.950 0.980 rg
+0.780 0.840 0.920 RG 0.80 w
+40.00 265.00 532.00 22.00 re
+B
+Q
+
+q
+0.100 0.200 0.350 rg
+BT
+/F2 11 Tf
+48.00 271.00 Td
+(9. Scrum Meeting Schedule) Tj
+ET
+Q
+
+q
+0.180 0.250 0.380 rg
+0.180 0.250 0.380 RG 1.00 w
+40.00 223.00 532.00 20.00 re
+B
+Q
+
+q
+1.000 1.000 1.000 rg
+BT
+/F2 9 Tf
+45.00 229.00 Td
+(Meeting Day) Tj
+ET
+Q
+
+q
+1.000 1.000 1.000 rg
+BT
+/F2 9 Tf
+120.00 229.00 Td
+(Time Window) Tj
+ET
+Q
+
+q
+1.000 1.000 1.000 rg
+BT
+/F2 9 Tf
+240.00 229.00 Td
+(Location & Modality) Tj
+ET
+Q
+
+q
+1.000 1.000 1.000 rg
+BT
+/F2 9 Tf
+385.00 229.00 Td
+(Meeting Purpose) Tj
+ET
+Q
+
+q
+1.000 1.000 1.000 rg
+0.850 0.880 0.910 RG 0.60 w
+40.00 193.00 532.00 30.00 re
+B
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+45.00 211.00 Td
+(Monday) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+120.00 211.00 Td
+(10:30 AM – 11:30 AM) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+240.00 211.00 Td
+(Engineering Lab \(In-Person\)) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+385.00 211.00 Td
+(Sprint progress check-in, backlog) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+385.00 200.00 Td
+(review, and weekly goal setting.) Tj
+ET
+Q
+
+q
+0.970 0.980 0.990 rg
+0.850 0.880 0.910 RG 0.60 w
+40.00 163.00 532.00 30.00 re
+B
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+45.00 181.00 Td
+(Wednesday) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+120.00 181.00 Td
+(10:30 AM – 11:30 AM) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+240.00 181.00 Td
+(Engineering Lab \(In-Person\)) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+385.00 181.00 Td
+(Official TA / Tutor Lab Check-in Meeting) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+385.00 170.00 Td
+(& live demo.) Tj
+ET
+Q
+
+q
+1.000 1.000 1.000 rg
+0.850 0.880 0.910 RG 0.60 w
+40.00 133.00 532.00 30.00 re
+B
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+45.00 151.00 Td
+(Friday) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+120.00 151.00 Td
+(10:30 AM – 11:30 AM) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+240.00 151.00 Td
+(Engineering Lab / Hybrid) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+385.00 151.00 Td
+(Code review, PR merge sync, and weekend) Tj
+ET
+Q
+
+q
+0.150 0.150 0.150 rg
+BT
+/F1 8.5 Tf
+385.00 140.00 Td
+(blockers resolution.) Tj
+ET
+Q
+
+q
+0.200 0.200 0.200 rg
+BT
+/F1 8.5 Tf
+40.00 119.00 Td
+(Standup updates are recorded in the team Discord channel. Blockers are escalated to the Scrum Master immediately. Any) Tj
+ET
+Q
+
+q
+0.200 0.200 0.200 rg
+BT
+/F1 8.5 Tf
+40.00 106.00 Td
+(schedule revisions will be reported to the TA at least 24 hours in advance.) Tj
+ET
+Q
+
+endstream
+endobj
+13 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>
+endobj
+14 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold >>
+endobj
+xref
+0 15
+0000000000 65535 f 
+0000000009 00000 n 
+0000000058 00000 n 
+0000000139 00000 n 
+0000000277 00000 n 
+0000000415 00000 n 
+0000000554 00000 n 
+0000000693 00000 n 
+0000000832 00000 n 
+0000009837 00000 n 
+0000021772 00000 n 
+0000031720 00000 n 
+0000041055 00000 n 
+0000050011 00000 n 
+0000050082 00000 n 
+trailer
+<< /Size 15 /Root 1 0 R >>
+startxref
+50158
+%%EOF

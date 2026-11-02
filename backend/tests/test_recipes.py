@@ -25,7 +25,7 @@ def test_create_and_read_recipe(client):
     assert recipe["author_username"] == "ana"
     assert [i["name"] for i in recipe["ingredients"]] == ["spaghetti", "canned tomatoes", "salt"]
 
-    assert client.get(f"/api/v1/recipes/{recipe['id']}").json()["title"] == "Tomato Pasta"
+    assert client.get("/api/v1/recipes/{recipe['id']}").json()["title"] == "Tomato Pasta"
     assert client.get("/api/v1/recipes/9999").status_code == 404
 
 
