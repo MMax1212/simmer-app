@@ -9,7 +9,7 @@ from app.core.database import Base
 recipe_tags = Table(
     "recipe_tags",
     Base.metadata,
-    Column("recipe_id", Integer, ForeignKey("recipe.id", ondelete="CASCADE"), primary_keys=True),
+    Column("recipe_id", Integer, ForeignKey("recipes.id", ondelete="CASCADE"), primary_key=True),
     Column("tag_id", Integer, ForeignKey("tags.id", ondelete="CASCADE"), primary_key=True)
 )
 
