@@ -1,5 +1,5 @@
 from fastapi import APIRouter, HTTPException, Query, Response
-from sqlalchemy import func, select
+from sqlalchemy import func, select, distinct, or_
 from sqlalchemy.orm import selectinload
 
 from app.api.deps import CurrentUser, DbSession
@@ -42,13 +42,61 @@ def create_recipe(body: RecipeCreate, user: CurrentUser, db: DbSession):
 
 # --- US2.2: Search Endpoint ---
 @router.get("", response_model=RecipeSearchResult)
-def search_recipes(db: DbSession):
-    total = db.scalar(select(func.count(Recipe.id))) or 0
-    items = db.scalars(select(Recipe).options(selectinload(Recipe.owner))).all()
+def search_recipes(
+    db: DbSession,
+    q: str | None = Query(default=None, max_length=100, description="Title/keyword query"),
+    cuisine: str | None = Query(default=None, max_length=50),
+    meal_type: str | None = Query (default=None, max_length=50),
+    difficulty: str | None = Query(default=None),
+    ingredient: str |None = Query(default= None, max_length=100),
+    limit: int = Query(default=20, ge=1,le=100),
+    offset: int = Query(default=0, ge=0),
+
+): 
+    filters = []
+    # Test search across title, desription, and ingreadient, names
+    if q and q.strip():
+        term = f"%{q.strip()}%"
+        filters.append(
+            or_(
+                Recipe.title.ilike(term),
+                Recipe.description.ilike(term),
+                Recipe.ingredients.any(Ingredient.name.ilike(term)),
+            )
+        )
+    
+    # Faceted category & ingredient filters
+    if cuisine and cuisine.strip():
+        filters.append(Recipe.cuisine.ilike(cuisine.strip()))
+    if meal_type and meal_type.strip():
+        filters.append(Recipe.meal_type.ilike(meal_type.strip()))
+    if difficulty and difficulty.strip():
+        filters.append(Recipe.difficulty == difficulty.strip().lower())
+    if ingredient and ingredient.strip():
+        filters.append(Recipe.ingredients.any(Ingredient.name.ilike(f"%{ingredient.strip()}%")))
+
+    # Total count matching filters
+
+    count_query = select(func.count(distinct(Recipe.id))).select_from(Recipe)
+    if filters:
+        count_query = count_query = count_query.where(*filters)
+    total = db.scalar(count_query) or 0
+
+    # Fetch matching recipes
+    query = (
+        select(Recipe)
+        .options(selectinload(Recipe.owner))
+        .order_by(Recipe.created_at.desc(), Recipe.id.desc())
+    )
+    if filters:
+        query = query.where(*filters)
+    query = query.offset(offset).limit(limit)
+    items = db.scalars(query).all()
+
     return RecipeSearchResult(
-        total=total,
-        limit=20,
-        offset=0,
+        total = total,
+        limit=limit,
+        offset=offset,
         items=items,
     )
 
