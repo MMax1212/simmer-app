@@ -33,6 +33,14 @@ class Recipe(Base):
         back_populates="recipe", cascade="all, delete-orphan", order_by="RecipeStep.step_number"
     )
 
+    # US2.4: Removing a tool from this collection also deletes its stored row.
+    tool_rows: Mapped[list["RecipeTool"]] = relationship(back_populates="recipe", cascade="all, delete-orphan", order_by="RecipeTool.id")
+
+    @property
+    def tools(self) -> list[str]:
+        """Expose tool names in API responses while retaining relational storage."""
+        return [tool.name for tool in self.tool_rows]
+
     # --- US1.5: Personal Recipe Tab (Author display helper) ---
     @property
     def author_username(self) -> str:
@@ -62,3 +70,13 @@ class RecipeStep(Base):
     step_number: Mapped[int] = mapped_column(Integer)
     instruction: Mapped[str] = mapped_column(Text)
     recipe: Mapped[Recipe] = relationship(back_populates="steps")
+
+
+class RecipeTool(Base):
+    """A recipe-owned tool; database CASCADE also handles direct recipe deletion."""
+    __tablename__ = "recipe_tools"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    recipe_id: Mapped[int] = mapped_column(ForeignKey("recipes.id", ondelete="CASCADE"), index=True)
+    name: Mapped[str] = mapped_column(String(80))
+    recipe: Mapped[Recipe] = relationship(back_populates="tool_rows")
