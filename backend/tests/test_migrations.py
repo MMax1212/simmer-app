@@ -122,7 +122,7 @@ def test_tools_migration_round_trip(tmp_path):
     config.set_main_option('script_location', str(ROOT / 'migrations'))
     with engine.begin() as connection:
         config.attributes['connection'] = connection
-        command.downgrade(config, '-1')
+        command.downgrade(config, '0002')
     assert set(inspect(engine).get_table_names()) == before
     with engine.connect() as conn:
         assert conn.scalar(text("SELECT username FROM users WHERE id=1")) == 'cook'
