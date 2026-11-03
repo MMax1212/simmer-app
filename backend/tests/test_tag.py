@@ -1,5 +1,5 @@
 from tests.conftest import auth_headers, register
-from test_recipes import PASTA
+from tests.test_recipes import PASTA
 
 
 # --- US1.5: Tag validation ---

@@ -3,8 +3,8 @@ from alembic import op
 import sqlalchemy as sa
 
 # Revision identifiers, used by Alembic.
-revision = "0003"
-down_revision = "0002"
+revision = "0004"
+down_revision = "0003_recipe_tools"
 branch_labels = None
 depends_on = None
 

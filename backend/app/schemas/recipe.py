@@ -65,6 +65,8 @@ class RecipeCreate(RequestModel):
     ingredients: list[IngredientIn] = Field(min_length=1, max_length=200)
     steps: list[RecipeStepIn] = Field(min_length=1, max_length=200)
 
+    tags: list[str] = Field(default_factory=list)
+
     @field_validator("title")
     @classmethod
     def strip_title(cls, value: str) -> str:
@@ -108,6 +110,14 @@ class RecipeOut(BaseModel):
     steps: list[RecipeStepOut]
     created_at: datetime
     updated_at: datetime
+
+    tags: list[str] = []
+    @field_validator("tags", mode="before")
+    @classmethod
+    def format_tags(cls, v):
+        if v and hasattr(v[0], "name"):
+            return [tag.name for tag in v]
+        return v or []
 
 # --- US2.2: Recipe Search & Discovery (Search Result Schemas) --
 class RecipeSummaryOut(BaseModel):

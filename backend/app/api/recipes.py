@@ -3,7 +3,7 @@ from sqlalchemy import func, select
 from sqlalchemy.orm import selectinload
 
 from app.api.deps import CurrentUser, DbSession
-from app.models import Ingredient, Recipe, RecipeStep, User
+from app.models import Ingredient, Recipe, RecipeStep, User, Tag
 from app.schemas.recipe import RecipeCreate, RecipeOut, RecipeUpdate, RecipeSearchResult
 
 router = APIRouter(prefix="/api/v1/recipes", tags=["recipes"])
@@ -34,6 +34,13 @@ def _set_children(recipe: Recipe, body: RecipeCreate) -> None:
 def create_recipe(body: RecipeCreate, user: CurrentUser, db: DbSession):
     recipe = Recipe(owner=user, **body.model_dump(exclude={"ingredients", "steps"}))
     _set_children(recipe, body)
+
+    for tag_name in body.tags:
+        tag = db.scalars(select(Tag).where(Tag.name == tag_name)).first()
+        if not tag:
+            tag = Tag(name=tag_name)
+            db.add(tag)
+        recipe.tags.append(tag)
     db.add(recipe)
     db.commit()
     db.refresh(recipe)
@@ -94,3 +101,13 @@ def delete_recipe(recipe_id: int, user: CurrentUser, db: DbSession):
     db.delete(recipe)
     db.commit()
     return Response(status_code=204)
+
+# --- US1.5 / US2.1: Recipe List & Tag Query Filtering ---
+@router.get("", response_model=list[RecipeOut])
+def list_recipes(db: DbSession, tag: str | None = Query(default=None)):
+    query = select(Recipe).options(selectinload(Recipe.ingredients), selectinload(Recipe.steps), selectinload(Recipe.owner), selectinload(Recipe.tags))
+    
+    if tag:
+        normalized_tag = tag if tag.startswith("#") else f"#{tag}"
+        query = query.join(Recipe.tags).where(Tag.name == normalized_tag.lower())
+    return db.scalars(query).all()
