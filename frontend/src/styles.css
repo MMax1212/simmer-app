@@ -100,3 +100,6 @@ table { width: 100%; border-collapse: collapse; font-size: 0.92rem; }
 th, td { text-align: left; padding: 0.55rem; border-bottom: 1px solid var(--border); }
 
 }
+
+.ingredient-check { display: flex; align-items: center; gap: 0.5rem; }
+.ingredient-check input { width: auto; }
