@@ -1,11 +1,12 @@
 import { useEffect, useState, type FormEvent } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { ErrorMessage } from "../components/ErrorMessage";
-import { api, errorText, type Ingredient, type RecipeInput } from "../services/api";
+import { api, errorText, STANDARD_UNITS, type Ingredient, type RecipeInput } from "../services/api";
 
 const emptyRecipe = (): RecipeInput => ({
   title: "", description: "", cuisine: "", meal_type: "", difficulty: "medium", image_url: "",
   prep_time_mins: 0, cook_time_mins: 0, servings: 1,
+  tools: [],
   ingredients: [{ name: "", amount: null, unit: "" }],
   steps: [{ step_number: 1, instruction: "" }],
 });
@@ -16,6 +17,7 @@ export function RecipeForm() {
   const editing = id !== undefined;
   const navigate = useNavigate();
   const [recipe, setRecipe] = useState<RecipeInput>(emptyRecipe);
+  const [toolInput, setToolInput] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
   const [loading, setLoading] = useState(editing);
@@ -23,6 +25,8 @@ export function RecipeForm() {
   useEffect(() => {
     let active = true;
     setRecipe(emptyRecipe());
+    // A different recipe must not inherit an unfinished tool from the previous form.
+    setToolInput("");
     setError(null);
     setLoading(editing);
     setBusy(false);
@@ -32,6 +36,7 @@ export function RecipeForm() {
           title: r.title, description: r.description, cuisine: r.cuisine, meal_type: r.meal_type,
           difficulty: r.difficulty, image_url: r.image_url, prep_time_mins: r.prep_time_mins,
           cook_time_mins: r.cook_time_mins, servings: r.servings,
+          tools: r.tools ?? [],
           ingredients: r.ingredients.length ? r.ingredients : emptyRecipe().ingredients,
           steps: r.steps.length ? r.steps : emptyRecipe().steps,
         });
@@ -46,6 +51,21 @@ export function RecipeForm() {
   const setIngredient = (index: number, changes: Partial<Ingredient>) =>
     setRecipe((current) => ({ ...current, ingredients: current.ingredients.map((item, i) => i === index ? { ...item, ...changes } : item) }));
 
+  // Share parsing between Enter/comma and Save so unfinished input is saved too.
+  // Preserve the input on validation failure, letting the author correct it.
+  function collectTools(): string[] | null {
+    const tools = [...recipe.tools];
+    for (const raw of toolInput.split(",")) {
+      const name = raw.trim();
+      if (name && !tools.some((tool) => tool.toLowerCase() === name.toLowerCase())) tools.push(name);
+    }
+    if (tools.length > 50 || tools.some((tool) => tool.length > 80)) {
+      setError("Use at most 50 tools with names of up to 80 characters.");
+      return null;
+    }
+    return tools;
+  }
+
   // --- US1.4: Task 4.4 & 4.5: Validate Recipe Inputs and Persist to Backend ---
   async function onSubmit(event: FormEvent) {
     event.preventDefault();
@@ -53,15 +73,17 @@ export function RecipeForm() {
       setError("Add at least one ingredient and one step.");
       return;
     }
-    if (recipe.title.trim().length < 3 || recipe.ingredients.some((i) => !i.name.trim() || !i.unit?.trim() || !(Number(i.amount) > 0)) ||
+    if (recipe.title.trim().length < 3 || recipe.ingredients.some((i) => !i.name.trim() || !STANDARD_UNITS.includes(i.unit as typeof STANDARD_UNITS[number]) || (!Number.isFinite(i.amount) || !(Number(i.amount) > 0))) ||
         recipe.steps.some((step) => step.instruction.trim().length < 3)) {
       setError("Enter a title, complete ingredients with positive amounts, and instructions of at least 3 characters.");
       return;
     }
+    const tools = collectTools();
+    if (!tools) return;
     setBusy(true);
     setError(null);
     const body: RecipeInput = {
-      ...recipe, title: recipe.title.trim(), description: recipe.description || null,
+      ...recipe, tools, title: recipe.title.trim(), description: recipe.description || null,
       cuisine: recipe.cuisine || null, meal_type: recipe.meal_type || null, image_url: recipe.image_url || null,
       ingredients: recipe.ingredients.map(({ name, amount, unit }) => ({ name: name.trim(), amount, unit: unit!.trim() })),
       steps: recipe.steps.map((step, index) => ({ step_number: index + 1, instruction: step.instruction.trim() })),
@@ -96,13 +118,36 @@ export function RecipeForm() {
         <legend>Ingredients</legend>
         {recipe.ingredients.map((ingredient, index) => (
           <div className="ingredient-row" key={index}>
-            <input aria-label={"Amount " + (index + 1)} type="number" min={0} step="any" placeholder="Amount" required value={ingredient.amount ?? ""} onChange={(e) => setIngredient(index, { amount: e.target.value === "" ? null : Number(e.target.value) })} />
-            <input aria-label={"Unit " + (index + 1)} placeholder="Unit" required maxLength={30} value={ingredient.unit ?? ""} onChange={(e) => setIngredient(index, { unit: e.target.value })} />
+            <input aria-label={"Amount " + (index + 1)} type="number" min={0.01} step="any" placeholder="Amount" required value={ingredient.amount ?? ""} onChange={(e) => setIngredient(index, { amount: e.target.value === "" ? null : Number(e.target.value) })} />
+            <select aria-label={"Unit " + (index + 1)} required value={ingredient.unit ?? ""} onChange={(e) => setIngredient(index, { unit: e.target.value })}>
+              <option value="">Choose unit</option>
+              {/* Show unknown legacy units without allowing them on a new save. */}
+              {ingredient.unit && !STANDARD_UNITS.includes(ingredient.unit as typeof STANDARD_UNITS[number]) && <option value={ingredient.unit} disabled>{ingredient.unit} (choose a supported unit)</option>}
+              {STANDARD_UNITS.map((unit) => <option key={unit} value={unit}>{unit}</option>)}
+            </select>
             <input aria-label={"Ingredient " + (index + 1)} placeholder="Ingredient" required maxLength={100} value={ingredient.name} onChange={(e) => setIngredient(index, { name: e.target.value })} />
-            <button type="button" className="secondary" aria-label={"Remove ingredient " + (index + 1)} onClick={() => set("ingredients", recipe.ingredients.filter((_, i) => i !== index))}>×</button>
+            <button type="button" className="secondary" disabled={recipe.ingredients.length === 1} aria-label={"Remove ingredient " + (index + 1)} onClick={() => set("ingredients", recipe.ingredients.filter((_, i) => i !== index))}>×</button>
           </div>
         ))}
         <button type="button" className="secondary" onClick={() => set("ingredients", [...recipe.ingredients, { name: "", amount: null, unit: "" }])}>+ Add ingredient</button>
+      </fieldset>
+      <fieldset>
+        <legend>Required kitchen tools</legend>
+        <label>Add tool<input value={toolInput} maxLength={80} placeholder="e.g. Large pot" onChange={(e) => setToolInput(e.target.value)} onKeyDown={(e) => {
+          if (e.key === "Enter" || e.key === ",") {
+            // Let input-method composition finish before interpreting Enter as Add.
+            if (e.nativeEvent.isComposing) return;
+            e.preventDefault();
+            const tools = collectTools();
+            if (tools) {
+              set("tools", tools);
+              setToolInput("");
+              setError(null);
+            }
+          }
+        }} /></label>
+        <p className="muted">Press Enter or comma to add a tool. Tools are optional.</p>
+        <ul>{recipe.tools.map((tool) => <li key={tool}>{tool} <button type="button" className="secondary" aria-label={"Remove tool " + tool} onClick={() => set("tools", recipe.tools.filter((name) => name !== tool))}>×</button></li>)}</ul>
       </fieldset>
       <fieldset>
         <legend>Instructions</legend>

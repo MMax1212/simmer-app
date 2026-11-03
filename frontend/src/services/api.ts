@@ -23,6 +23,9 @@ export interface User {
 }
 
 // --- US1.4: Recipe Creation & Saving (Ingredient Data Structure) ---
+// US2.4: Keep these choices aligned with the backend IngredientIn unit contract.
+export const STANDARD_UNITS = ["g", "kg", "oz", "lb", "cup", "tbsp", "tsp", "ml", "l", "count", "pinch"] as const;
+
 export interface Ingredient {
   id?: number;
   name: string;
@@ -48,6 +51,7 @@ export interface RecipeInput {
   prep_time_mins: number;
   cook_time_mins: number;
   servings: number;
+  tools: string[];
   ingredients: Ingredient[];
   steps: RecipeStep[];
 }
