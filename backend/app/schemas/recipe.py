@@ -108,3 +108,31 @@ class RecipeOut(BaseModel):
     steps: list[RecipeStepOut]
     created_at: datetime
     updated_at: datetime
+
+
+# --- US2.3 Task 2.3.2: Cooking History Request & Response Schemas ---
+class LogCookedRequest(RequestModel):
+    notes: str | None = Field(default=None, max_length=500)
+    rating: int | None = Field(default=None, ge=1, le=5)
+
+
+class CompletedRecipeOut(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+    id: int
+    recipe_id: int
+    user_id: int
+    cooked_at: datetime
+    notes: str | None
+    rating: int | None
+
+
+class CookingHistoryItemOut(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+    id: int
+    recipe_id: int
+    recipe_title: str
+    recipe_image_url: str | None
+    cooked_at: datetime
+    notes: str | None
+    rating: int | None
+
