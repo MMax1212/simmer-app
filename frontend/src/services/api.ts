@@ -65,6 +65,26 @@ export interface Recipe extends RecipeInput {
   updated_at: string;
 }
 
+// --- US2.3: Cooking History Data Structures ---
+export interface CompletedRecipeOut {
+  id: number;
+  recipe_id: number;
+  user_id: number;
+  cooked_at: string;
+  notes: string | null;
+  rating: number | null;
+}
+
+export interface CookingHistoryItem {
+  id: number;
+  recipe_id: number;
+  recipe_title: string;
+  recipe_image_url: string | null;
+  cooked_at: string;
+  notes: string | null;
+  rating: number | null;
+}
+
 export class ApiError extends Error {
   constructor(public status: number, message: string) { super(message); }
 }
@@ -131,10 +151,12 @@ export const api = {
 
   // --- US2.3: Cooking History Endpoints ---
   completeRecipe: (id: number, data: { notes?: string; rating?: number } = {}) =>
-    request<{ id: number; recipe_id: number; user_id: number; cooked_at: string; notes: string | null; rating: number | null }>(
+    request<CompletedRecipeOut>(
       "/api/v1/recipes/" + id + "/complete",
       { method: "POST", body: json(data) },
     ),
+  getCookingHistory: () =>
+    request<CookingHistoryItem[]>("/api/v1/users/me/cooking-history"),
 
   // --- US1.2: Admin Account & RBAC Endpoints ---
   adminListUsers: () => request<User[]>("/api/v1/admin/users"),
