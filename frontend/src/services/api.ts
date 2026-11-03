@@ -129,6 +129,13 @@ export const api = {
   // --- US1.5: Recipe Deletion Endpoint ---
   deleteRecipe: (id: number) => request<void>("/api/v1/recipes/" + id, { method: "DELETE" }),
 
+  // --- US2.3: Cooking History Endpoints ---
+  completeRecipe: (id: number, data: { notes?: string; rating?: number } = {}) =>
+    request<{ id: number; recipe_id: number; user_id: number; cooked_at: string; notes: string | null; rating: number | null }>(
+      "/api/v1/recipes/" + id + "/complete",
+      { method: "POST", body: json(data) },
+    ),
+
   // --- US1.2: Admin Account & RBAC Endpoints ---
   adminListUsers: () => request<User[]>("/api/v1/admin/users"),
   adminUpdateUser: (id: number, changes: { is_active?: boolean; role?: string }) =>
