@@ -61,6 +61,34 @@ export interface Recipe extends RecipeInput {
   updated_at: string;
 }
 
+export interface RecipeSummary{
+  id: number;
+  title: string;
+  author_username: string;
+  cuisine: string | null;
+  meal_type: string | null;
+  difficulty: "easy" | "medium" | "hard"
+  cook_time_mins: number;
+  image_url: string | null;
+}
+
+export interface RecipeSearchResult{
+  total: number;
+  limit: number;
+  offset: number;
+  items: RecipeSummary[];
+}
+
+export interface SearchFilters{
+    q?: string;
+    cuisine?: string;
+    meal_type?: string;
+    difficulty?: string;
+    ingredient?: string;
+    offset?: number;
+    limit?: number;
+}
+
 export class ApiError extends Error {
   constructor(public status: number, message: string) { super(message); }
 }
@@ -115,6 +143,24 @@ export const api = {
   myRecipes: (offset = 0, limit = 20) =>
     request<Recipe[]>("/api/v1/recipes/my-recipes?offset=" + offset + "&limit=" + limit),
   getRecipe: (id: number) => request<Recipe>("/api/v1/recipes/" + id),
+
+  // --- US2.2: Search & Filter Recipes Endpoint ---
+  searchRecipes: (filters: SearchFilters = {}) => {
+    const params = new URLSearchParams();
+    if (filters.q?.trim()) params.set("q", filters.q.trim());
+    if (filters.cuisine?.trim()) params.set("cuisine", filters.cuisine.trim());
+    if (filters.meal_type?.trim()) params.set("meal_type", filters.meal_type.trim());
+    if (filters.difficulty?.trim()) params.set("difficulty", filters.difficulty.trim());
+    if (filters.ingredient?.trim()) params.set("ingredient", filters.ingredient.trim());
+    if (filters.offset !== undefined) params.set("offset", String(filters.offset));
+    if (filters.limit !== undefined) params.set("limit", String(filters.limit));
+    const queryString = params.toString();
+    return request<RecipeSearchResult>(
+      "/api/v1/recipes" + (queryString ? "?" + queryString : ""),
+      {},
+      false
+    );
+  },
 
   // --- US1.4: Recipe Creation & Update Endpoints ---
   createRecipe: (recipe: RecipeInput) =>

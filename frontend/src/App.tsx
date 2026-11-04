@@ -10,6 +10,7 @@ import { Profile } from "./pages/Profile";
 import { RecipeDetail } from "./pages/RecipeDetail";
 import { RecipeForm } from "./pages/RecipeForm";
 import { Register } from "./pages/Register";
+import { RecipesPage } from "./pages/RecipesPage";
 import "./styles.css";
 
 export default function App() {
@@ -20,6 +21,8 @@ export default function App() {
         <main className="app-container">
           <Routes>
             <Route path="/" element={<Home />} />
+            {/* US2.2: Recipe Search & Discovery */}
+            <Route path="/recipes" element={<RecipesPage />} />
             {/* US1.1: User Account Registration & Login */}
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
