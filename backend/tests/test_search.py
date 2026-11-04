@@ -40,7 +40,7 @@ TACO_RECIPE = {
     "ingredients": [
         {"name": "corn tortillas", "amount": 6, "unit": "count"},
         {"name": "flank steak", "amount": 300, "unit": "g"},
-        {"name": "cilantro", "amount": 1, "unit": "bunch"},
+        {"name": "cilantro", "amount": 1, "unit": "count"},
     ],
     "steps": [
         {"step_number": 1, "instruction": "Grill steak to desired doneness."},
