@@ -35,6 +35,15 @@ export function MyRecipes() {
     ) : <div className="recipe-grid">{recipes.slice(0, PAGE_SIZE).map((recipe) => (
       <Link to={"/recipes/" + recipe.id} key={recipe.id} className="recipe-card">
         <h3>{recipe.title}</h3>{recipe.description && <p className="muted clamp">{recipe.description}</p>}
+        {recipe.tags && recipe.tags.length > 0 && (
+          <div className="row gap-1 my-1">
+            {recipe.tags.map((t) => (
+              <span key={t} className="chip on text-xs py-0.5 px-2 font-semibold">
+                {t}
+              </span>
+            ))}
+          </div>
+        )}
         <p className="small">{recipe.prep_time_mins + recipe.cook_time_mins} min · serves {recipe.servings}</p>
       </Link>
     ))}</div>}

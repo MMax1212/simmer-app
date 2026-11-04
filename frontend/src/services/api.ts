@@ -9,6 +9,15 @@ export const CULINARY_PREFS = [
   "nut-free", "halal", "kosher", "low-carb",
 ];
 
+// --- US2.1: Recipe Categorization Standard Constants ---
+export const CUISINES = [
+  "Italian", "Mexican", "Asian", "American", "Mediterranean", "Indian", "French", "other"
+] as const;
+export const MEAL_TYPES = [
+  "breakfast", "lunch", "dinner", "dessert", "snack"
+] as const;
+export const DIFFICULTIES = ["easy", "medium", "hard"] as const;
+
 // --- US1.1, US1.2, US1.3: User Profile & Authentication Data Model ---
 export interface User {
   id: number;
@@ -54,6 +63,7 @@ export interface RecipeInput {
   tools: string[];
   ingredients: Ingredient[];
   steps: RecipeStep[];
+  tags: string[];
 }
 
 // --- US1.5: Personal Recipe Tab (Full Recipe Entity) ---
@@ -63,6 +73,25 @@ export interface Recipe extends RecipeInput {
   author_username: string;
   created_at: string;
   updated_at: string;
+}
+
+export interface RecipeSummary {
+  id: number;
+  title: string;
+  author_username: string;
+  cuisine: string | null;
+  meal_type: string | null;
+  difficulty: "easy" | "medium" | "hard";
+  cook_time_mins: number;
+  image_url: string | null;
+  tags: string[];
+}
+
+export interface RecipeSearchResult {
+  total: number;
+  limit: number;
+  offset: number;
+  items: RecipeSummary[];
 }
 
 export class ApiError extends Error {
@@ -133,6 +162,16 @@ export const api = {
   adminListUsers: () => request<User[]>("/api/v1/admin/users"),
   adminUpdateUser: (id: number, changes: { is_active?: boolean; role?: string }) =>
     request<User>("/api/v1/admin/users/" + id + "/status", { method: "PATCH", body: json(changes) }),
+
+    // --- US2.1 / US2.2: Public Recipe Discovery & Category Filter ---
+  searchRecipes: (filter?: { cuisine?: string; meal_type?: string; tag?: string }) => {
+    const params = new URLSearchParams();
+    if (filter?.cuisine) params.set("cuisine", filter.cuisine);
+    if (filter?.meal_type) params.set("meal_type", filter.meal_type);
+    if (filter?.tag) params.set("tag", filter.tag);
+    const qs = params.toString();
+    return request<RecipeSearchResult>("/api/v1/recipes" + (qs ? "?" + qs : ""), {}, false);
+  },
 };
 
 export const errorText = (e: unknown) => e instanceof Error ? e.message : "Something went wrong";

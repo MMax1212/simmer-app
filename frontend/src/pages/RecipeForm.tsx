@@ -1,7 +1,7 @@
 import { useEffect, useState, type FormEvent } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { ErrorMessage } from "../components/ErrorMessage";
-import { api, errorText, STANDARD_UNITS, type Ingredient, type RecipeInput } from "../services/api";
+import { api, errorText, STANDARD_UNITS, CUISINES, MEAL_TYPES, type Ingredient, type RecipeInput } from "../services/api";
 
 const emptyRecipe = (): RecipeInput => ({
   title: "", description: "", cuisine: "", meal_type: "", difficulty: "medium", image_url: "",
@@ -9,6 +9,7 @@ const emptyRecipe = (): RecipeInput => ({
   tools: [],
   ingredients: [{ name: "", amount: null, unit: "" }],
   steps: [{ step_number: 1, instruction: "" }],
+  tags: [],
 });
 
 // --- US1.4: Recipe Creation & Saving (Recipe Authoring & Editing Form) ---
@@ -18,9 +19,21 @@ export function RecipeForm() {
   const navigate = useNavigate();
   const [recipe, setRecipe] = useState<RecipeInput>(emptyRecipe);
   const [toolInput, setToolInput] = useState("");
+  const [tagInput, setTagInput] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
   const [loading, setLoading] = useState(editing);
+
+  function addTag(raw: string) {
+    let tag = raw.trim();
+    if (!tag) return;
+    if (!tag.startsWith("#")) tag = `#${tag}`;
+    tag = tag.toLowerCase().replace(/\s+/g, ""); // No spaces in hashtags
+    if (!recipe.tags.includes(tag)) {
+      set("tags", [...recipe.tags, tag]);
+    }
+    setTagInput("");
+  }
 
   useEffect(() => {
     let active = true;
@@ -37,6 +50,7 @@ export function RecipeForm() {
           difficulty: r.difficulty, image_url: r.image_url, prep_time_mins: r.prep_time_mins,
           cook_time_mins: r.cook_time_mins, servings: r.servings,
           tools: r.tools ?? [],
+          tags: r.tags ?? [],
           ingredients: r.ingredients.length ? r.ingredients : emptyRecipe().ingredients,
           steps: r.steps.length ? r.steps : emptyRecipe().steps,
         });
@@ -66,6 +80,17 @@ export function RecipeForm() {
     return tools;
   }
 
+  function collectTags(): string[] {
+    const tags = [...recipe.tags];
+    for (const raw of tagInput.split(/[\s,]+/)) {
+      let t = raw.trim().toLowerCase().replace(/\s+/g, "");
+      if (!t) continue;
+      if (!t.startsWith("#")) t = `#${t}`;
+      if (!tags.includes(t)) tags.push(t);
+    }
+    return tags;
+  }
+
   // --- US1.4: Task 4.4 & 4.5: Validate Recipe Inputs and Persist to Backend ---
   async function onSubmit(event: FormEvent) {
     event.preventDefault();
@@ -80,10 +105,11 @@ export function RecipeForm() {
     }
     const tools = collectTools();
     if (!tools) return;
+    const tags = collectTags();
     setBusy(true);
     setError(null);
     const body: RecipeInput = {
-      ...recipe, tools, title: recipe.title.trim(), description: recipe.description || null,
+      ...recipe, tools, tags, title: recipe.title.trim(), description: recipe.description || null,
       cuisine: recipe.cuisine || null, meal_type: recipe.meal_type || null, image_url: recipe.image_url || null,
       ingredients: recipe.ingredients.map(({ name, amount, unit }) => ({ name: name.trim(), amount, unit: unit!.trim() })),
       steps: recipe.steps.map((step, index) => ({ step_number: index + 1, instruction: step.instruction.trim() })),
@@ -101,13 +127,118 @@ export function RecipeForm() {
       <h1>{editing ? "Edit recipe" : "New recipe"}</h1>
       <label>Title<input value={recipe.title} onChange={(e) => set("title", e.target.value)} required minLength={3} maxLength={150} /></label>
       <label>Description<textarea value={recipe.description ?? ""} onChange={(e) => set("description", e.target.value)} maxLength={2000} rows={2} /></label>
-      <div className="grid-3">
-        <label>Cuisine<input value={recipe.cuisine ?? ""} onChange={(e) => set("cuisine", e.target.value)} maxLength={50} /></label>
-        <label>Meal type<input value={recipe.meal_type ?? ""} onChange={(e) => set("meal_type", e.target.value)} maxLength={50} /></label>
-        <label>Difficulty<select value={recipe.difficulty} onChange={(e) => set("difficulty", e.target.value as RecipeInput["difficulty"])}>
-          <option value="easy">Easy</option><option value="medium">Medium</option><option value="hard">Hard</option>
-        </select></label>
-      </div>
+      {/* --- US2.1: Category Badge Selectors --- */}
+      <fieldset>
+        <legend>Categories</legend>
+        
+        {/* Cuisine Selector & Badges */}
+        <div>
+          <label>
+            Cuisine
+            <input
+              value={recipe.cuisine ?? ""}
+              onChange={(e) => set("cuisine", e.target.value)}
+              maxLength={50}
+              placeholder="e.g. Italian, Mexican, Asian"
+            />
+          </label>
+          <div className="chips" style={{ marginTop: "0.25rem" }}>
+            {CUISINES.map((c) => (
+              <button
+                key={c}
+                type="button"
+                className={`chip ${recipe.cuisine?.toLowerCase() === c.toLowerCase() ? "on" : ""}`}
+                onClick={() => set("cuisine", recipe.cuisine?.toLowerCase() === c.toLowerCase() ? "" : c)}
+              >
+                {c}
+              </button>
+            ))}
+          </div>
+        </div>
+        {/* Meal Type Selector & Badges */}
+        <div style={{ marginTop: "0.5rem" }}>
+          <label>
+            Meal type
+            <input
+              value={recipe.meal_type ?? ""}
+              onChange={(e) => set("meal_type", e.target.value)}
+              maxLength={50}
+              placeholder="e.g. Breakfast, Lunch, Dinner"
+            />
+          </label>
+          <div className="chips" style={{ marginTop: "0.25rem" }}>
+            {MEAL_TYPES.map((m) => (
+              <button
+                key={m}
+                type="button"
+                className={`chip ${recipe.meal_type?.toLowerCase() === m.toLowerCase() ? "on" : ""}`}
+                onClick={() => set("meal_type", recipe.meal_type?.toLowerCase() === m.toLowerCase() ? "" : m)}
+              >
+                {m.charAt(0).toUpperCase() + m.slice(1)}
+              </button>
+            ))}
+          </div>
+        </div>
+        {/* Difficulty Selector */}
+        <div style={{ marginTop: "0.5rem" }}>
+          <label>
+            Difficulty
+            <select
+              value={recipe.difficulty}
+              onChange={(e) => set("difficulty", e.target.value as RecipeInput["difficulty"])}
+            >
+              <option value="easy">Easy</option>
+              <option value="medium">Medium</option>
+              <option value="hard">Hard</option>
+            </select>
+          </label>
+        </div>
+      </fieldset>
+      {/* --- US2.1: Dynamic Tag Pills --- */}
+      <fieldset>
+        <legend>Hashtag Tags</legend>
+        <label>Add Tag</label>
+        <div className="flex gap-2 items-center">
+          <input
+            value={tagInput}
+            maxLength={50}
+            placeholder="e.g. #japanese, #quick, #comfortfood (press Enter or Add)"
+            onChange={(e) => setTagInput(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" || e.key === ",") {
+                e.preventDefault();
+                addTag(tagInput);
+              }
+            }}
+          />
+          <button
+            type="button"
+            className="secondary"
+            style={{ width: "auto", whiteSpace: "nowrap" }}
+            onClick={() => addTag(tagInput)}
+          >
+            + Add
+          </button>
+        </div>
+        
+        {recipe.tags.length > 0 && (
+          <div className="chips" style={{ marginTop: "0.5rem" }}>
+            {recipe.tags.map((tag, index) => (
+              <span className="chip on" key={index}>
+                {tag}
+                <button
+                  type="button"
+                  className="link-button"
+                  aria-label={"Remove tag " + tag}
+                  onClick={() => set("tags", recipe.tags.filter((_, i) => i !== index))}
+                >
+                  ×
+                </button>
+              </span>
+            ))}
+          </div>
+        )}
+      </fieldset>
       <label>Recipe image URL<input type="url" value={recipe.image_url ?? ""} onChange={(e) => set("image_url", e.target.value)} maxLength={255} pattern="https?://.*" /></label>
       <div className="grid-3">
         <label>Prep (min)<input type="number" min={0} max={10000} value={recipe.prep_time_mins} onChange={(e) => set("prep_time_mins", Number(e.target.value))} required /></label>

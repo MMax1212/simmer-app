@@ -112,7 +112,7 @@ def test_tools_migration_round_trip(tmp_path):
         conn.execute(text("INSERT INTO users (id,email,username,hashed_password,role,is_active,created_at,culinary_preferences) VALUES (1,'cook@example.com','cook','hash','user',1,'2026-10-28','[]')"))
         conn.execute(text("INSERT INTO recipes (id,author_id,title,prep_time_mins,cook_time_mins,servings,created_at,updated_at) VALUES (1,1,'Existing recipe',0,0,1,'2026-10-28','2026-10-28')"))
     before = set(inspect(engine).get_table_names())
-    migrate(engine)
+    migrate(engine, '0003_recipe_tools')
     assert 'recipe_tools' in inspect(engine).get_table_names()
     with engine.begin() as conn:
         conn.execute(text("INSERT INTO recipe_tools (recipe_id,name) VALUES (1,'Pot')"))
