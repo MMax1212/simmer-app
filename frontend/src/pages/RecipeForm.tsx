@@ -1,7 +1,6 @@
 import { useEffect, useState, type FormEvent } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { ErrorMessage } from "../components/ErrorMessage";
-import { TagInput } from "../components/TagInput";
 import { api, errorText, STANDARD_UNITS, CUISINES, MEAL_TYPES, type Ingredient, type RecipeInput } from "../services/api";
 
 const emptyRecipe = (): RecipeInput => ({
@@ -132,32 +131,48 @@ export function RecipeForm() {
       <fieldset>
         <legend>Categories</legend>
         
-        {/* Cuisine Badges */}
+        {/* Cuisine Selector & Badges */}
         <div>
-          <label className="small muted">Cuisine</label>
-          <div className="chips" role="group" aria-label="Cuisine selector">
+          <label>
+            Cuisine
+            <input
+              value={recipe.cuisine ?? ""}
+              onChange={(e) => set("cuisine", e.target.value)}
+              maxLength={50}
+              placeholder="e.g. Italian, Mexican, Asian"
+            />
+          </label>
+          <div className="chips" role="group" aria-label="Cuisine presets" style={{ marginTop: "0.25rem" }}>
             {CUISINES.map((c) => (
               <button
                 key={c}
                 type="button"
                 className={`chip ${recipe.cuisine?.toLowerCase() === c.toLowerCase() ? "on" : ""}`}
-                onClick={() => set("cuisine", recipe.cuisine === c ? "" : c)}
+                onClick={() => set("cuisine", recipe.cuisine?.toLowerCase() === c.toLowerCase() ? "" : c)}
               >
                 {c}
               </button>
             ))}
           </div>
         </div>
-        {/* Meal Type Badges */}
+        {/* Meal Type Selector & Badges */}
         <div style={{ marginTop: "0.5rem" }}>
-          <label className="small muted">Meal Type</label>
-          <div className="chips" role="group" aria-label="Meal type selector">
+          <label>
+            Meal type
+            <input
+              value={recipe.meal_type ?? ""}
+              onChange={(e) => set("meal_type", e.target.value)}
+              maxLength={50}
+              placeholder="e.g. Breakfast, Lunch, Dinner"
+            />
+          </label>
+          <div className="chips" role="group" aria-label="Meal type presets" style={{ marginTop: "0.25rem" }}>
             {MEAL_TYPES.map((m) => (
               <button
                 key={m}
                 type="button"
                 className={`chip ${recipe.meal_type?.toLowerCase() === m.toLowerCase() ? "on" : ""}`}
-                onClick={() => set("meal_type", recipe.meal_type === m ? "" : m)}
+                onClick={() => set("meal_type", recipe.meal_type?.toLowerCase() === m.toLowerCase() ? "" : m)}
               >
                 {m.charAt(0).toUpperCase() + m.slice(1)}
               </button>
