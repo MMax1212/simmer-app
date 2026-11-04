@@ -9,6 +9,15 @@ export const CULINARY_PREFS = [
   "nut-free", "halal", "kosher", "low-carb",
 ];
 
+// --- US2.1: Recipe Categorization Standard Constants ---
+export const CUISINES = [
+  "Italian", "Mexican", "Asian", "American", "Mediterranean", "Indian", "French", "other"
+] as const;
+export const MEAL_TYPES = [
+  "breakfast", "lunch", "dinner", "dessert", "snack"
+] as const;
+export const DIFFICULTIES = ["easy", "medium", "hard"] as const;
+
 // --- US1.1, US1.2, US1.3: User Profile & Authentication Data Model ---
 export interface User {
   id: number;
@@ -54,6 +63,7 @@ export interface RecipeInput {
   tools: string[];
   ingredients: Ingredient[];
   steps: RecipeStep[];
+  tags: string[];
 }
 
 // --- US1.5: Personal Recipe Tab (Full Recipe Entity) ---
