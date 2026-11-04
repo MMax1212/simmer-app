@@ -157,10 +157,18 @@ class RecipeSummaryOut(BaseModel):
     title: str
     author_username: str
     cuisine: str | None = None
-    meal_type: str |None = None
+    meal_type: str | None = None
     difficulty: str
     cook_time_mins: int
     image_url: str | None = None
+    tags: list[str] = []
+
+    @field_validator("tags", mode="before")
+    @classmethod
+    def format_tags(cls, v):
+        if v and hasattr(v[0], "name"):
+            return [tag.name for tag in v]
+        return v or []
 
 class RecipeSearchResult(BaseModel):
     """Paginated search respinse w/ total hit count and current window"""

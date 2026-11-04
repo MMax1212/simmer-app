@@ -36,6 +36,7 @@ def _set_children(recipe: Recipe, body: RecipeCreate) -> None:
 def create_recipe(body: RecipeCreate, user: CurrentUser, db: DbSession):
     recipe = Recipe(owner=user, **body.model_dump(exclude={"ingredients", "steps", "tools", "tags"}))
     _set_children(recipe, body)
+    db.add(recipe)
 
     for tag_name in body.tags:
         tag = db.scalars(select(Tag).where(Tag.name == tag_name)).first()
@@ -43,29 +44,10 @@ def create_recipe(body: RecipeCreate, user: CurrentUser, db: DbSession):
             tag = Tag(name=tag_name)
             db.add(tag)
         recipe.tags.append(tag)
-    db.add(recipe)
+
     db.commit()
     db.refresh(recipe)
     return recipe
-
-
-# --- US2.1 / US2.2: Search & Filter Endpoint ---
-@router.get("", response_model=RecipeSearchResult)
-def search_recipes(db: DbSession, tag: str | None = Query(default=None)):
-    query = select(Recipe).options(selectinload(Recipe.owner), selectinload(Recipe.tags))
-    
-    if tag:
-        normalized_tag = tag if tag.startswith("#") else f"#{tag}"
-        query = query.join(Recipe.tags).where(Tag.name == normalized_tag.lower())
-
-    total = db.scalar(select(func.count()).select_from(query.subquery())) or 0
-    items = db.scalars(query).all()
-    return RecipeSearchResult(
-        total=total,
-        limit=20,
-        offset=0,
-        items=items,
-    )
 
 
 # --- US1.5: Personal Recipe Tab (Get Author-Filtered Saved Recipes with Pagination) ---
@@ -89,13 +71,20 @@ def read_recipe(recipe_id: int, db: DbSession):
 def update_recipe(recipe_id: int, body: RecipeUpdate, user: CurrentUser, db: DbSession):
     recipe = _get_recipe(db, recipe_id)
     _require_owner(recipe, user)
-    for field, value in body.model_dump(exclude={"ingredients", "steps", "tools"}).items():
+    for field, value in body.model_dump(exclude={"ingredients", "steps", "tools", "tags"}).items():
         setattr(recipe, field, value)
     # Delete old ordered rows before inserting replacements with the same step numbers.
     recipe.ingredients.clear()
     recipe.steps.clear()
+    recipe.tags.clear()
     db.flush()
     _set_children(recipe, body)
+    for tag_name in body.tags:
+        tag = db.scalars(select(Tag).where(Tag.name == tag_name)).first()
+        if not tag:
+            tag = Tag(name=tag_name)
+            db.add(tag)
+        recipe.tags.append(tag)
     db.commit()
     db.refresh(recipe)
     return recipe
@@ -110,11 +99,28 @@ def delete_recipe(recipe_id: int, user: CurrentUser, db: DbSession):
     db.commit()
     return Response(status_code=204)
 
-# --- US1.5 / US2.1: Recipe List & Tag Query Filtering ---
-def list_recipes(db: DbSession, tag: str | None = Query(default=None)):
-    query = select(Recipe).options(selectinload(Recipe.ingredients), selectinload(Recipe.steps), selectinload(Recipe.owner), selectinload(Recipe.tags))
-    
+
+# --- US2.1 / US2.2: Search & Filter Endpoint ---
+@router.get("", response_model=RecipeSearchResult)
+def search_recipes(
+    db: DbSession,
+    tag: str | None = Query(default=None),
+    cuisine: str | None = Query(default=None),
+    meal_type: str | None = Query(default=None),
+):
+    query = select(Recipe).options(selectinload(Recipe.owner), selectinload(Recipe.tags))
     if tag:
         normalized_tag = tag if tag.startswith("#") else f"#{tag}"
         query = query.join(Recipe.tags).where(Tag.name == normalized_tag.lower())
-    return db.scalars(query).all()
+    if cuisine:
+        query = query.where(func.lower(Recipe.cuisine) == cuisine.lower())
+    if meal_type:
+        query = query.where(func.lower(Recipe.meal_type) == meal_type.lower())
+    total = db.scalar(select(func.count()).select_from(query.subquery())) or 0
+    items = db.scalars(query).all()
+    return RecipeSearchResult(
+        total=total,
+        limit=20,
+        offset=0,
+        items=items,
+    )

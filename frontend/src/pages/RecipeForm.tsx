@@ -13,17 +13,6 @@ const emptyRecipe = (): RecipeInput => ({
   tags: [],
 });
 
-function addTag(raw: string) {
-  let tag = raw.trim();
-  if (!tag) return;
-  if (!tag.startsWith("#")) tag = `#${tag}`;
-  tag = tag.toLowerCase().replace(/\s+/g, ""); // No spaces in hashtags
-  if (!recipe.tags.includes(tag)) {
-    set("tags", [...recipe.tags, tag]);
-  }
-  setTagInput("");
-}
-
 // --- US1.4: Recipe Creation & Saving (Recipe Authoring & Editing Form) ---
 export function RecipeForm() {
   const { id } = useParams();
@@ -35,6 +24,17 @@ export function RecipeForm() {
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
   const [loading, setLoading] = useState(editing);
+
+  function addTag(raw: string) {
+    let tag = raw.trim();
+    if (!tag) return;
+    if (!tag.startsWith("#")) tag = `#${tag}`;
+    tag = tag.toLowerCase().replace(/\s+/g, ""); // No spaces in hashtags
+    if (!recipe.tags.includes(tag)) {
+      set("tags", [...recipe.tags, tag]);
+    }
+    setTagInput("");
+  }
 
   useEffect(() => {
     let active = true;
@@ -81,6 +81,17 @@ export function RecipeForm() {
     return tools;
   }
 
+  function collectTags(): string[] {
+    const tags = [...recipe.tags];
+    for (const raw of tagInput.split(/[\s,]+/)) {
+      let t = raw.trim().toLowerCase().replace(/\s+/g, "");
+      if (!t) continue;
+      if (!t.startsWith("#")) t = `#${t}`;
+      if (!tags.includes(t)) tags.push(t);
+    }
+    return tags;
+  }
+
   // --- US1.4: Task 4.4 & 4.5: Validate Recipe Inputs and Persist to Backend ---
   async function onSubmit(event: FormEvent) {
     event.preventDefault();
@@ -95,10 +106,11 @@ export function RecipeForm() {
     }
     const tools = collectTools();
     if (!tools) return;
+    const tags = collectTags();
     setBusy(true);
     setError(null);
     const body: RecipeInput = {
-      ...recipe, tools, tags: recipe.tags, title: recipe.title.trim(), description: recipe.description || null,
+      ...recipe, tools, tags, title: recipe.title.trim(), description: recipe.description || null,
       cuisine: recipe.cuisine || null, meal_type: recipe.meal_type || null, image_url: recipe.image_url || null,
       ingredients: recipe.ingredients.map(({ name, amount, unit }) => ({ name: name.trim(), amount, unit: unit!.trim() })),
       steps: recipe.steps.map((step, index) => ({ step_number: index + 1, instruction: step.instruction.trim() })),
@@ -170,12 +182,12 @@ export function RecipeForm() {
       {/* --- US2.1: Dynamic Tag Pills --- */}
       <fieldset>
         <legend>Hashtag Tags</legend>
-        <label>
-          Add Tag
+        <label>Add Tag</label>
+        <div className="flex gap-2 items-center">
           <input
             value={tagInput}
             maxLength={50}
-            placeholder="e.g. #japanese, #quick, #comfortfood (press Enter)"
+            placeholder="e.g. #japanese, #quick, #comfortfood (press Enter or Add)"
             onChange={(e) => setTagInput(e.target.value)}
             onKeyDown={(e) => {
               if (e.key === "Enter" || e.key === ",") {
@@ -184,7 +196,15 @@ export function RecipeForm() {
               }
             }}
           />
-        </label>
+          <button
+            type="button"
+            className="secondary"
+            style={{ width: "auto", whiteSpace: "nowrap" }}
+            onClick={() => addTag(tagInput)}
+          >
+            + Add
+          </button>
+        </div>
         
         {recipe.tags.length > 0 && (
           <div className="chips" style={{ marginTop: "0.5rem" }}>

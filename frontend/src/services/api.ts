@@ -75,6 +75,25 @@ export interface Recipe extends RecipeInput {
   updated_at: string;
 }
 
+export interface RecipeSummary {
+  id: number;
+  title: string;
+  author_username: string;
+  cuisine: string | null;
+  meal_type: string | null;
+  difficulty: "easy" | "medium" | "hard";
+  cook_time_mins: number;
+  image_url: string | null;
+  tags: string[];
+}
+
+export interface RecipeSearchResult {
+  total: number;
+  limit: number;
+  offset: number;
+  items: RecipeSummary[];
+}
+
 export class ApiError extends Error {
   constructor(public status: number, message: string) { super(message); }
 }
@@ -143,6 +162,16 @@ export const api = {
   adminListUsers: () => request<User[]>("/api/v1/admin/users"),
   adminUpdateUser: (id: number, changes: { is_active?: boolean; role?: string }) =>
     request<User>("/api/v1/admin/users/" + id + "/status", { method: "PATCH", body: json(changes) }),
+
+    // --- US2.1 / US2.2: Public Recipe Discovery & Category Filter ---
+  searchRecipes: (filter?: { cuisine?: string; meal_type?: string; tag?: string }) => {
+    const params = new URLSearchParams();
+    if (filter?.cuisine) params.set("cuisine", filter.cuisine);
+    if (filter?.meal_type) params.set("meal_type", filter.meal_type);
+    if (filter?.tag) params.set("tag", filter.tag);
+    const qs = params.toString();
+    return request<RecipeSearchResult>("/api/v1/recipes" + (qs ? "?" + qs : ""), {}, false);
+  },
 };
 
 export const errorText = (e: unknown) => e instanceof Error ? e.message : "Something went wrong";

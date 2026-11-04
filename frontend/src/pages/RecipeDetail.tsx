@@ -47,6 +47,15 @@ export function RecipeDetail() {
       <p className="muted">by {recipe.author_username}</p>
       {recipe.image_url && <img src={recipe.image_url} alt={recipe.title} className="max-h-80 w-full rounded-lg object-cover" />}
       <p className="muted">{[recipe.cuisine, recipe.meal_type, recipe.difficulty].filter(Boolean).join(" · ")}</p>
+      {recipe.tags && recipe.tags.length > 0 && (
+        <div className="chips my-2">
+          {recipe.tags.map((t) => (
+            <span key={t} className="chip on font-semibold">
+              {t}
+            </span>
+          ))}
+        </div>
+      )}
       {recipe.description && <p>{recipe.description}</p>}
       <ul className="meta">
         {recipe.prep_time_mins != null && <li>Prep {recipe.prep_time_mins} min</li>}
