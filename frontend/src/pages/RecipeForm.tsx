@@ -142,7 +142,7 @@ export function RecipeForm() {
               placeholder="e.g. Italian, Mexican, Asian"
             />
           </label>
-          <div className="chips" role="group" aria-label="Cuisine presets" style={{ marginTop: "0.25rem" }}>
+          <div className="chips" style={{ marginTop: "0.25rem" }}>
             {CUISINES.map((c) => (
               <button
                 key={c}
@@ -166,7 +166,7 @@ export function RecipeForm() {
               placeholder="e.g. Breakfast, Lunch, Dinner"
             />
           </label>
-          <div className="chips" role="group" aria-label="Meal type presets" style={{ marginTop: "0.25rem" }}>
+          <div className="chips" style={{ marginTop: "0.25rem" }}>
             {MEAL_TYPES.map((m) => (
               <button
                 key={m}
