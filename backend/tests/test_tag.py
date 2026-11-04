@@ -39,11 +39,14 @@ def test_filter_recipes_by_tag(client):
     # 1. Filter by tag (e.g., ?tag=japanese or ?tag=#japanese depending on your route)
     res = client.get("/api/v1/recipes?tag=japanese")
     assert res.status_code == 200
-    titles = [r["title"] for r in res.json()]
+    data = res.json()
+    items = data["items"] if isinstance(data, dict) and "items" in data else data
+    titles = [r["title"] for r in items]
     assert "Ramen" in titles
     assert "Udon" in titles
     assert "Pancakes" not in titles
     # 2. Filter by non-existent tag should return an empty list
     empty_res = client.get("/api/v1/recipes?tag=nonexistent")
     assert empty_res.status_code == 200
-    assert empty_res.json() == []
+    data = empty_res.json()
+    assert (data["items"] if isinstance(data, dict) else data) == []

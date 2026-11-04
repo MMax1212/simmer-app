@@ -49,11 +49,17 @@ def create_recipe(body: RecipeCreate, user: CurrentUser, db: DbSession):
     return recipe
 
 
-# --- US2.2: Search Endpoint ---
+# --- US2.1 / US2.2: Search & Filter Endpoint ---
 @router.get("", response_model=RecipeSearchResult)
-def search_recipes(db: DbSession):
-    total = db.scalar(select(func.count(Recipe.id))) or 0
-    items = db.scalars(select(Recipe).options(selectinload(Recipe.owner))).all()
+def search_recipes(db: DbSession, tag: str | None = Query(default=None)):
+    query = select(Recipe).options(selectinload(Recipe.owner), selectinload(Recipe.tags))
+    
+    if tag:
+        normalized_tag = tag if tag.startswith("#") else f"#{tag}"
+        query = query.join(Recipe.tags).where(Tag.name == normalized_tag.lower())
+
+    total = db.scalar(select(func.count()).select_from(query.subquery())) or 0
+    items = db.scalars(query).all()
     return RecipeSearchResult(
         total=total,
         limit=20,
@@ -105,7 +111,6 @@ def delete_recipe(recipe_id: int, user: CurrentUser, db: DbSession):
     return Response(status_code=204)
 
 # --- US1.5 / US2.1: Recipe List & Tag Query Filtering ---
-@router.get("", response_model=list[RecipeOut])
 def list_recipes(db: DbSession, tag: str | None = Query(default=None)):
     query = select(Recipe).options(selectinload(Recipe.ingredients), selectinload(Recipe.steps), selectinload(Recipe.owner), selectinload(Recipe.tags))
     

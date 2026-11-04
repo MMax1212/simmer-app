@@ -98,6 +98,21 @@ class RecipeCreate(RequestModel):
         if [step.step_number for step in self.steps] != list(range(1, len(self.steps) + 1)):
             raise ValueError("Steps must be ordered consecutively starting at 1")
         return self
+    
+    @field_validator("tags")
+    @classmethod
+    def clean_tags(cls, tags: list[str]) -> list[str]:
+        cleaned = []
+        for tag in tags:
+            if not isinstance(tag, str) or not tag.strip():
+                raise ValueError("Tag must not be empty")
+            t = tag.strip()
+            if " " in t:
+                raise ValueError("Tags cannot contain spaces")
+            if not t.startswith("#"):
+                t = f"#{t}"
+            cleaned.append(t.lower())
+        return cleaned
 
 
 # --- US1.4: Recipe Creation & Saving (Recipe Full Update Schema) ---
