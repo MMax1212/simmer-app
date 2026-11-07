@@ -81,9 +81,10 @@ export interface RecipeSummary{
   author_username: string;
   cuisine: string | null;
   meal_type: string | null;
-  difficulty: "easy" | "medium" | "hard"
+  difficulty: "easy" | "medium" | "hard";
   cook_time_mins: number;
   image_url: string | null;
+  tags?: string[];
 }
 
 export interface RecipeSearchResult{
@@ -95,6 +96,7 @@ export interface RecipeSearchResult{
 
 export interface SearchFilters{
     q?: string;
+    tag?: string;
     cuisine?: string;
     meal_type?: string;
     difficulty?: string;
@@ -158,10 +160,11 @@ export const api = {
     request<Recipe[]>("/api/v1/recipes/my-recipes?offset=" + offset + "&limit=" + limit),
   getRecipe: (id: number) => request<Recipe>("/api/v1/recipes/" + id),
 
-  // --- US2.2: Search & Filter Recipes Endpoint ---
+  // --- US2.1 & US2.2: Search & Filter Recipes Endpoint ---
   searchRecipes: (filters: SearchFilters = {}) => {
     const params = new URLSearchParams();
     if (filters.q?.trim()) params.set("q", filters.q.trim());
+    if (filters.tag?.trim()) params.set("tag", filters.tag.trim());
     if (filters.cuisine?.trim()) params.set("cuisine", filters.cuisine.trim());
     if (filters.meal_type?.trim()) params.set("meal_type", filters.meal_type.trim());
     if (filters.difficulty?.trim()) params.set("difficulty", filters.difficulty.trim());
@@ -189,16 +192,6 @@ export const api = {
   adminListUsers: () => request<User[]>("/api/v1/admin/users"),
   adminUpdateUser: (id: number, changes: { is_active?: boolean; role?: string }) =>
     request<User>("/api/v1/admin/users/" + id + "/status", { method: "PATCH", body: json(changes) }),
-
-    // --- US2.1 / US2.2: Public Recipe Discovery & Category Filter ---
-  searchRecipes: (filter?: { cuisine?: string; meal_type?: string; tag?: string }) => {
-    const params = new URLSearchParams();
-    if (filter?.cuisine) params.set("cuisine", filter.cuisine);
-    if (filter?.meal_type) params.set("meal_type", filter.meal_type);
-    if (filter?.tag) params.set("tag", filter.tag);
-    const qs = params.toString();
-    return request<RecipeSearchResult>("/api/v1/recipes" + (qs ? "?" + qs : ""), {}, false);
-  },
 };
 
 export const errorText = (e: unknown) => e instanceof Error ? e.message : "Something went wrong";
