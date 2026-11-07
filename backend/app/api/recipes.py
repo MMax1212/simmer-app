@@ -1,5 +1,5 @@
 from fastapi import APIRouter, HTTPException, Query, Response
-from sqlalchemy import func, select
+from sqlalchemy import func, select, distinct, or_
 from sqlalchemy.orm import selectinload
 
 from app.api.deps import CurrentUser, DbSession
@@ -48,6 +48,71 @@ def create_recipe(body: RecipeCreate, user: CurrentUser, db: DbSession):
     db.commit()
     db.refresh(recipe)
     return recipe
+
+
+# --- US2.1 & US2.2: Search & Filter Endpoint ---
+@router.get("", response_model=RecipeSearchResult)
+def search_recipes(
+    db: DbSession,
+    q: str | None = Query(default=None, max_length=100, description="Title/keyword query"),
+    tag: str | None = Query(default=None),
+    cuisine: str | None = Query(default=None, max_length=50),
+    meal_type: str | None = Query(default=None, max_length=50),
+    difficulty: str | None = Query(default=None),
+    ingredient: str | None = Query(default=None, max_length=100),
+    limit: int = Query(default=20, ge=1, le=100),
+    offset: int = Query(default=0, ge=0),
+):
+    query = select(Recipe).options(selectinload(Recipe.owner), selectinload(Recipe.tags))
+    filters = []
+
+    # Tag filter (US2.1)
+    if tag and tag.strip():
+        normalized_tag = tag.strip() if tag.strip().startswith("#") else f"#{tag.strip()}"
+        query = query.join(Recipe.tags).where(Tag.name == normalized_tag.lower())
+
+    # Text search across title, description, and ingredient names (US2.2)
+    if q and q.strip():
+        term = f"%{q.strip()}%"
+        filters.append(
+            or_(
+                Recipe.title.ilike(term),
+                Recipe.description.ilike(term),
+                Recipe.ingredients.any(Ingredient.name.ilike(term)),
+            )
+        )
+
+    # Faceted category & ingredient filters
+    if cuisine and cuisine.strip():
+        filters.append(func.lower(Recipe.cuisine) == cuisine.strip().lower())
+    if meal_type and meal_type.strip():
+        filters.append(func.lower(Recipe.meal_type) == meal_type.strip().lower())
+    if difficulty and difficulty.strip():
+        filters.append(Recipe.difficulty == difficulty.strip().lower())
+    if ingredient and ingredient.strip():
+        filters.append(Recipe.ingredients.any(Ingredient.name.ilike(f"%{ingredient.strip()}%")))
+
+    if filters:
+        query = query.where(*filters)
+
+    # Total count matching filters
+    count_query = select(func.count()).select_from(query.order_by(None).subquery())
+    total = db.scalar(count_query) or 0
+
+    # Fetch matching recipes
+    query = (
+        query.order_by(Recipe.created_at.desc(), Recipe.id.desc())
+        .offset(offset)
+        .limit(limit)
+    )
+    items = db.scalars(query).all()
+
+    return RecipeSearchResult(
+        total=total,
+        limit=limit,
+        offset=offset,
+        items=items,
+    )
 
 
 # --- US1.5: Personal Recipe Tab (Get Author-Filtered Saved Recipes with Pagination) ---
@@ -100,27 +165,3 @@ def delete_recipe(recipe_id: int, user: CurrentUser, db: DbSession):
     return Response(status_code=204)
 
 
-# --- US2.1 / US2.2: Search & Filter Endpoint ---
-@router.get("", response_model=RecipeSearchResult)
-def search_recipes(
-    db: DbSession,
-    tag: str | None = Query(default=None),
-    cuisine: str | None = Query(default=None),
-    meal_type: str | None = Query(default=None),
-):
-    query = select(Recipe).options(selectinload(Recipe.owner), selectinload(Recipe.tags))
-    if tag:
-        normalized_tag = tag if tag.startswith("#") else f"#{tag}"
-        query = query.join(Recipe.tags).where(Tag.name == normalized_tag.lower())
-    if cuisine:
-        query = query.where(func.lower(Recipe.cuisine) == cuisine.lower())
-    if meal_type:
-        query = query.where(func.lower(Recipe.meal_type) == meal_type.lower())
-    total = db.scalar(select(func.count()).select_from(query.subquery())) or 0
-    items = db.scalars(query).all()
-    return RecipeSearchResult(
-        total=total,
-        limit=20,
-        offset=0,
-        items=items,
-    )
