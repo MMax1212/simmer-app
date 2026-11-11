@@ -28,6 +28,10 @@ class User(Base):
     # --- US1.4: Recipe Creation & Association ---
     recipes: Mapped[list["Recipe"]] = relationship(back_populates="owner", cascade="all, delete-orphan")  # noqa: F821
 
+    # --- US3.1: Community Food Posts ---
+    posts: Mapped[list["Post"]] = relationship(back_populates="author", cascade="all, delete-orphan")  # noqa: F821
+
+
 
 # --- US1.1: Unique Case-Insensitive Username Index ---
 Index("uq_users_username_lower", func.lower(User.username), unique=True)

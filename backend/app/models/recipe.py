@@ -43,6 +43,10 @@ class Recipe(Base):
     # US2.4: Removing a tool from this collection also deletes its stored row.
     tool_rows: Mapped[list["RecipeTool"]] = relationship(back_populates="recipe", cascade="all, delete-orphan", order_by="RecipeTool.id")
 
+    # --- US3.1: Community Food Posts linked to this recipe ---
+    posts: Mapped[list["Post"]] = relationship(back_populates="recipe")  # noqa: F821
+
+
     @property
     def tools(self) -> list[str]:
         """Expose tool names in API responses while retaining relational storage."""
