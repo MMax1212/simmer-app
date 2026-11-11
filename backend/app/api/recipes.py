@@ -1,9 +1,9 @@
 from fastapi import APIRouter, HTTPException, Query, Response
-from sqlalchemy import func, select
+from sqlalchemy import func, select, distinct, or_
 from sqlalchemy.orm import selectinload
 
 from app.api.deps import CurrentUser, DbSession
-from app.models import Ingredient, Recipe, RecipeStep, RecipeTool, User
+from app.models import Ingredient, Recipe, RecipeStep, User, Tag, RecipeTool
 from app.schemas.recipe import RecipeCreate, RecipeOut, RecipeUpdate, RecipeSearchResult
 
 router = APIRouter(prefix="/api/v1/recipes", tags=["recipes"])
@@ -34,23 +34,83 @@ def _set_children(recipe: Recipe, body: RecipeCreate) -> None:
 # --- US1.4: Recipe Creation & Saving (Create Recipe Endpoint) ---
 @router.post("", response_model=RecipeOut, status_code=201)
 def create_recipe(body: RecipeCreate, user: CurrentUser, db: DbSession):
-    recipe = Recipe(owner=user, **body.model_dump(exclude={"ingredients", "steps", "tools"}))
+    recipe = Recipe(owner=user, **body.model_dump(exclude={"ingredients", "steps", "tools", "tags"}))
     _set_children(recipe, body)
     db.add(recipe)
+
+    for tag_name in body.tags:
+        tag = db.scalars(select(Tag).where(Tag.name == tag_name)).first()
+        if not tag:
+            tag = Tag(name=tag_name)
+            db.add(tag)
+        recipe.tags.append(tag)
+
     db.commit()
     db.refresh(recipe)
     return recipe
 
 
-# --- US2.2: Search Endpoint ---
+# --- US2.1 & US2.2: Search & Filter Endpoint ---
 @router.get("", response_model=RecipeSearchResult)
-def search_recipes(db: DbSession):
-    total = db.scalar(select(func.count(Recipe.id))) or 0
-    items = db.scalars(select(Recipe).options(selectinload(Recipe.owner))).all()
+def search_recipes(
+    db: DbSession,
+    q: str | None = Query(default=None, max_length=100, description="Title/keyword query"),
+    tag: str | None = Query(default=None),
+    cuisine: str | None = Query(default=None, max_length=50),
+    meal_type: str | None = Query(default=None, max_length=50),
+    difficulty: str | None = Query(default=None),
+    ingredient: str | None = Query(default=None, max_length=100),
+    limit: int = Query(default=20, ge=1, le=100),
+    offset: int = Query(default=0, ge=0),
+):
+    query = select(Recipe).options(selectinload(Recipe.owner), selectinload(Recipe.tags))
+    filters = []
+
+    # Tag filter (US2.1)
+    if tag and tag.strip():
+        normalized_tag = tag.strip() if tag.strip().startswith("#") else f"#{tag.strip()}"
+        query = query.join(Recipe.tags).where(Tag.name == normalized_tag.lower())
+
+    # Text search across title, description, and ingredient names (US2.2)
+    if q and q.strip():
+        term = f"%{q.strip()}%"
+        filters.append(
+            or_(
+                Recipe.title.ilike(term),
+                Recipe.description.ilike(term),
+                Recipe.ingredients.any(Ingredient.name.ilike(term)),
+            )
+        )
+
+    # Faceted category & ingredient filters
+    if cuisine and cuisine.strip():
+        filters.append(func.lower(Recipe.cuisine) == cuisine.strip().lower())
+    if meal_type and meal_type.strip():
+        filters.append(func.lower(Recipe.meal_type) == meal_type.strip().lower())
+    if difficulty and difficulty.strip():
+        filters.append(Recipe.difficulty == difficulty.strip().lower())
+    if ingredient and ingredient.strip():
+        filters.append(Recipe.ingredients.any(Ingredient.name.ilike(f"%{ingredient.strip()}%")))
+
+    if filters:
+        query = query.where(*filters)
+
+    # Total count matching filters
+    count_query = select(func.count()).select_from(query.order_by(None).subquery())
+    total = db.scalar(count_query) or 0
+
+    # Fetch matching recipes
+    query = (
+        query.order_by(Recipe.created_at.desc(), Recipe.id.desc())
+        .offset(offset)
+        .limit(limit)
+    )
+    items = db.scalars(query).all()
+
     return RecipeSearchResult(
         total=total,
-        limit=20,
-        offset=0,
+        limit=limit,
+        offset=offset,
         items=items,
     )
 
@@ -76,13 +136,20 @@ def read_recipe(recipe_id: int, db: DbSession):
 def update_recipe(recipe_id: int, body: RecipeUpdate, user: CurrentUser, db: DbSession):
     recipe = _get_recipe(db, recipe_id)
     _require_owner(recipe, user)
-    for field, value in body.model_dump(exclude={"ingredients", "steps", "tools"}).items():
+    for field, value in body.model_dump(exclude={"ingredients", "steps", "tools", "tags"}).items():
         setattr(recipe, field, value)
     # Delete old ordered rows before inserting replacements with the same step numbers.
     recipe.ingredients.clear()
     recipe.steps.clear()
+    recipe.tags.clear()
     db.flush()
     _set_children(recipe, body)
+    for tag_name in body.tags:
+        tag = db.scalars(select(Tag).where(Tag.name == tag_name)).first()
+        if not tag:
+            tag = Tag(name=tag_name)
+            db.add(tag)
+        recipe.tags.append(tag)
     db.commit()
     db.refresh(recipe)
     return recipe
@@ -96,3 +163,5 @@ def delete_recipe(recipe_id: int, user: CurrentUser, db: DbSession):
     db.delete(recipe)
     db.commit()
     return Response(status_code=204)
+
+

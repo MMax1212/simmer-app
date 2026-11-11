@@ -4,6 +4,7 @@ from sqlalchemy import func, select
 from app.api.deps import AdminUser, DbSession
 from app.models import AdminAudit, Recipe, User
 from app.schemas.admin import AdminStatsResponse
+from app.schemas.audit import AdminAuditResponse
 from app.schemas.user import AdminUserUpdate, UserPrivate
 
 router = APIRouter(prefix="/api/v1/admin", tags=["admin"])
@@ -46,6 +47,22 @@ def update_user(user_id: int, body: AdminUserUpdate, admin: AdminUser, db: DbSes
     return user
 
 
+# --- US1.2: Admin Account & RBAC (US-1.2-T-1: Inspect Audit Logs) ---
+@router.get("/audit-logs", response_model=list[AdminAuditResponse])
+def get_audit_logs(
+    _: AdminUser,
+    db: DbSession,
+    target_id: int | None = Query(default=None, description="Filter by target user ID"),
+    limit: int = Query(default=50, ge=1, le=100, description="Max records to return"),
+    offset: int = Query(default=0, ge=0, description="Records to skip"),
+):
+    query = select(AdminAudit).order_by(AdminAudit.created_at.desc(), AdminAudit.id.desc())
+    if target_id is not None:
+        query = query.where(AdminAudit.target_id == target_id)
+    query = query.offset(offset).limit(limit)
+    return db.scalars(query).all()
+
+
 # --- US1.2: Admin Account & RBAC (US-1.2-T-2: Admin Dashboard System Metrics) ---
 @router.get("/stats", response_model=AdminStatsResponse)
 def get_admin_stats(_: AdminUser, db: DbSession):
@@ -64,4 +81,3 @@ def get_admin_stats(_: AdminUser, db: DbSession):
         total_posts=total_posts,
         total_recipes=total_recipes,
     )
-

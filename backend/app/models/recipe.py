@@ -1,10 +1,17 @@
 from datetime import datetime, timezone
 
-from sqlalchemy import DateTime, Float, ForeignKey, Integer, String, Text, UniqueConstraint
+from sqlalchemy import DateTime, Float, ForeignKey, Integer, String, Text, UniqueConstraint, Column, Table 
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.core.database import Base
 
+# --- US2.1 (Task 1.1): Many to Many Association Table ---
+recipe_tags = Table(
+    "recipe_tags",
+    Base.metadata,
+    Column("recipe_id", Integer, ForeignKey("recipes.id", ondelete="CASCADE"), primary_key=True),
+    Column("tag_id", Integer, ForeignKey("tags.id", ondelete="CASCADE"), primary_key=True)
+)
 
 # --- US1.4: Recipe Creation & Saving (Core Recipe Model) ---
 class Recipe(Base):
@@ -45,7 +52,12 @@ class Recipe(Base):
     @property
     def author_username(self) -> str:
         return self.owner.username
-
+    
+    tags: Mapped[list["Tag"]] = relationship(
+        secondary=recipe_tags, 
+        back_populates="recipes", 
+        lazy="selectin"  # Automatically loads tags with the recipe without N+1 queries
+    )
 
 # --- US1.4: Recipe Creation & Saving (Relational Ingredients Model) ---
 class Ingredient(Base):
@@ -71,6 +83,15 @@ class RecipeStep(Base):
     instruction: Mapped[str] = mapped_column(Text)
     recipe: Mapped[Recipe] = relationship(back_populates="steps")
 
+# --- US 2.1 (Task 1.1): Dynamic Hashtag Model ---
+class Tag(Base):
+    __tablename__ = "tags"
+    id: Mapped[int] = mapped_column(primary_key=True)
+    # Stored unique, lowercase with '#' (e.g., "#japanese"), indexed for O(1) lookups
+    name: Mapped[str] = mapped_column(String(50), unique=True, index=True)
+    recipes: Mapped[list["Recipe"]] = relationship(
+        secondary=recipe_tags, back_populates="tags"
+    )
 
 class RecipeTool(Base):
     """A recipe-owned tool; database CASCADE also handles direct recipe deletion."""
