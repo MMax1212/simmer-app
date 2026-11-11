@@ -9,6 +9,9 @@ export function Navbar() {
     <header className="navbar">
       <Link to="/" className="brand">Simmer</Link>
       <nav>
+        {/* US2.2: Recipe Search & Discovery Navigation */}
+        <NavLink to="/recipes">Explore</NavLink>
+
         {user ? (
           <>
             {/* US1.5: Personal Recipe Tab Navigation */}

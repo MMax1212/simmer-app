@@ -67,6 +67,7 @@ class RecipeCreate(RequestModel):
     tools: list[str] = Field(default_factory=list, max_length=50)
     steps: list[RecipeStepIn] = Field(min_length=1, max_length=200)
 
+    tags: list[str] = Field(default_factory=list)
     @field_validator("tools")
     @classmethod
     def clean_tools(cls, values: list[str]) -> list[str]:
@@ -97,6 +98,21 @@ class RecipeCreate(RequestModel):
         if [step.step_number for step in self.steps] != list(range(1, len(self.steps) + 1)):
             raise ValueError("Steps must be ordered consecutively starting at 1")
         return self
+    
+    @field_validator("tags")
+    @classmethod
+    def clean_tags(cls, tags: list[str]) -> list[str]:
+        cleaned = []
+        for tag in tags:
+            if not isinstance(tag, str) or not tag.strip():
+                raise ValueError("Tag must not be empty")
+            t = tag.strip()
+            if " " in t:
+                raise ValueError("Tags cannot contain spaces")
+            if not t.startswith("#"):
+                t = f"#{t}"
+            cleaned.append(t.lower())
+        return cleaned
 
 
 # --- US1.4: Recipe Creation & Saving (Recipe Full Update Schema) ---
@@ -125,6 +141,16 @@ class RecipeOut(BaseModel):
     created_at: datetime
     updated_at: datetime
 
+    tags: list[str] = []
+
+    @field_validator("tags", mode="before")
+    @classmethod
+    def format_tags(cls, v):
+        if v and hasattr(v[0], "name"):
+            return [tag.name for tag in v]
+        return v or []
+
+
 # --- US2.2: Recipe Search & Discovery (Search Result Schemas) ---
 class RecipeSummaryOut(BaseModel):
     """Lightweight recipe summary returned in search grids and listing cards."""
@@ -137,6 +163,14 @@ class RecipeSummaryOut(BaseModel):
     difficulty: str
     cook_time_mins: int
     image_url: str | None = None
+    tags: list[str] = []
+
+    @field_validator("tags", mode="before")
+    @classmethod
+    def format_tags(cls, v):
+        if v and hasattr(v[0], "name"):
+            return [tag.name for tag in v]
+        return v or []
 
 
 class RecipeSearchResult(BaseModel):

@@ -1,4 +1,4 @@
-from app.models.recipe import Ingredient, Recipe, RecipeStep, RecipeTool
+from app.models.recipe import Ingredient, Recipe, RecipeStep, Tag, RecipeTool
 from app.models.user import User
 from app.models.audit import AdminAudit
 from app.models.completed_recipe import CompletedRecipe
