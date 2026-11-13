@@ -33,6 +33,20 @@ class User(Base):
         back_populates="user", cascade="all, delete-orphan"
     )
 
+    # --- US3.5: User Follow Relationships ---
+    following_relations: Mapped[list["UserFollow"]] = relationship(  # noqa: F821
+        "UserFollow",
+        foreign_keys="UserFollow.follower_id",
+        back_populates="follower",
+        cascade="all, delete-orphan",
+    )
+    follower_relations: Mapped[list["UserFollow"]] = relationship(  # noqa: F821
+        "UserFollow",
+        foreign_keys="UserFollow.following_id",
+        back_populates="following",
+        cascade="all, delete-orphan",
+    )
+
 
 # --- US1.1: Unique Case-Insensitive Username Index ---
 Index("uq_users_username_lower", func.lower(User.username), unique=True)
