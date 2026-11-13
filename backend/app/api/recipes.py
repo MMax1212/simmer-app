@@ -1,10 +1,19 @@
+from datetime import datetime, timedelta, timezone
+
 from fastapi import APIRouter, HTTPException, Query, Response
 from sqlalchemy import func, select, distinct, or_
 from sqlalchemy.orm import selectinload
 
 from app.api.deps import CurrentUser, DbSession
-from app.models import Ingredient, Recipe, RecipeStep, User, Tag, RecipeTool
-from app.schemas.recipe import RecipeCreate, RecipeOut, RecipeUpdate, RecipeSearchResult
+from app.models import CompletedRecipe, Ingredient, Recipe, RecipeStep, RecipeTool, Tag, User
+from app.schemas.recipe import (
+    CompletedRecipeOut,
+    LogCookedRequest,
+    RecipeCreate,
+    RecipeOut,
+    RecipeSearchResult,
+    RecipeUpdate,
+)
 
 router = APIRouter(prefix="/api/v1/recipes", tags=["recipes"])
 
@@ -165,3 +174,33 @@ def delete_recipe(recipe_id: int, user: CurrentUser, db: DbSession):
     return Response(status_code=204)
 
 
+# --- US2.3 Task 2.3.2: Mark Recipe as Completed Endpoint ---
+@router.post("/{recipe_id}/complete", response_model=CompletedRecipeOut, status_code=201)
+def complete_recipe(recipe_id: int, body: LogCookedRequest, user: CurrentUser, db: DbSession):
+    recipe = _get_recipe(db, recipe_id)
+
+    # US2.3 Guardrail: Prevent duplicate logs within a 60-second window
+    cutoff = datetime.now(timezone.utc) - timedelta(seconds=60)
+    recent = db.scalar(
+        select(CompletedRecipe).where(
+            CompletedRecipe.user_id == user.id,
+            CompletedRecipe.recipe_id == recipe.id,
+            CompletedRecipe.cooked_at >= cutoff,
+        )
+    )
+    if recent is not None:
+        raise HTTPException(
+            status_code=400,
+            detail="Recipe was already marked as cooked within the last 60 seconds",
+        )
+
+    entry = CompletedRecipe(
+        user_id=user.id,
+        recipe_id=recipe.id,
+        notes=body.notes,
+        rating=body.rating,
+    )
+    db.add(entry)
+    db.commit()
+    db.refresh(entry)
+    return entry

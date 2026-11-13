@@ -75,7 +75,27 @@ export interface Recipe extends RecipeInput {
   updated_at: string;
 }
 
-export interface RecipeSummary{
+// --- US2.3: Cooking History Data Structures ---
+export interface CompletedRecipeOut {
+  id: number;
+  recipe_id: number;
+  user_id: number;
+  cooked_at: string;
+  notes: string | null;
+  rating: number | null;
+}
+
+export interface CookingHistoryItem {
+  id: number;
+  recipe_id: number;
+  recipe_title: string;
+  recipe_image_url: string | null;
+  cooked_at: string;
+  notes: string | null;
+  rating: number | null;
+}
+
+export interface RecipeSummary {
   id: number;
   title: string;
   author_username: string;
@@ -87,22 +107,22 @@ export interface RecipeSummary{
   tags?: string[];
 }
 
-export interface RecipeSearchResult{
+export interface RecipeSearchResult {
   total: number;
   limit: number;
   offset: number;
   items: RecipeSummary[];
 }
 
-export interface SearchFilters{
-    q?: string;
-    tag?: string;
-    cuisine?: string;
-    meal_type?: string;
-    difficulty?: string;
-    ingredient?: string;
-    offset?: number;
-    limit?: number;
+export interface SearchFilters {
+  q?: string;
+  tag?: string;
+  cuisine?: string;
+  meal_type?: string;
+  difficulty?: string;
+  ingredient?: string;
+  offset?: number;
+  limit?: number;
 }
 
 // --- US3.3: Likes & Comments (Like Toggle Contract) ---
@@ -193,6 +213,15 @@ export const api = {
 
   // --- US1.5: Recipe Deletion Endpoint ---
   deleteRecipe: (id: number) => request<void>("/api/v1/recipes/" + id, { method: "DELETE" }),
+
+  // --- US2.3: Cooking History Endpoints ---
+  completeRecipe: (id: number, data: { notes?: string; rating?: number } = {}) =>
+    request<CompletedRecipeOut>(
+      "/api/v1/recipes/" + id + "/complete",
+      { method: "POST", body: json(data) },
+    ),
+  getCookingHistory: () =>
+    request<CookingHistoryItem[]>("/api/v1/users/me/cooking-history"),
 
   // --- US1.2: Admin Account & RBAC Endpoints ---
   adminListUsers: () => request<User[]>("/api/v1/admin/users"),
