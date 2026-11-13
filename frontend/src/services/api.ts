@@ -125,6 +125,12 @@ export interface SearchFilters {
   limit?: number;
 }
 
+// --- US3.3: Likes & Comments (Like Toggle Contract) ---
+export interface LikeToggleResponse {
+  liked: boolean;
+  likes_count: number;
+}
+
 export class ApiError extends Error {
   constructor(public status: number, message: string) { super(message); }
 }
@@ -221,6 +227,12 @@ export const api = {
   adminListUsers: () => request<User[]>("/api/v1/admin/users"),
   adminUpdateUser: (id: number, changes: { is_active?: boolean; role?: string }) =>
     request<User>("/api/v1/admin/users/" + id + "/status", { method: "PATCH", body: json(changes) }),
+
+  // --- US3.3: Likes & Comments (Post Like Endpoint) ---
+  togglePostLike: (postId: number) =>
+    request<LikeToggleResponse>("/api/v1/posts/" + postId + "/like", { method: "POST" }),
 };
+
+export const togglePostLike = (postId: number) => api.togglePostLike(postId);
 
 export const errorText = (e: unknown) => e instanceof Error ? e.message : "Something went wrong";
