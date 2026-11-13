@@ -29,6 +29,21 @@ def get_current_user(db: DbSession, token: Annotated[str, Depends(oauth2_scheme)
 
 CurrentUser = Annotated[User, Depends(get_current_user)]
 
+oauth2_scheme_optional = OAuth2PasswordBearer(tokenUrl="/api/v1/auth/token", auto_error=False)
+
+
+def get_optional_user(db: DbSession, token: Annotated[str | None, Depends(oauth2_scheme_optional)] = None) -> User | None:
+    if not token:
+        return None
+    user_id = decode_access_token(token)
+    if user_id is None:
+        return None
+    user = db.get(User, user_id)
+    return user if (user and user.is_active) else None
+
+
+OptionalUser = Annotated[User | None, Depends(get_optional_user)]
+
 
 # --- US1.2: Admin Account & RBAC (Admin-Only Role Guard Dependency) ---
 def require_admin(user: CurrentUser) -> User:

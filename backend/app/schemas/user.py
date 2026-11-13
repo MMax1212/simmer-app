@@ -80,3 +80,10 @@ class AdminUserUpdate(RequestModel):
         if value is None:
             raise ValueError("Use a concrete status or role")
         return value
+
+
+# --- US3.5 Task 3.5.2: Follow/Unfollow Response Schema ---
+class FollowToggleResponse(BaseModel):
+    following: bool
+    followers_count: int
+    following_count: int
