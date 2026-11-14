@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { ErrorMessage } from "../components/ErrorMessage";
+import { FollowButton } from "../components/FollowButton";
 import { useAuth } from "../context/auth";
 import { api, errorText, type Recipe } from "../services/api";
 
@@ -81,7 +82,15 @@ export function RecipeDetail() {
   return (
     <article className="card">
       <h1>{recipe.title}</h1>
-      <p className="muted">by {recipe.author_username}</p>
+      <div className="flex items-center gap-3 my-1">
+        <p className="muted">by {recipe.author_username}</p>
+        <FollowButton
+          targetUserId={recipe.author_id}
+          targetUsername={recipe.author_username}
+          currentUserId={user?.id}
+          size="sm"
+        />
+      </div>
       {recipe.image_url && <img src={recipe.image_url} alt={recipe.title} className="max-h-80 w-full rounded-lg object-cover" />}
       <p className="muted">{[recipe.cuisine, recipe.meal_type, recipe.difficulty].filter(Boolean).join(" · ")}</p>
       {recipe.tags && recipe.tags.length > 0 && (
