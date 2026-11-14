@@ -33,6 +33,11 @@ class User(Base):
         back_populates="user", cascade="all, delete-orphan"
     )
 
+    # --- US3.1: Community Food Posts ---
+    posts: Mapped[list["Post"]] = relationship(  # noqa: F821
+        "Post", back_populates="author", cascade="all, delete-orphan"
+    )
+
     # --- US3.5: User Follow Relationships ---
     following_relations: Mapped[list["UserFollow"]] = relationship(  # noqa: F821
         "UserFollow",
