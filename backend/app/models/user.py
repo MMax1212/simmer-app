@@ -31,8 +31,9 @@ class User(Base):
     # --- US2.3: Mark & Log Completed Recipes (Cooking History) ---
     completed_recipes: Mapped[list["CompletedRecipe"]] = relationship(  # noqa: F821
         back_populates="user", cascade="all, delete-orphan"
-    )
-
+                                                                
+    # --- US3.1: Community Food Posts ---
+    posts: Mapped[list["Post"]] = relationship(back_populates="author", cascade="all, delete-orphan")  # noqa: F821
 
 # --- US1.1: Unique Case-Insensitive Username Index ---
 Index("uq_users_username_lower", func.lower(User.username), unique=True)
