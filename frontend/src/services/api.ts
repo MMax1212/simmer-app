@@ -131,6 +131,17 @@ export interface LikeToggleResponse {
   likes_count: number;
 }
 
+// --- US3.3: Likes & Comments (Post Comments Contract) ---
+export interface Comment {
+  id: number;
+  post_id: number;
+  user_id: number;
+  username: string;
+  avatar_url?: string | null;
+  content: string;
+  created_at: string;
+}
+
 export class ApiError extends Error {
   constructor(public status: number, message: string) { super(message); }
 }
@@ -231,8 +242,19 @@ export const api = {
   // --- US3.3: Likes & Comments (Post Like Endpoint) ---
   togglePostLike: (postId: number) =>
     request<LikeToggleResponse>("/api/v1/posts/" + postId + "/like", { method: "POST" }),
+
+  // --- US3.3: Likes & Comments (Post Comments Endpoints) ---
+  getPostComments: (postId: number) =>
+    request<Comment[]>("/api/v1/posts/" + postId + "/comments"),
+  createPostComment: (postId: number, content: string) =>
+    request<Comment>("/api/v1/posts/" + postId + "/comments", {
+      method: "POST",
+      body: json({ content }),
+    }),
 };
 
 export const togglePostLike = (postId: number) => api.togglePostLike(postId);
+export const getPostComments = (postId: number) => api.getPostComments(postId);
+export const createPostComment = (postId: number, content: string) => api.createPostComment(postId, content);
 
 export const errorText = (e: unknown) => e instanceof Error ? e.message : "Something went wrong";
