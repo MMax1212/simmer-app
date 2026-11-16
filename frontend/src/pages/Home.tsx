@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useAuth } from "../context/auth";
-import { api, errorText, type RecipeSummary } from "../services/api";
+import { api, errorText, type FeedResponse, type RecipeSummary } from "../services/api";
 import { ErrorMessage } from "../components/ErrorMessage";
+import { FeedCard } from "../components/FeedCard";
 import { BookOpen } from "lucide-react";
 
 // Filter pills configuration
@@ -20,15 +21,60 @@ const FILTER_PRESETS = [
 export function Home() {
   const { user } = useAuth();
   const notice = (useLocation().state as { notice?: string } | null)?.notice;
+
+  // --- US3.5 Task 3.5.5: Feed Mode State ("following" vs "global") ---
+  const [feedMode, setFeedMode] = useState<"following" | "global">(() =>
+    user ? "following" : "global"
+  );
+  const [feed, setFeed] = useState<FeedResponse | null>(null);
+  const [feedLoading, setFeedLoading] = useState<boolean>(false);
+  const [feedError, setFeedError] = useState<string | null>(null);
+
+  // Sync feedMode when user auth changes
+  useEffect(() => {
+    setFeedMode(user ? "following" : "global");
+  }, [user]);
+
+  // Fetch timeline feed based on mode
+  useEffect(() => {
+    if (!user && feedMode === "following") {
+      setFeed(null);
+      setFeedLoading(false);
+      return;
+    }
+
+    let active = true;
+    setFeedLoading(true);
+    setFeedError(null);
+
+    api
+      .getFeed(feedMode)
+      .then((res) => {
+        if (active) setFeed(res);
+      })
+      .catch((e) => {
+        if (active) setFeedError(errorText(e));
+      })
+      .finally(() => {
+        if (active) setFeedLoading(false);
+      });
+
+    return () => {
+      active = false;
+    };
+  }, [feedMode, user]);
+
+  // Recipe discovery state
   const [activeFilter, setActiveFilter] = useState({ type: "all", value: "" });
   const [recipes, setRecipes] = useState<RecipeSummary[] | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const [recipesLoading, setRecipesLoading] = useState(true);
+  const [recipesError, setRecipesError] = useState<string | null>(null);
+
   // Fetch recipes whenever the selected filter changes
   useEffect(() => {
     let active = true;
-    setLoading(true);
-    setError(null);
+    setRecipesLoading(true);
+    setRecipesError(null);
     const filterParam =
       activeFilter.type === "cuisine"
         ? { cuisine: activeFilter.value }
@@ -43,15 +89,16 @@ export function Home() {
         if (active) setRecipes(res.items);
       })
       .catch((e) => {
-        if (active) setError(errorText(e));
+        if (active) setRecipesError(errorText(e));
       })
       .finally(() => {
-        if (active) setLoading(false);
+        if (active) setRecipesLoading(false);
       });
     return () => {
       active = false;
     };
   }, [activeFilter]);
+
   return (
     <div className="flex flex-col gap-6">
       {/* Hero Banner */}
@@ -73,6 +120,96 @@ export function Home() {
           )}
         </div>
       </section>
+
+      {/* --- US3.5 Task 3.5.5: Tabbed Feed Navigation --- */}
+      <section className="feed-section">
+        <div
+          role="tablist"
+          aria-label="Home Feed"
+          className="flex gap-6 border-b border-slate-200 mb-6"
+        >
+          <button
+            type="button"
+            role="tab"
+            aria-selected={feedMode === "following"}
+            className={`link-button pb-2.5 font-semibold text-base transition-colors ${
+              feedMode === "following"
+                ? "border-b-2 border-rose-500 text-rose-600 font-bold"
+                : "text-slate-500 hover:text-slate-800"
+            }`}
+            onClick={() => setFeedMode("following")}
+          >
+            Following Feed
+          </button>
+          <button
+            type="button"
+            role="tab"
+            aria-selected={feedMode === "global"}
+            className={`link-button pb-2.5 font-semibold text-base transition-colors ${
+              feedMode === "global"
+                ? "border-b-2 border-rose-500 text-rose-600 font-bold"
+                : "text-slate-500 hover:text-slate-800"
+            }`}
+            onClick={() => setFeedMode("global")}
+          >
+            Global Community Feed
+          </button>
+        </div>
+
+        {/* Unauthenticated Prompt for Following Feed */}
+        {!user && feedMode === "following" && (
+          <div className="card text-center py-12 flex flex-col items-center gap-3">
+            <h3 className="text-lg font-semibold text-slate-800">
+              Sign in to see posts from creators you follow!
+            </h3>
+            <p className="text-slate-500 max-w-md">
+              Follow cooks and creators across the Simmer community to personalize your culinary feed.
+            </p>
+            <Link to="/login" className="button mt-2">
+              Log in
+            </Link>
+          </div>
+        )}
+
+        {/* Feed Error Display */}
+        {feedError && <ErrorMessage error={feedError} />}
+
+        {/* Loading Indicator */}
+        {feedLoading && !feed && <p className="muted py-6">Loading feed…</p>}
+
+        {/* Empty State for Following Feed */}
+        {user && feedMode === "following" && !feedLoading && feed && feed.items.length === 0 && (
+          <div className="card text-center py-12 flex flex-col items-center gap-3">
+            <h3 className="text-lg font-semibold text-slate-800">
+              Your following feed is empty!
+            </h3>
+            <p className="text-slate-500 max-w-md">
+              Follow other home cooks and creators to see their recipes and posts appear here.
+            </p>
+            <button
+              type="button"
+              className="button secondary mt-2"
+              onClick={() => setFeedMode("global")}
+            >
+              Explore Global Community
+            </button>
+          </div>
+        )}
+
+        {/* Feed Post List */}
+        {feed && feed.items.length > 0 && (
+          <div className="feed-stream max-w-2xl mx-auto w-full">
+            {feed.items.map((post) => (
+              <FeedCard
+                key={post.id}
+                post={post}
+                currentUserId={user?.id}
+              />
+            ))}
+          </div>
+        )}
+      </section>
+
       {/* --- US2.1 (Task 2.1.4): Category Filter Pills Bar --- */}
       <section className="card">
         <div className="flex flex-col gap-2">
@@ -103,15 +240,16 @@ export function Home() {
           </div>
         </div>
       </section>
+
       {/* Recipe Discovery Grid */}
       <section style={{ minHeight: "280px" }}>
-        {error && <ErrorMessage error={error} />}
-        {loading && recipes === null && <p className="muted">Loading recipes…</p>}
+        {recipesError && <ErrorMessage error={recipesError} />}
+        {recipesLoading && recipes === null && <p className="muted">Loading recipes…</p>}
 
         {recipes && recipes.length === 0 && (
           <div
             className="flex flex-col items-center gap-3 py-12 text-center card"
-            style={{ opacity: loading ? 0.6 : 1, transition: "opacity 0.15s ease" }}
+            style={{ opacity: recipesLoading ? 0.6 : 1, transition: "opacity 0.15s ease" }}
           >
             <BookOpen size={48} className="text-stone-400" />
             <h3 className="text-lg font-semibold">No recipes found</h3>
@@ -132,7 +270,7 @@ export function Home() {
           <div
             className="recipe-grid"
             style={{
-              opacity: loading ? 0.6 : 1,
+              opacity: recipesLoading ? 0.6 : 1,
               transition: "opacity 0.15s ease",
             }}
           >
