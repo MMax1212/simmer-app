@@ -26,7 +26,11 @@ class Post(Base):
         default=lambda: datetime.now(timezone.utc),
         onupdate=lambda: datetime.now(timezone.utc),
     )
+    
 
     # ORM Relationships
     author: Mapped["User"] = relationship(back_populates="posts")  # noqa: F821
     recipe: Mapped["Recipe | None"] = relationship(back_populates="posts")  # noqa: F821
+
+    # --- US3.4: Saved / Bookmarked by users ---
+    saved_by: Mapped[list["SavedPost"]] = relationship(back_populates="post", cascade="all, delete-orphan") # noqa F821
