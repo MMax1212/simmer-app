@@ -35,4 +35,3 @@ def downgrade():
         batch_op.drop_index(batch_op.f('ix_posts_author_id'))
 
     op.drop_table('posts')
-

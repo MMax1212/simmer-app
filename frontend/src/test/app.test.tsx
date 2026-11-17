@@ -122,6 +122,31 @@ describe("profiles and recipes", () => {
     });
   });
 
+  // --- US2.3 Task 2.3.4: Cooking History Tab on Profile ---
+  it("renders cooking history tab with completed recipe cards and dates", async () => {
+    const historyItem = {
+      id: 1,
+      recipe_id: 1,
+      recipe_title: "Delicious Lasagna",
+      recipe_image_url: null,
+      cooked_at: "2026-11-01T18:00:00Z",
+      notes: "Extra cheese on top",
+      rating: 5,
+    };
+    fetchMock.mockImplementation(async (url) => {
+      if (String(url).endsWith("/auth/me")) return respond(user);
+      if (String(url).endsWith("/users/me/cooking-history")) return respond([historyItem]);
+      return respond(user);
+    });
+    const actor = userEvent.setup();
+    open("/profile", true);
+    await actor.click(await screen.findByRole("button", { name: "Cooking History" }));
+    expect(await screen.findByText("Delicious Lasagna")).toBeInTheDocument();
+    expect(screen.getByText(/"Extra cheese on top"/)).toBeInTheDocument();
+    expect(screen.getByLabelText("5 out of 5 stars")).toBeInTheDocument();
+    expect(screen.getByText(/Cooked on/)).toBeInTheDocument();
+  });
+
   // --- US1.4: Recipe Creation & Saving (Dynamic Ingredients & Steps Rows) ---
   it("adds/removes ingredient and step rows without losing the remaining values", async () => {
     fetchMock.mockImplementation(async (url, init) => String(url).endsWith("/auth/me")

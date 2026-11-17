@@ -39,6 +39,9 @@ class Recipe(Base):
     steps: Mapped[list["RecipeStep"]] = relationship(
         back_populates="recipe", cascade="all, delete-orphan", order_by="RecipeStep.step_number"
     )
+    completed_logs: Mapped[list["CompletedRecipe"]] = relationship(  # noqa: F821
+        back_populates="recipe", cascade="all, delete-orphan"
+    )
 
     # US2.4: Removing a tool from this collection also deletes its stored row.
     tool_rows: Mapped[list["RecipeTool"]] = relationship(back_populates="recipe", cascade="all, delete-orphan", order_by="RecipeTool.id")

@@ -28,9 +28,13 @@ class User(Base):
     # --- US1.4: Recipe Creation & Association ---
     recipes: Mapped[list["Recipe"]] = relationship(back_populates="owner", cascade="all, delete-orphan")  # noqa: F821
 
+    # --- US2.3: Mark & Log Completed Recipes (Cooking History) ---
+    completed_recipes: Mapped[list["CompletedRecipe"]] = relationship(  # noqa: F821
+        back_populates="user", cascade="all, delete-orphan"
+    )
+
     # --- US3.1: Community Food Posts ---
     posts: Mapped[list["Post"]] = relationship(back_populates="author", cascade="all, delete-orphan")  # noqa: F821
-
 
 
 # --- US1.1: Unique Case-Insensitive Username Index ---
