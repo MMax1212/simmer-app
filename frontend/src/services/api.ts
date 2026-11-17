@@ -131,6 +131,17 @@ export interface LikeToggleResponse {
   likes_count: number;
 }
 
+// --- US3.3: Likes & Comments (Post Comments Contract) ---
+export interface Comment {
+  id: number;
+  post_id: number;
+  user_id: number;
+  username: string;
+  avatar_url?: string | null;
+  content: string;
+  created_at: string;
+}
+
 // --- US3.5: Follow Users & Following Feed (Follow Toggle & Feed Contract) ---
 export interface FollowToggleResponse {
   following: boolean;
@@ -269,6 +280,15 @@ export const api = {
   togglePostLike: (postId: number) =>
     request<LikeToggleResponse>("/api/v1/posts/" + postId + "/like", { method: "POST" }),
 
+  // --- US3.3: Likes & Comments (Post Comments Endpoints) ---
+  getPostComments: (postId: number) =>
+    request<Comment[]>("/api/v1/posts/" + postId + "/comments"),
+  createPostComment: (postId: number, content: string) =>
+    request<Comment>("/api/v1/posts/" + postId + "/comments", {
+      method: "POST",
+      body: json({ content }),
+    }),
+
   // --- US3.5: Follow Users & Following Feed Endpoints ---
   toggleFollow: (userId: number) =>
     request<FollowToggleResponse>("/api/v1/users/" + userId + "/follow", { method: "POST" }),
@@ -279,6 +299,8 @@ export const api = {
 };
 
 export const togglePostLike = (postId: number) => api.togglePostLike(postId);
+export const getPostComments = (postId: number) => api.getPostComments(postId);
+export const createPostComment = (postId: number, content: string) => api.createPostComment(postId, content);
 export const toggleFollow = (userId: number) => api.toggleFollow(userId);
 export const getFollowStatus = (userId: number) => api.getFollowStatus(userId);
 export const getFeed = (mode: "following" | "global" = "following", offset = 0, limit = 20) => api.getFeed(mode, offset, limit);
