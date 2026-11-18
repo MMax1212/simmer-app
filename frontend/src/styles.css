@@ -109,3 +109,4 @@ th, td { text-align: left; padding: 0.55rem; border-bottom: 1px solid var(--bord
 .post-actions-list { position: absolute; right: 0; z-index: 15; min-width: 10rem; padding: 0.5rem; }
 .post-delete-backdrop { position: fixed; inset: 0; z-index: 40; display: grid; place-items: center; padding: 1rem; background: rgb(0 0 0 / 45%); }
 .post-delete-dialog { width: min(100%, 30rem); max-height: calc(100dvh - 2rem); overflow-y: auto; }
+.post-edit-form { display: flex; flex-direction: column; gap: 1rem; }

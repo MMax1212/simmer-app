@@ -142,6 +142,23 @@ export interface Comment {
   created_at: string;
 }
 
+// US3.2.3: PUT replaces all editable fields, so callers must retain recipe/media metadata.
+export interface PostEditInput {
+  caption: string;
+  image_url: string;
+  media_type: "image" | "video";
+  recipe_id: number | null;
+}
+
+export interface CommunityPost extends PostEditInput {
+  id: number;
+  author_id: number;
+  author_username: string;
+  recipe_title: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
 export class ApiError extends Error {
   constructor(public status: number, message: string) { super(message); }
 }
@@ -232,6 +249,10 @@ export const api = {
     request<Recipe>("/api/v1/recipes", { method: "POST", body: json(recipe) }),
   updateRecipe: (id: number, recipe: RecipeInput) =>
     request<Recipe>("/api/v1/recipes/" + id, { method: "PUT", body: json(recipe) }),
+
+  // US3.2.3: Authentication, session expiry and validation errors use the shared client.
+  updatePost: (postId: number, body: PostEditInput) =>
+    request<CommunityPost>(`/api/v1/posts/${postId}`, { method: "PUT", body: json(body) }),
 
   // US3.2.2: Use the shared bearer-token/error handling for author-only deletion.
   deletePost: (postId: number) => request<void>(`/api/v1/posts/${postId}`, { method: "DELETE" }),
