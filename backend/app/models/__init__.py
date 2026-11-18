@@ -1,8 +1,11 @@
-from app.models.recipe import Ingredient, Recipe, RecipeStep, Tag, RecipeTool
-from app.models.user import User
 from app.models.audit import AdminAudit
 from app.models.completed_recipe import CompletedRecipe
 from app.models.post import Post
+from app.models.post_comment import PostComment
+from app.models.post_like import PostLike
+from app.models.recipe import Ingredient, Recipe, RecipeStep, RecipeTool, Tag
+from app.models.saved_post import SavedPost
+from app.models.user import User
 from app.models.user_follow import UserFollow
 
 __all__ = [
@@ -11,9 +14,12 @@ __all__ = [
     "Ingredient",
     "RecipeStep",
     "RecipeTool",
+    "Tag",
     "AdminAudit",
     "CompletedRecipe",
-    "Tag",
-    "UserFollow",
     "Post",
+    "PostLike",
+    "PostComment",
+    "SavedPost",
+    "UserFollow",
 ]

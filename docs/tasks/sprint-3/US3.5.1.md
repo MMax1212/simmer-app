@@ -29,12 +29,12 @@ This task creates the `user_follows` table and the `UserFollow` SQLAlchemy model
   - `follower_relations`: Back-populates `UserFollow.following` with `cascade="all, delete-orphan"`.
 
 - **Alembic Migration:**
-  - `backend/migrations/versions/0007_user_follows.py`
-  - `revision = "0007_user_follows"`
-  - `down_revision = "0006_completed_recipes"`
+  - `backend/migrations/versions/0009_user_follows.py`
+  - `revision = "0009_user_follows"`
+  - `down_revision = "0008_saved_posts"`
 
 ## Acceptance Criteria
-1. Migration `0007_user_follows` applies cleanly (`upgrade head`) and reverts cleanly (`downgrade -1`).
+1. Migration `0009_user_follows` applies cleanly (`upgrade head`) and reverts cleanly (`downgrade -1`).
 2. A user can follow another user, creating a persistent row in `user_follows`.
 3. Attempting to follow the same user a second time violates uniqueness and raises `IntegrityError`.
 4. Attempting to follow oneself violates check constraint `follower_id != following_id` and raises `IntegrityError`.

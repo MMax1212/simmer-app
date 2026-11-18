@@ -6,7 +6,7 @@ from sqlalchemy.pool import StaticPool
 
 from app.core.database import Base, get_db
 from app.main import app
-from app.models import User
+from app.models import User, Post
 
 
 @pytest.fixture()
@@ -49,3 +49,17 @@ def make_admin(db_session):
         db_session.commit()
 
     return _make
+
+def create_test_post(db, author_id: int, caption: str = "Delicious pasta", image_url: str = "https://example.com/paste.jpg"): 
+    """Helper to insert a test post directly into the database"""
+    post = Post(
+            author_id=author_id,
+            caption=caption,
+            image_url=image_url,
+            media_type="",
+    )
+    db.add(post)
+    db.commit()
+    db.refresh(post)
+    return post
+

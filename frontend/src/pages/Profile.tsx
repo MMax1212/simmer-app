@@ -1,13 +1,14 @@
 import { useEffect, useState, type FormEvent } from "react";
 import { Link } from "react-router-dom";
 import { ErrorMessage } from "../components/ErrorMessage";
+import { BookmarkButton } from "../components/BookmarkButton";
 import { useAuth } from "../context/auth";
-import { api, CULINARY_PREFS, errorText, type CookingHistoryItem } from "../services/api";
+import { api, CULINARY_PREFS, errorText, type CookingHistoryItem, getSavedPosts } from "../services/api";
 
 // --- US1.3 & US2.3: User Profile & Cooking History Tab Interface ---
 export function Profile() {
   const { user, setUser } = useAuth();
-  const [tab, setTab] = useState<"profile" | "history">("profile");
+  const [tab, setTab] = useState<"profile" | "history" | "saved">("profile");
 
   // Profile Form State
   const [bio, setBio] = useState(user?.bio ?? "");
@@ -20,6 +21,32 @@ export function Profile() {
   const [history, setHistory] = useState<CookingHistoryItem[]>([]);
   const [historyLoading, setHistoryLoading] = useState(false);
   const [historyError, setHistoryError] = useState<string | null>(null);
+
+  // --- US3.4 Task 3.4.4: Saved Posts Tab State ---
+  const [savedPosts, setSavedPosts] = useState<any[]>([]);
+  const [savedLoading, setSavedLoading] = useState(false);
+  const [savedError, setSavedError] = useState<string | null>(null);
+
+  useEffect(() => {
+  if (tab === "saved") {
+    let active = true;
+    setSavedLoading(true);
+    setSavedError(null);
+    getSavedPosts()
+      .then((items) => {
+        if (active) setSavedPosts(items);
+      })
+      .catch((err) => {
+        if (active) setSavedError(errorText(err));
+      })
+      .finally(() => {
+        if (active) setSavedLoading(false);
+      });
+    return () => {
+      active = false;
+    };
+  }
+}, [tab]);
 
   useEffect(() => {
     if (tab === "history") {
@@ -87,9 +114,17 @@ export function Profile() {
         >
           Cooking History
         </button>
+	<button
+  	  type="button"
+  	  className={`link-button ${tab === "saved" ? "active font-bold" : "muted"}`}
+  	  onClick={() => setTab("saved")}
+  	  style={{ paddingBottom: "0.5rem", borderBottom: tab === "saved" ? "2px solid currentColor" : "none" }}
+	>
+  Saved Posts
+</button>
       </div>
 
-      {tab === "profile" ? (
+      {tab === "profile" && (
         <form onSubmit={onSubmit}>
           <label>Bio<textarea value={bio} onChange={(e) => setBio(e.target.value)} maxLength={500} rows={3} placeholder="Tell the community what you love to cook" /></label>
           <label>Avatar image URL<input type="url" value={avatarUrl} onChange={(e) => setAvatarUrl(e.target.value)} placeholder="https://…" maxLength={255} pattern="https?://.*" /></label>
@@ -108,7 +143,8 @@ export function Profile() {
           {saved && <p className="success">Profile saved.</p>}
           <button type="submit">Save profile</button>
         </form>
-      ) : (
+      )}
+      {tab === "history" && (
         /* --- US2.3 Task 2.3.4: Cooking History Tab View --- */
         <div className="cooking-history">
           <h2>Cooking History</h2>
@@ -157,6 +193,46 @@ export function Profile() {
           )}
         </div>
       )}
-    </div>
+    {/* --- US3.4 Task 3.4.4: Saved Posts Tab View --- */}
+	{tab === "saved" && (
+  	<div className="saved-posts">
+    	<h2>Saved Posts</h2>
+    	{savedLoading && <p className="muted">Loading saved posts…</p>}
+    	{savedError && <ErrorMessage error={savedError} />}
+    	{!savedLoading && !savedError && savedPosts.length === 0 && (
+      	<p className="muted">No saved posts yet. Bookmark dishes from the community to revisit later!</p>
+	)}
+	{!savedLoading && !savedError && savedPosts.length > 0 && (
+	<div className="recipe-grid" style={{ marginTop: "1rem" }}>
+	{savedPosts.map((post) => (
+		<article key={post.id} className="card" style={{ padding: "0.75rem", display: "flex", flexDirection: "column", gap: "0.5rem" }}>
+            {post.image_url && (
+              <img
+                src={post.image_url}
+                alt={post.caption}
+                style={{ width: "100%", height: "160px", objectFit: "cover", borderRadius: "8px" }}
+              />
+            )}
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: "0.5rem" }}>
+              <p style={{ margin: 0, fontWeight: 500, flex: 1 }} className="clamp">
+                {post.caption}
+              </p>
+              <BookmarkButton
+                postId={post.id}
+                initialBookmarked={true}
+                onToggle={(_: number, isSaved: boolean) => {
+                  if (!isSaved) {
+                    setSavedPosts((prev) => prev.filter((p) => p.id !== post.id));
+                  }
+                }}
+              />
+            </div>
+          </article>
+        ))}
+      </div>
+    )}
+  </div>
+)}
+</div>
   );
 }
