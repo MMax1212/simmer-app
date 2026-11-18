@@ -1,9 +1,12 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, status
 from sqlalchemy import select
+from sqlalchemy.orm import selectinload
 
 from app.api.deps import CurrentUser, DbSession
-from app.models import Post, SavedPost
+from app.models import Post, Recipe, SavedPost
+from app.schemas.post import PostCreate, PostResponse
 
+# Route prefix for all community post endpoints: /api/v1/posts
 router = APIRouter(prefix="/api/v1/posts", tags=["posts"])
 
 
@@ -30,16 +33,6 @@ def toggle_bookmark(post_id: int, user: CurrentUser, db: DbSession):
     db.add(saved)
     db.commit()
     return {"bookmark": True, "bookmarked": True}
-from fastapi import APIRouter, HTTPException, status
-from sqlalchemy import select
-from sqlalchemy.orm import selectinload
-
-from app.api.deps import CurrentUser, DbSession
-from app.models import Post, Recipe
-from app.schemas.post import PostCreate, PostResponse
-
-# Route prefix for all community post endpoints: /api/v1/posts
-router = APIRouter(prefix="/api/v1/posts", tags=["posts"])
 
 
 def _to_post_response(post: Post) -> PostResponse:
