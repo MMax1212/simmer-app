@@ -1,10 +1,10 @@
 from fastapi import APIRouter, HTTPException, status
-from sqlalchemy import select
+from sqlalchemy import func, select
 from sqlalchemy.orm import selectinload
 
 from app.api.deps import CurrentUser, DbSession
-from app.models import Post, Recipe, SavedPost
-from app.schemas.post import PostCreate, PostResponse
+from app.models import Post, PostLike, Recipe, SavedPost
+from app.schemas.post import LikeToggleResponse, PostCreate, PostResponse
 
 # Route prefix for all community post endpoints: /api/v1/posts
 router = APIRouter(prefix="/api/v1/posts", tags=["posts"])
@@ -105,3 +105,40 @@ def get_post(post_id: int, db: DbSession):
         raise HTTPException(status_code=404, detail="Post not found")
 
     return _to_post_response(post)
+
+
+# --- US3.3.2: Task 3.3.2: Toggle Post Like ---
+@router.post("/{post_id}/like", response_model=LikeToggleResponse, status_code=status.HTTP_200_OK)
+def toggle_post_like(post_id: int, user: CurrentUser, db: DbSession):
+    """Toggle the current user's like on a community post.
+    
+    1. Requires authentication via CurrentUser dependency (returns 401 if unauthenticated).
+    2. Validates post existence (returns 404 if post does not exist).
+    3. If the user already liked the post, deletes the like record (unlikes).
+    4. If the user has not liked the post, inserts a new PostLike record (likes).
+    5. Returns LikeToggleResponse with updated boolean `liked` status and total `likes_count`.
+    """
+    post = db.get(Post, post_id)
+    if post is None:
+        raise HTTPException(status_code=404, detail="Post not found")
+
+    existing_like = db.execute(
+        select(PostLike).where(PostLike.post_id == post_id, PostLike.user_id == user.id)
+    ).scalar_one_or_none()
+
+    if existing_like:
+        db.delete(existing_like)
+        liked = False
+    else:
+        new_like = PostLike(user_id=user.id, post_id=post_id)
+        db.add(new_like)
+        liked = True
+
+    db.commit()
+
+    likes_count = db.scalar(
+        select(func.count(PostLike.id)).where(PostLike.post_id == post_id)
+    ) or 0
+
+    return LikeToggleResponse(liked=liked, likes_count=likes_count)
+

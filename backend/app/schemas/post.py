@@ -41,3 +41,11 @@ class PostResponse(BaseModel):
     recipe_title: str | None
     created_at: datetime
     updated_at: datetime
+
+
+# --- US3.3.2: Like Toggle Response DTO ---
+class LikeToggleResponse(BaseModel):
+    """Schema returned after toggling a like on a post."""
+    liked: bool = Field(description="Whether the calling user currently likes the post after the toggle")
+    likes_count: int = Field(ge=0, description="Total number of likes on the post after the toggle")
+
