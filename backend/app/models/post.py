@@ -54,3 +54,11 @@ class Post(Base):
 
     # post.recipe provides access to the linked Recipe entity (or None if post is standalone)
     recipe: Mapped["Recipe | None"] = relationship(back_populates="posts")  # noqa: F821
+
+    # US3.3: Likes & Comments associated with this post
+    likes: Mapped[list["PostLike"]] = relationship(  # noqa: F821
+        back_populates="post", cascade="all, delete-orphan", order_by="PostLike.created_at"
+    )
+    comments: Mapped[list["PostComment"]] = relationship(  # noqa: F821
+        back_populates="post", cascade="all, delete-orphan", order_by="PostComment.created_at"
+    )
