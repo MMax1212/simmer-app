@@ -233,6 +233,9 @@ export const api = {
   updateRecipe: (id: number, recipe: RecipeInput) =>
     request<Recipe>("/api/v1/recipes/" + id, { method: "PUT", body: json(recipe) }),
 
+  // US3.2.2: Use the shared bearer-token/error handling for author-only deletion.
+  deletePost: (postId: number) => request<void>(`/api/v1/posts/${postId}`, { method: "DELETE" }),
+
   // --- US1.5: Recipe Deletion Endpoint ---
   deleteRecipe: (id: number) => request<void>("/api/v1/recipes/" + id, { method: "DELETE" }),
 
