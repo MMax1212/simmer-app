@@ -142,6 +142,43 @@ export interface Comment {
   created_at: string;
 }
 
+// --- US3.5: Follow Users & Following Feed (Follow Toggle & Feed Contract) ---
+export interface FollowToggleResponse {
+  following: boolean;
+  followers_count: number;
+  following_count: number;
+}
+
+export interface FeedPostAuthor {
+  id: number;
+  username: string;
+  avatar_url: string | null;
+}
+
+export interface FeedPostRecipe {
+  id: number;
+  title: string;
+  cook_time_mins: number;
+  difficulty: string;
+}
+
+export interface FeedPost {
+  id: number;
+  caption: string | null;
+  image_url: string;
+  media_type: string;
+  created_at: string;
+  author: FeedPostAuthor;
+  recipe: FeedPostRecipe | null;
+}
+
+export interface FeedResponse {
+  total: number;
+  limit: number;
+  offset: number;
+  items: FeedPost[];
+}
+
 export class ApiError extends Error {
   constructor(public status: number, message: string) { super(message); }
 }
@@ -262,10 +299,21 @@ export const api = {
       method: "POST",
       body: json({ content }),
     }),
+
+  // --- US3.5: Follow Users & Following Feed Endpoints ---
+  toggleFollow: (userId: number) =>
+    request<FollowToggleResponse>("/api/v1/users/" + userId + "/follow", { method: "POST" }),
+  getFollowStatus: (userId: number) =>
+    request<FollowToggleResponse>("/api/v1/users/" + userId + "/follow", {}, false),
+  getFeed: (mode: "following" | "global" = "following", offset = 0, limit = 20) =>
+    request<FeedResponse>("/api/v1/feed?mode=" + mode + "&offset=" + offset + "&limit=" + limit, {}, mode === "following"),
 };
 
 export const togglePostLike = (postId: number) => api.togglePostLike(postId);
 export const getPostComments = (postId: number) => api.getPostComments(postId);
 export const createPostComment = (postId: number, content: string) => api.createPostComment(postId, content);
+export const toggleFollow = (userId: number) => api.toggleFollow(userId);
+export const getFollowStatus = (userId: number) => api.getFollowStatus(userId);
+export const getFeed = (mode: "following" | "global" = "following", offset = 0, limit = 20) => api.getFeed(mode, offset, limit);
 
 export const errorText = (e: unknown) => e instanceof Error ? e.message : "Something went wrong";

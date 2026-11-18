@@ -50,13 +50,13 @@ class Post(Base):
 
     # Two-way SQLAlchemy ORM navigation
     # post.author provides direct access to the User who published this post
-    author: Mapped["User"] = relationship(back_populates="posts")  # noqa: F821
+    author: Mapped["User"] = relationship("User", back_populates="posts")  # noqa: F821
 
     # post.recipe provides access to the linked Recipe entity (or None if post is standalone)
-    recipe: Mapped["Recipe | None"] = relationship(back_populates="posts")  # noqa: F821
+    recipe: Mapped["Recipe | None"] = relationship("Recipe", back_populates="posts")  # noqa: F821
 
     # --- US3.4: Saved / Bookmarked by users ---
-    saved_by: Mapped[list["SavedPost"]] = relationship(back_populates="post", cascade="all, delete-orphan") # noqa F821
+    saved_by: Mapped[list["SavedPost"]] = relationship(back_populates="post", cascade="all, delete-orphan")  # noqa: F821
       
     # US3.3: Likes & Comments associated with this post
     likes: Mapped[list["PostLike"]] = relationship(  # noqa: F821
