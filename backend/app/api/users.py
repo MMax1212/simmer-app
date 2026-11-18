@@ -2,7 +2,7 @@ from fastapi import APIRouter, HTTPException
 from sqlalchemy import func, select
 
 from app.api.deps import CurrentUser, DbSession
-from app.models import CompletedRecipe, Recipe, User
+from app.models import CompletedRecipe, Recipe, User, SavedPost, Post
 from app.schemas.recipe import CookingHistoryItemOut
 from app.schemas.user import ProfileUpdate, UserPrivate, UserPublic
 
@@ -48,3 +48,26 @@ def read_user(username: str, db: DbSession):
     if user is None or not user.is_active:
         raise HTTPException(status_code=404, detail="User not found")
     return user
+
+# --- US3.4 Task 3.4.2: Get User's Saved / Bookmarked Posts ---
+@router.get("/me/saved-posts")
+def get_my_saved_posts(user: CurrentUser, db: DbSession):
+    query = (
+        select(Post)
+        .join(SavedPost, SavedPost.post_id == Post.id)
+        .where(SavedPost.user_id == user.id)
+        .order_by(SavedPost.created_at.desc())
+    )
+    posts = db.scalars(query).all()
+    return [
+        {
+            "id": p.id,
+            "author_id": p.author_id,
+            "caption": p.caption,
+            "image_url": p.image_url,
+            "media_type": p.media_type,
+            "recipe_id": p.recipe_id,
+            "created_at": p.created_at.isoformat() if p.created_at else None,
+        }
+        for p in posts
+    ]
