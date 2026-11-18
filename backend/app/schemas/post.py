@@ -7,7 +7,7 @@ from pydantic import BaseModel, ConfigDict, Field, field_validator
 # --- US3.1: Post Creation Request DTO ---
 class PostCreate(BaseModel):
     """Pydantic validation schema for incoming post creation payloads (POST /api/v1/posts).
-    
+
     Disallows unrecognized fields (extra="forbid") and enforces non-empty
     caption and media URLs.
     """
@@ -41,6 +41,19 @@ class PostResponse(BaseModel):
     recipe_title: str | None
     created_at: datetime
     updated_at: datetime
+
+
+# US3.2.1: PUT reuses creation fields, but never accepts author or timestamp changes.
+class PostUpdate(PostCreate):
+    """Full replacement of editable fields; omitted optional fields use their defaults."""
+
+    @field_validator("caption", "image_url")
+    @classmethod
+    def reject_blank_content(cls, value: str) -> str:
+        # Preserve formatting and media strings verbatim; reject whitespace-only content.
+        if not value.strip():
+            raise ValueError("Must not be blank")
+        return value
 
 
 # --- US3.3.2: Like Toggle Response DTO ---
@@ -77,5 +90,3 @@ class CommentOut(BaseModel):
     avatar_url: str | None = None
     content: str
     created_at: datetime
-
-

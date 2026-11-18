@@ -232,4 +232,3 @@ def test_feed_linked_recipe_payload(client, db_session):
     assert item["recipe"]["title"] == "Homemade Lasagna"
     assert item["recipe"]["cook_time_mins"] == 60
     assert item["recipe"]["difficulty"] == "medium"
-

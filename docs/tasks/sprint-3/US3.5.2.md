@@ -9,7 +9,7 @@ estimate_hours: 3
 # Implement Backend Follow/Unfollow Endpoints and Count Queries
 
 ## Description
-Serves **US3.5** (*Follow Users & Following Feed*). Simmer users want to follow and unfollow other creators seamlessly and inspect follower and following metrics on user profiles. 
+Serves **US3.5** (*Follow Users & Following Feed*). Simmer users want to follow and unfollow other creators seamlessly and inspect follower and following metrics on user profiles.
 
 This task implements the REST endpoints to toggle follow/unfollow status (`POST /api/v1/users/{id}/follow`) and inspect follow status and follower counts (`GET /api/v1/users/{id}/follow`). It enforces self-follow prevention, non-existent user handling, authentication guards, and optimized counting queries.
 
