@@ -61,3 +61,32 @@ class LikeToggleResponse(BaseModel):
     """Schema returned after toggling a like on a post."""
     liked: bool = Field(description="Whether the calling user currently likes the post after the toggle")
     likes_count: int = Field(ge=0, description="Total number of likes on the post after the toggle")
+
+
+# --- US3.3.3: Post Comment Schemas ---
+class CommentCreate(BaseModel):
+    """Validation schema for creating a comment under a community post."""
+    model_config = ConfigDict(extra="forbid")
+
+    content: str = Field(min_length=1, max_length=1000, description="Comment text body")
+
+    @field_validator("content")
+    @classmethod
+    def validate_content_non_empty(cls, v: str) -> str:
+        stripped = v.strip()
+        if not stripped:
+            raise ValueError("Comment content cannot be empty or whitespace-only")
+        return stripped
+
+
+class CommentOut(BaseModel):
+    """Serialized comment DTO returned to clients."""
+    model_config = ConfigDict(from_attributes=True)
+
+    id: int
+    post_id: int
+    user_id: int
+    username: str
+    avatar_url: str | None = None
+    content: str
+    created_at: datetime

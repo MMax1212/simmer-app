@@ -5,8 +5,15 @@ from sqlalchemy import func, select
 from sqlalchemy.orm import selectinload
 
 from app.api.deps import CurrentUser, DbSession
-from app.models import Post, PostLike, Recipe, SavedPost
-from app.schemas.post import LikeToggleResponse, PostCreate, PostResponse, PostUpdate
+from app.models import Post, PostComment, PostLike, Recipe, SavedPost
+from app.schemas.post import (
+    CommentCreate,
+    CommentOut,
+    LikeToggleResponse,
+    PostCreate,
+    PostResponse,
+    PostUpdate,
+)
 
 # Route prefix for all community post endpoints: /api/v1/posts
 router = APIRouter(prefix="/api/v1/posts", tags=["posts"])
@@ -190,3 +197,115 @@ def toggle_post_like(post_id: int, user: CurrentUser, db: DbSession):
     ) or 0
 
     return LikeToggleResponse(liked=liked, likes_count=likes_count)
+
+
+# --- US3.3.3: Post Comments Endpoints ---
+def _delete_comment_helper(
+    comment_id: int,
+    user: CurrentUser,
+    db: DbSession,
+    post_id: int | None = None,
+):
+    comment = db.get(PostComment, comment_id)
+    if comment is None or (post_id is not None and comment.post_id != post_id):
+        raise HTTPException(status_code=404, detail="Comment not found")
+
+    if comment.user_id != user.id and user.role != "admin":
+        raise HTTPException(
+            status_code=403, detail="Not authorized to delete this comment"
+        )
+
+    db.delete(comment)
+    db.commit()
+
+
+@router.get("/{post_id}/comments", response_model=list[CommentOut])
+def get_post_comments(
+    post_id: int,
+    db: DbSession,
+    limit: int = 50,
+    offset: int = 0,
+):
+    """Retrieve comments for a post in chronological order."""
+    post = db.get(Post, post_id)
+    if post is None:
+        raise HTTPException(status_code=404, detail="Post not found")
+
+    query = (
+        select(PostComment)
+        .options(selectinload(PostComment.user))
+        .where(PostComment.post_id == post_id)
+        .order_by(PostComment.created_at.asc())
+        .offset(offset)
+        .limit(limit)
+    )
+    comments = db.scalars(query).all()
+    return [
+        CommentOut(
+            id=c.id,
+            post_id=c.post_id,
+            user_id=c.user_id,
+            username=c.user.username if c.user else "",
+            avatar_url=c.user.avatar_url if c.user else None,
+            content=c.content,
+            created_at=c.created_at,
+        )
+        for c in comments
+    ]
+
+
+@router.post("/{post_id}/comments", response_model=CommentOut, status_code=status.HTTP_201_CREATED)
+def create_post_comment(
+    post_id: int,
+    body: CommentCreate,
+    user: CurrentUser,
+    db: DbSession,
+):
+    """Post a new comment under a post."""
+    post = db.get(Post, post_id)
+    if post is None:
+        raise HTTPException(status_code=404, detail="Post not found")
+
+    new_comment = PostComment(
+        post_id=post_id,
+        user_id=user.id,
+        content=body.content,
+    )
+    db.add(new_comment)
+    db.commit()
+    db.refresh(new_comment)
+
+    return CommentOut(
+        id=new_comment.id,
+        post_id=new_comment.post_id,
+        user_id=new_comment.user_id,
+        username=user.username,
+        avatar_url=user.avatar_url,
+        content=new_comment.content,
+        created_at=new_comment.created_at,
+    )
+
+
+@router.delete("/{post_id}/comments/{comment_id}", status_code=status.HTTP_204_NO_CONTENT)
+def delete_post_comment_scoped(
+    post_id: int,
+    comment_id: int,
+    user: CurrentUser,
+    db: DbSession,
+):
+    """Delete a comment scoped to a post."""
+    _delete_comment_helper(comment_id, user, db, post_id=post_id)
+
+
+# Separate router for global comments endpoint: /api/v1/comments
+comments_router = APIRouter(prefix="/api/v1/comments", tags=["comments"])
+
+
+@comments_router.delete("/{comment_id}", status_code=status.HTTP_204_NO_CONTENT)
+def delete_comment(
+    comment_id: int,
+    user: CurrentUser,
+    db: DbSession,
+):
+    """Delete a comment by its unique ID (Author or Admin only)."""
+    _delete_comment_helper(comment_id, user, db)

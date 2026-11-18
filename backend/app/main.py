@@ -26,6 +26,7 @@ app.include_router(users.router)
 app.include_router(recipes.router)
 app.include_router(admin.router)
 app.include_router(posts.router)
+app.include_router(posts.comments_router)
 app.include_router(feed.router)
 
 
