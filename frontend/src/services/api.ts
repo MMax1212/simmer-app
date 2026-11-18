@@ -190,6 +190,17 @@ export const tokenStore = {
   clear: () => localStorage.removeItem(TOKEN_KEY),
 };
 
+// --- US3.4: Bookmark / Save Post API Client Functions ---
+export async function togglePostBookmark(postId: number): Promise<{ bookmarked: boolean; bookmark: boolean }> {
+  return request(`/api/v1/posts/${postId}/bookmark`, {
+    method: "POST",
+  });
+}
+
+export async function getSavedPosts(): Promise<any[]> {
+  return request(`/api/v1/users/me/saved-posts`);
+}
+
 // --- US1.1: HTTP Request Interceptor with Bearer Token & Session Handling ---
 async function request<T>(path: string, options: RequestInit = {}, authenticated = true): Promise<T> {
   const headers = new Headers(options.headers);
