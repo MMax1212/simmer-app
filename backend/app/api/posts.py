@@ -1,12 +1,12 @@
 from datetime import datetime, timezone
 
 from fastapi import APIRouter, HTTPException, Response, status
-from sqlalchemy import select
+from sqlalchemy import func, select
 from sqlalchemy.orm import selectinload
 
 from app.api.deps import CurrentUser, DbSession
-from app.models import Post, Recipe, SavedPost
-from app.schemas.post import PostCreate, PostResponse, PostUpdate
+from app.models import Post, PostLike, Recipe, SavedPost
+from app.schemas.post import LikeToggleResponse, PostCreate, PostResponse, PostUpdate
 
 # Route prefix for all community post endpoints: /api/v1/posts
 router = APIRouter(prefix="/api/v1/posts", tags=["posts"])
@@ -39,7 +39,7 @@ def toggle_bookmark(post_id: int, user: CurrentUser, db: DbSession):
 
 def _to_post_response(post: Post) -> PostResponse:
     """Helper to convert a Post ORM database entity into a client-facing PostResponse DTO.
-    
+
     Extracts author username and optional recipe title so clients don't need
     secondary round-trips to render author and recipe chips.
     """
@@ -61,7 +61,7 @@ def _to_post_response(post: Post) -> PostResponse:
 @router.post("", response_model=PostResponse, status_code=status.HTTP_201_CREATED)
 def create_post(body: PostCreate, user: CurrentUser, db: DbSession):
     """Publish a new dish post to the community feed.
-    
+
     1. Requires authentication (CurrentUser guard returns 401 if token is missing/invalid).
     2. Validates optional recipe_id: if supplied, verifies the recipe exists in DB (returns 404 if not found).
     3. Persists the new Post entity with author_id set to the authenticated user's ID.
@@ -92,7 +92,7 @@ def create_post(body: PostCreate, user: CurrentUser, db: DbSession):
 @router.get("/{post_id}", response_model=PostResponse)
 def get_post(post_id: int, db: DbSession):
     """Retrieve full details of a specific community post by its unique ID.
-    
+
     1. Public endpoint (no login required so shared links are viewable).
     2. Uses selectinload on author and recipe to eagerly fetch joined metadata in a single query.
     3. Returns HTTP 404 Not Found if post_id does not exist.
@@ -154,3 +154,39 @@ def delete_post(post_id: int, user: CurrentUser, db: DbSession):
     db.delete(post)
     db.commit()
     return Response(status_code=status.HTTP_204_NO_CONTENT)
+
+
+# --- US3.3.2: Task 3.3.2: Toggle Post Like ---
+@router.post("/{post_id}/like", response_model=LikeToggleResponse, status_code=status.HTTP_200_OK)
+def toggle_post_like(post_id: int, user: CurrentUser, db: DbSession):
+    """Toggle the current user's like on a community post.
+
+    1. Requires authentication via CurrentUser dependency (returns 401 if unauthenticated).
+    2. Validates post existence (returns 404 if post does not exist).
+    3. If the user already liked the post, deletes the like record (unlikes).
+    4. If the user has not liked the post, inserts a new PostLike record (likes).
+    5. Returns LikeToggleResponse with updated boolean `liked` status and total `likes_count`.
+    """
+    post = db.get(Post, post_id)
+    if post is None:
+        raise HTTPException(status_code=404, detail="Post not found")
+
+    existing_like = db.execute(
+        select(PostLike).where(PostLike.post_id == post_id, PostLike.user_id == user.id)
+    ).scalar_one_or_none()
+
+    if existing_like:
+        db.delete(existing_like)
+        liked = False
+    else:
+        new_like = PostLike(user_id=user.id, post_id=post_id)
+        db.add(new_like)
+        liked = True
+
+    db.commit()
+
+    likes_count = db.scalar(
+        select(func.count(PostLike.id)).where(PostLike.post_id == post_id)
+    ) or 0
+
+    return LikeToggleResponse(liked=liked, likes_count=likes_count)

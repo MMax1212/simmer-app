@@ -7,7 +7,7 @@ from pydantic import BaseModel, ConfigDict, Field, field_validator
 # --- US3.1: Post Creation Request DTO ---
 class PostCreate(BaseModel):
     """Pydantic validation schema for incoming post creation payloads (POST /api/v1/posts).
-    
+
     Disallows unrecognized fields (extra="forbid") and enforces non-empty
     caption and media URLs.
     """
@@ -54,3 +54,10 @@ class PostUpdate(PostCreate):
         if not value.strip():
             raise ValueError("Must not be blank")
         return value
+
+
+# --- US3.3.2: Like Toggle Response DTO ---
+class LikeToggleResponse(BaseModel):
+    """Schema returned after toggling a like on a post."""
+    liked: bool = Field(description="Whether the calling user currently likes the post after the toggle")
+    likes_count: int = Field(ge=0, description="Total number of likes on the post after the toggle")
