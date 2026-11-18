@@ -37,6 +37,17 @@ class User(Base):
 
     # ---US3.4: Saved / Bookmarked Posts ---
     saved_posts: Mapped[list["SavedPost"]] = relationship(back_populates="user", cascade="all, delete-orphan") #noqa: F821
+    # --- US3.1: Community Food Posts ---
+    posts: Mapped[list["Post"]] = relationship(back_populates="author", cascade="all, delete-orphan")  # noqa: F821
+
+    # --- US3.3: Likes & Comments ---
+    post_likes: Mapped[list["PostLike"]] = relationship(  # noqa: F821
+        back_populates="user", cascade="all, delete-orphan"
+    )
+    post_comments: Mapped[list["PostComment"]] = relationship(  # noqa: F821
+        back_populates="user", cascade="all, delete-orphan"
+    )
+
 
 # --- US1.1: Unique Case-Insensitive Username Index ---
 Index("uq_users_username_lower", func.lower(User.username), unique=True)
