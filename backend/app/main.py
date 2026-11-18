@@ -27,8 +27,6 @@ app.include_router(recipes.router)
 app.include_router(admin.router)
 app.include_router(posts.router)
 
-
-
 @app.get("/api/health")
 def health_check():
     return {"status": "ok", "app": "Simmer Backend", "version": "1.0.0"}
