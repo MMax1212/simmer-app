@@ -24,3 +24,12 @@ Assignment source: Sprint 3 Plan, Section 6. This task does not implement edit m
 The initial 20 cases in tests/test_US3_2_1.py were run before implementation: 20 failed because PUT/DELETE returned 405. Tests cover successful persistence and deletion, invalid-body atomicity, missing resources, authentication, cross-user/admin denial, and populated cascade cleanup.
 
 Existing test fixtures use isolated databases; no user database is changed by the tests.
+
+## Green-phase results
+
+After implementing PostUpdate and the author-protected PUT/DELETE endpoints:
+- Task suite: 20 passed.
+- Full backend regression suite: 131 passed (one existing Starlette/httpx deprecation warning).
+- Diff whitespace check passed.
+
+No database migration or frontend change is required. The edit menu and editing modal remain Tasks 3.2.2 and 3.2.3, outside this implementation.

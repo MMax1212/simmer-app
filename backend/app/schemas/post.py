@@ -1,7 +1,7 @@
 from datetime import datetime
 from typing import Literal
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field, field_validator
 
 
 # --- US3.1: Post Creation Request DTO ---
@@ -41,3 +41,16 @@ class PostResponse(BaseModel):
     recipe_title: str | None
     created_at: datetime
     updated_at: datetime
+
+
+# US3.2.1: PUT reuses creation fields, but never accepts author or timestamp changes.
+class PostUpdate(PostCreate):
+    """Full replacement of editable fields; omitted optional fields use their defaults."""
+
+    @field_validator("caption", "image_url")
+    @classmethod
+    def reject_blank_content(cls, value: str) -> str:
+        # Preserve formatting and media strings verbatim; reject whitespace-only content.
+        if not value.strip():
+            raise ValueError("Must not be blank")
+        return value
