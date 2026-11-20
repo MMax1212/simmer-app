@@ -76,6 +76,38 @@ npm run dev
 
 ---
 
+## 📡 External & Public REST API Endpoints
+
+The Simmer backend exposes a full-featured RESTful API prefixed at `/api/v1`. Interactive OpenAPI documentation is automatically served at [http://localhost:8000/docs](http://localhost:8000/docs) (Swagger UI) and [http://localhost:8000/redoc](http://localhost:8000/redoc) (ReDoc).
+
+For full payload schemas, query parameters, and JSON response examples, see the [**Complete API Specification Document**](docs/API_README.md).
+
+| Method | Endpoint | Auth Required | Description |
+| :--- | :--- | :---: | :--- |
+| `POST` | `/api/v1/auth/register` | None (Public) | Register new user account with email, username, and password |
+| `POST` | `/api/v1/auth/login` | None (Public) | Authenticate credentials; returns Bearer JWT and user profile |
+| `GET`  | `/api/v1/auth/me` | Bearer Token | Retrieve currently authenticated user identity and role |
+| `PUT`  | `/api/v1/users/me` | Bearer Token | Update profile (bio, avatar URL, culinary preferences) |
+| `GET`  | `/api/v1/users/me/cooking-history` | Bearer Token | Retrieve personal completed recipes cooking log |
+| `GET`  | `/api/v1/users/{username}` | None (Public) | Public chef profile lookup |
+| `GET`  | `/api/v1/recipes` | None (Public) | Search recipes by keyword (`q`), dietary tags (`tag`), cuisine, and difficulty |
+| `POST` | `/api/v1/recipes` | Bearer Token | Author a new structured recipe with ingredients, tools, and steps |
+| `GET`  | `/api/v1/recipes/my-recipes` | Bearer Token | List all recipes authored by the authenticated user with pagination |
+| `GET`  | `/api/v1/recipes/{id}` | None (Public) | Read full recipe details |
+| `PUT`  | `/api/v1/recipes/{id}` | Bearer Token (Author) | Update an authored recipe |
+| `DELETE`| `/api/v1/recipes/{id}` | Bearer Token (Author/Admin) | Delete a recipe and cascade child rows |
+| `POST` | `/api/v1/recipes/{id}/complete` | Bearer Token | Log recipe as cooked with optional rating (1–5) and notes |
+| `POST` | `/api/v1/posts/{id}/like` | Bearer Token | Toggle like status on a community dish post |
+| `GET`  | `/api/v1/posts/{id}/comments` | None (Public) | Retrieve list of discussion comments for a post |
+| `POST` | `/api/v1/posts/{id}/comments` | Bearer Token | Post a discussion comment under a post (1–1,000 characters) |
+| `GET`  | `/api/v1/admin/users` | Bearer Token (Admin) | List registered users with optional role/active filters |
+| `PATCH`| `/api/v1/admin/users/{id}/status` | Bearer Token (Admin) | Deactivate/reactivate accounts or toggle roles (with audit logging) |
+| `GET`  | `/api/v1/admin/audit-logs` | Bearer Token (Admin) | Retrieve paginated administrative audit logs |
+| `GET`  | `/api/v1/admin/stats` | Bearer Token (Admin) | Retrieve system metrics (users, active counts, recipes) |
+| `GET`  | `/api/health` | None (Public) | Backend service health check |
+
+---
+
 ## 👥 Team Simmer Roles
 - **Maximo Mora** — Product Owner (PO), Full-Stack Developer
 - **Bryan Moreno** — Scrum Master, Full-Stack Developer
