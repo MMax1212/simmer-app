@@ -1,0 +1,44 @@
+# ==============================================================================
+# Simmer Backend .dockerignore
+# ==============================================================================
+# This file prevents unnecessary local development files, sensitive credentials,
+# and temporary caches from being copied into the Docker container context.
+# Keeping the build context small speeds up container builds and prevents accidental
+# credential leakage into container layers.
+# ==============================================================================
+
+# Python bytecode and compilation caches
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Local virtual environments (Docker builds its own isolated virtual environment)
+.venv/
+env/
+venv/
+ENV/
+
+# Testing artifacts and test coverage reports
+.pytest_cache/
+.coverage
+htmlcov/
+tests/
+
+# Local SQLite databases (production uses cloud staging database or mounted volume)
+*.db
+*.sqlite3
+simmer.db
+simmer-old.db
+
+# Sensitive local environment files (secrets are injected via Docker Compose / Cloud runtime)
+.env
+.env.local
+.env.*.local
+
+# Git version control metadata
+.git/
+.gitignore
+
+# OS metadata
+.DS_Store
+Thumbs.db
