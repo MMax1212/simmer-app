@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { Utensils } from "lucide-react";
 import { FollowButton } from "./FollowButton";
 import { LikeButton } from "./LikeButton";
+import { BookmarkButton } from "./BookmarkButton";
 import type { FeedPost } from "../services/api";
 
 export interface FeedCardProps {
@@ -93,6 +94,7 @@ export function FeedCard({ post, currentUserId, onFollowToggle }: FeedCardProps)
       {/* Footer Social Actions */}
       <div className="px-4 py-2.5 bg-slate-50 border-t border-slate-100 flex items-center justify-between">
         <LikeButton postId={post.id} />
+        <BookmarkButton postId={post.id} />
       </div>
     </article>
   );
