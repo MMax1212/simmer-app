@@ -69,6 +69,9 @@ def search_recipes(
     meal_type: str | None = Query(default=None, max_length=50),
     difficulty: str | None = Query(default=None),
     ingredient: str | None = Query(default=None, max_length=100),
+    dietary: str | None = Query(default=None, description="Comma-separated dietary tags"),
+    occasion: str | None = Query(default=None, description="Occasion tag"),
+    max_time: int | None = Query(default=None, ge=1, description="Max total cooking and prep mins"),
     limit: int = Query(default=20, ge=1, le=100),
     offset: int = Query(default=0, ge=0),
 ):
@@ -100,6 +103,24 @@ def search_recipes(
         filters.append(Recipe.difficulty == difficulty.strip().lower())
     if ingredient and ingredient.strip():
         filters.append(Recipe.ingredients.any(Ingredient.name.ilike(f"%{ingredient.strip()}%")))
+
+    # Multi-select Dietary Filter (US4.4: strict AND intersection)
+    if dietary and dietary.strip():
+        raw_tags = [t.strip() for t in dietary.split(",") if t.strip()]
+        unique_tags = list(dict.fromkeys(raw_tags))
+        for raw_tag in unique_tags:
+            norm = raw_tag if raw_tag.startswith("#") else f"#{raw_tag}"
+            filters.append(Recipe.tags.any(func.lower(Tag.name) == norm.lower()))
+
+    # Occasion Tag Filter (US4.4)
+    if occasion and occasion.strip():
+        norm_occasion = occasion.strip() if occasion.strip().startswith("#") else f"#{occasion.strip()}"
+        filters.append(Recipe.tags.any(func.lower(Tag.name) == norm_occasion.lower()))
+
+    # Max Cooking Time Filter (US4.4: prep_time + cook_time <= max_time)
+    if max_time is not None:
+        total_time = func.coalesce(Recipe.prep_time_mins, 0) + func.coalesce(Recipe.cook_time_mins, 0)
+        filters.append(total_time <= max_time)
 
     if filters:
         query = query.where(*filters)
