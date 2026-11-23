@@ -44,7 +44,7 @@ Database models and migrations (Task 4.2.2), REST API endpoints (Task 4.2.3), an
 ## Requirements
 - Conforms to PEP 8 and `docs/Code-Standards.md` (no magic numbers, max line length 100 characters).
 - Implemented in `backend/app/services/grocery.py`.
-- Comprehensive automated test suite in `backend/tests/test_grocery.py`.
+- Comprehensive automated test suite in `backend/tests/test_US4_2_1.py` and `backend/tests/test_grocery.py`.
 - 100% test pass rate across existing backend suites with zero regressions.
 
 ## Acceptance criteria
@@ -53,4 +53,4 @@ Database models and migrations (Task 4.2.2), REST API endpoints (Task 4.2.3), an
 3. Multi-recipe aggregation successfully combines fractional amounts across compatible units (e.g. $1/2\text{ cup}$ olive oil + $1/4\text{ cup}$ olive oil = $0.75\text{ cup}$ olive oil in `Pantry & Baking`).
 4. Incompatible units for the same ingredient remain distinct rows without data corruption.
 5. `classify_department` accurately categorizes ingredients into grocery store aisles.
-6. All unit tests in `backend/tests/test_grocery.py` pass cleanly in under 1 second.
+6. All unit tests in `backend/tests/test_US4_2_1.py` and `backend/tests/test_grocery.py` pass cleanly in under 1 second.
