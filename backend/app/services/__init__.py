@@ -1,1 +1,1 @@
-"""Application services shared by API routes."""
+"""Services package for Simmer business logic and algorithmic engines."""
