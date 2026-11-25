@@ -26,4 +26,14 @@ Before implementation, 11 cases failed and the existing numeric-route regression
 
 ## Review decisions and boundaries
 
-The plan provides no exact numerical ranking policy. This endpoint layer exposes validated TRENDING_* configuration and uses documented starting defaults (3/5/4 weights, 7 days, 24-hour half-weight age) for product review. Query logic itself still requires explicit values. PostgreSQL execution requires staging verification. No schema or frontend code changes are introduced. This increment stays local on Ulises until push is requested.
+The implementation was developed before docs/spec_4.md and docs/intent_4.md arrived from main. This endpoint layer exposes validated TRENDING_* configuration and uses documented starting defaults (3/5/4 weights, 7 days, 24-hour half-weight age) for product review. Query logic itself still requires explicit values. PostgreSQL execution requires staging verification. No schema or frontend code changes are introduced. This increment is being submitted as a draft PR from Ulises. Issue #62 remains In Progress until the newly merged specification is reconciled.
+
+
+## Specification alignment required before merge
+
+- Replace the existing per-event ranking policy with the specified recipe-age gravity formula and weights.
+- Align response shape and field names with the specified list DTO (`trending_score`, `completed_count`).
+- Use the specified default limit of 10 and maximum of 20.
+- Implement and test the specified recommendation fallback; reconcile the newest/high-rated wording across the spec and intent.
+
+The current behavior and its tests describe this draft implementation; they do not establish compliance with those newer contracts.
