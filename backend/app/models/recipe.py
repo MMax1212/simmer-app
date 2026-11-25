@@ -53,6 +53,11 @@ class Recipe(Base):
     # --- US3.1: Community Food Posts linked to this recipe ---
     posts: Mapped[list["Post"]] = relationship(back_populates="recipe")  # noqa: F821
 
+    # --- US4.2: Grocery Items referencing this recipe ---
+    grocery_items: Mapped[list["GroceryItem"]] = relationship(  # noqa: F821
+        "GroceryItem", back_populates="source_recipe"
+    )
+
 
     @property
     def tools(self) -> list[str]:
