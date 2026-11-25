@@ -1,10 +1,17 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Query
 from sqlalchemy import func, select
 
 from app.api.deps import CurrentUser, DbSession, OptionalUser
 from app.models import CompletedRecipe, Post, Recipe, SavedPost, User, UserFollow
 from app.schemas.recipe import CookingHistoryItemOut
-from app.schemas.user import FollowToggleResponse, ProfileUpdate, UserPrivate, UserPublic
+from app.schemas.user import (
+    FollowToggleResponse,
+    ProfileUpdate,
+    UserPrivate,
+    UserPublic,
+    UserSearchResponse,
+    UserSearchResultItem,
+)
 
 router = APIRouter(prefix="/api/v1/users", tags=["users"])
 
@@ -133,6 +140,90 @@ def get_follow_status(user_id: int, db: DbSession, current_user: OptionalUser = 
         following=is_following,
         followers_count=followers_count,
         following_count=following_count,
+    )
+
+
+# --- US4.1 Task 4.1.1 & 4.1.2: User Search Endpoint ---
+# Placed before /{username} so /search is not captured as a dynamic username
+@router.get("/search", response_model=UserSearchResponse)
+def search_users(
+    db: DbSession,
+    q: str = Query("", description="Username search query prefix"),
+    limit: int = Query(20, ge=1, le=100, description="Page size limit"),
+    offset: int = Query(0, ge=0, description="Page offset"),
+    current_user: OptionalUser = None,
+):
+    query = select(User).where(User.is_active.is_(True))
+
+    # Self-exclusion when authenticated (Task 4.1.6)
+    if current_user is not None:
+        query = query.where(User.id != current_user.id)
+
+    # Case-insensitive prefix matching on username
+    stripped_q = q.strip()
+    if stripped_q:
+        query = query.where(func.lower(User.username).like(f"{stripped_q.lower()}%"))
+
+    # Total matching count
+    total = db.scalar(select(func.count()).select_from(query.subquery())) or 0
+
+    # Pagination & alphabetical ordering
+    users = db.scalars(
+        query.order_by(User.username.asc()).offset(offset).limit(limit)
+    ).all()
+
+    if not users:
+        return UserSearchResponse(total=total, limit=limit, offset=offset, items=[])
+
+    user_ids = [u.id for u in users]
+
+    # Pre-fetch following IDs for current user to avoid N+1 queries
+    followed_ids: set[int] = set()
+    if current_user is not None:
+        followed_rows = db.scalars(
+            select(UserFollow.following_id).where(
+                UserFollow.follower_id == current_user.id,
+                UserFollow.following_id.in_(user_ids),
+            )
+        ).all()
+        followed_ids = set(followed_rows)
+
+    # Batch query follower counts (Task 4.1.2)
+    follower_counts_rows = db.execute(
+        select(UserFollow.following_id, func.count(UserFollow.follower_id))
+        .where(UserFollow.following_id.in_(user_ids))
+        .group_by(UserFollow.following_id)
+    ).all()
+    follower_counts_map = dict(follower_counts_rows)
+
+    # Batch query following counts (Task 4.1.2)
+    following_counts_rows = db.execute(
+        select(UserFollow.follower_id, func.count(UserFollow.following_id))
+        .where(UserFollow.follower_id.in_(user_ids))
+        .group_by(UserFollow.follower_id)
+    ).all()
+    following_counts_map = dict(following_counts_rows)
+
+    items = [
+        UserSearchResultItem(
+            id=u.id,
+            username=u.username,
+            bio=u.bio,
+            avatar_url=u.avatar_url,
+            culinary_preferences=u.culinary_preferences or [],
+            created_at=u.created_at,
+            is_following=(u.id in followed_ids),
+            followers_count=follower_counts_map.get(u.id, 0),
+            following_count=following_counts_map.get(u.id, 0),
+        )
+        for u in users
+    ]
+
+    return UserSearchResponse(
+        total=total,
+        limit=limit,
+        offset=offset,
+        items=items,
     )
 
 

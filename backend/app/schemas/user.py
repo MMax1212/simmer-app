@@ -87,3 +87,25 @@ class FollowToggleResponse(BaseModel):
     following: bool
     followers_count: int
     following_count: int
+
+
+# --- US4.1 Task 4.1.1 & 4.1.2: User Search Response Schemas ---
+class UserSearchResultItem(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
+    id: int
+    username: str
+    bio: str | None = None
+    avatar_url: str | None = None
+    culinary_preferences: list[str] = []
+    created_at: datetime
+    is_following: bool = False
+    followers_count: int = 0
+    following_count: int = 0
+
+
+class UserSearchResponse(BaseModel):
+    total: int
+    limit: int
+    offset: int
+    items: list[UserSearchResultItem]
