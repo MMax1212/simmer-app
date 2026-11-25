@@ -1,0 +1,86 @@
+# ==============================================================================
+# Simmer Staging Docker Compose Configuration (INF-4.0.1)
+# ==============================================================================
+# Architectural Overview:
+# This compose manifest orchestrates the containerized Simmer application stack
+# for production staging environments and local verification.
+#
+# Key Highlights:
+# 1. Service Isolation: Backend and Frontend run in isolated containers.
+# 2. Internal DNS Networking: Frontend Nginx reverse proxies to 'backend:8000'
+#    seamlessly via the private bridge network 'simmer-staging-network'.
+# 3. Healthcheck Dependencies: Frontend startup waits for the backend service
+#    healthcheck (/api/health) to succeed before accepting ingress traffic.
+# 4. Volume Persistence: Local database data is persisted in a named volume.
+# ==============================================================================
+
+services:
+  # ----------------------------------------------------------------------------
+  # Backend API Service (FastAPI + Python 3.12 + Uvicorn)
+  # ----------------------------------------------------------------------------
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: simmer-backend-staging
+    restart: unless-stopped
+    ports:
+      # Expose port 8000 on the host for direct API inspection/debugging
+      - "8000:8000"
+    environment:
+      - PORT=8000
+      - PYTHONUNBUFFERED=1
+      # Defaults for local staging; override via .env or cloud environment injection (Task 4.0.2)
+      - SECRET_KEY=${SECRET_KEY:-staging-secret-key-change-in-production-32bytes}
+      - DATABASE_URL=${DATABASE_URL:-sqlite:////app/data/simmer.db}
+      - CORS_ORIGINS=${CORS_ORIGINS:-http://localhost,http://localhost:80,http://localhost:3000,http://localhost:5173}
+    volumes:
+      # Persistent volume for backend SQLite data when not using cloud PostgreSQL
+      - simmer-backend-data:/app/data
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/api/health"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+    networks:
+      - simmer-staging-network
+
+  # ----------------------------------------------------------------------------
+  # Frontend Web Service (Vite React + Nginx Alpine)
+  # ----------------------------------------------------------------------------
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: simmer-frontend-staging
+    restart: unless-stopped
+    ports:
+      # Standard HTTP ingress port for web browsers
+      - "80:80"
+    depends_on:
+      backend:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://localhost/healthz"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+      start_period: 5s
+    networks:
+      - simmer-staging-network
+
+# ------------------------------------------------------------------------------
+# Persistent Volumes
+# ------------------------------------------------------------------------------
+volumes:
+  simmer-backend-data:
+    name: simmer-backend-data
+
+# ------------------------------------------------------------------------------
+# Network Topology
+# ------------------------------------------------------------------------------
+networks:
+  simmer-staging-network:
+    name: simmer-staging-network
+    driver: bridge

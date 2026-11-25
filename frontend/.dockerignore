@@ -1,0 +1,41 @@
+# ==============================================================================
+# Simmer Frontend .dockerignore
+# ==============================================================================
+# This file prevents heavy local build artifacts, local dependencies, test
+# reports, and sensitive local configuration files from being sent to the Docker
+# build daemon.
+#
+# By ignoring local `node_modules` and `dist/`, Docker will perform a clean,
+# reproducible build within the container environment matching Linux libc.
+# ==============================================================================
+
+# Local node dependencies (container installs cleanly via npm ci)
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Production output build directory
+dist/
+build/
+
+# End-to-end and unit testing artifacts
+coverage/
+playwright-report/
+test-results/
+.nyc_output/
+
+# Git metadata
+.git/
+.gitignore
+
+# Environment and sensitive keys
+.env
+.env.local
+.env.*.local
+
+# OS and IDE configuration files
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/

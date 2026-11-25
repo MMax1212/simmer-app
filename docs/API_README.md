@@ -51,7 +51,7 @@ All external endpoints follow standard **RESTful HTTP design principles**:
 | `GET` | `/api/v1/users/me/cooking-history` | Bearer Token | Retrieve authenticated user's personal cooking log history |
 | `GET` | `/api/v1/users/{username}` | None (Public) | Look up public chef profile by username |
 | **Recipes & Search** | | | |
-| `GET` | `/api/v1/recipes` | None (Public) | Search recipes by keyword (`q`), dietary tags (`tag`), cuisine, and difficulty |
+| `GET` | `/api/v1/recipes` | None (Public) | Search recipes by keyword (`q`), dietary tags (`dietary`), occasion (`occasion`), max cooking time (`max_time`), single tag (`tag`), cuisine, and difficulty |
 | `POST` | `/api/v1/recipes` | Bearer Token | Author a new structured recipe with ingredients, tools, and steps |
 | `GET` | `/api/v1/recipes/my-recipes` | Bearer Token | List all recipes authored by the authenticated user with pagination |
 | `GET` | `/api/v1/recipes/{recipe_id}` | None (Public) | Read complete recipe details by ID |
@@ -141,7 +141,10 @@ All external endpoints follow standard **RESTful HTTP design principles**:
 * **Access:** Public
 * **Query Parameters:**
   - `q` (string, optional): Search keyword matched across titles, descriptions, and ingredients.
-  - `tag` (string, optional): Filter by tag (e.g. `quick` or `#healthy`).
+  - `dietary` (string, optional): Comma-separated dietary tags (e.g. `vegan,gluten-free`). Performs strict boolean AND intersection matching.
+  - `occasion` (string, optional): Filter by occasion tag (e.g. `quick-dinner`, `under-30-mins`, `date-night`).
+  - `max_time` (integer, optional, min: 1): Maximum combined preparation and cooking time in minutes (`prep_time_mins + cook_time_mins <= max_time`).
+  - `tag` (string, optional): Filter by legacy tag (e.g. `quick` or `#healthy`).
   - `cuisine` (string, optional): Filter by cuisine (e.g. `Italian`, `Mexican`, `Asian`).
   - `meal_type` (string, optional): Filter by meal type (e.g. `dinner`, `breakfast`).
   - `difficulty` (string, optional): Filter by difficulty (`easy`, `medium`, `hard`).
