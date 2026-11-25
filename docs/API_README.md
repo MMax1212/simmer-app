@@ -322,34 +322,54 @@ All external endpoints follow standard **RESTful HTTP design principles**:
 
 ## US4.3.2 - Recipe discovery endpoints
 
+### Shared response and pagination
+
+Both endpoints return `List[TrendingRecipeOut]` with HTTP 200. Each card exposes exactly
+`id`, `title`, `image_url`, `cuisine`, `difficulty`, `cook_time_mins`, `author_username`,
+`trending_score`, `likes_count`, and `completed_count`. No user credentials or private
+profile fields are serialized. Empty results are `[]`, including offsets beyond the list.
+
+Query parameters: `limit` (integer 1–20, default 10), `offset` (integer >=0, default 0).
+Invalid pagination returns 422. Named discovery routes precede `/recipes/{recipe_id}`.
+The optional offset is a compatible extension to the spec's limit-only examples.
+Pages are deterministic for an unchanged clock and dataset, not frozen across requests.
+
 ### GET /api/v1/recipes/trending
 
-Public. Query parameters: `limit` (integer 1-100, default 20), `offset` (integer >=0, default 0). Invalid pagination returns 422. Named routes are registered before `/recipes/{recipe_id}` so they are not parsed as numeric IDs.
+Public. Positive-score recipes are ordered by descending gravity score, then ascending ID:
 
-Returns 200 with `{ "limit": 20, "offset": 0, "items": [...] }`. Each item contains the existing public RecipeSummaryOut fields (`id`, `title`, `author_username`, `cuisine`, `meal_type`, `difficulty`, `cook_time_mins`, `image_url`, `tags`) plus `score`, `likes_count`, `comments_count`, and `completions_count`. No author email or credentials are serialized. No total count is provided. Out-of-range offsets or no positive-score recipes return an empty `items` array with 200.
+`(likes * 2 + comments * 3 + cooking_logs * 5) / (hours_since_recipe_creation + 2)^1.5`
 
-Scores reuse the 4.3.1 event-age decay service. Existing recipes can trend through new activity. Future/stale events and unlinked post engagement are excluded. Ties use ascending recipe ID. Results depend on the request clock and current engagement; pagination is not a frozen snapshot across requests.
+Counts aggregate all engagement through the UTC request clock, across recipe-linked posts
+and cooking logs. There is no event-age lookback window. Unlinked post engagement, future
+events, and future-dated recipes are excluded. Independent event aggregation prevents count
+multiplication. Scores and pagination execute in SQL; owner/tag metadata uses eager joins.
+
+If **no eligible recipe has engagement**, fallback orders by average non-null cooking
+rating descending, recipe creation descending, then ID ascending. With no ratings, this
+naturally returns newest recipes. Fallback is selected before pagination: running out of
+trending results never switches a later page to unrelated fallback recipes. A partially
+filled trending page is not padded. A user-facing fallback badge remains UI work.
 
 ### GET /api/v1/recipes/recommended
 
-Requires bearer authentication. Missing, invalid or inactive sessions return 401. Accepts the same bounded `limit` and `offset` parameters; invalid pagination returns 422.
+Requires bearer authentication. Missing, invalid or inactive sessions return 401.
+Preferences come only from the authenticated profile, never a caller-supplied user ID.
 
-Returns 200 with `{ "limit": 20, "offset": 0, "personalized": true, "items": [...] }`. Items use RecipeSummaryOut. Preferences come only from the authenticated user's profile; callers cannot select another user's preferences via query parameters.
+Normalization handles case, surrounding whitespace, leading hashtags, and spaces-to-hyphens.
+Cuisine, meal type and tags match exactly after normalization. Order: matching fields /
+distinct normalized tags descending, gravity score descending, newest recipe, ascending ID.
+Several matching tags never duplicate a card. This is culinary-interest matching, not an
+allergy or nutritional guarantee.
 
-The initial deterministic matching rule normalizes case, surrounding whitespace, a leading hashtag, and spaces-to-hyphens. It matches cuisine, meal type and tags exactly after normalization, ordering by the number of matching fields/distinct tags, then newest recipe and descending ID. Multiple matching tags never duplicate recipes. This is culinary-interest matching, not an allergy/nutrition guarantee.
+Empty or unusable preferences return highest average cooking rating first, newest recipes
+on ties, then ascending ID. Unrated recipes follow rated ones; with no ratings this becomes
+a newest-recipes list. This reconciles the spec's top-rated requirement with the intent's
+newest/high-rated cold-start language. Real preferences with no matches return `[]`.
 
-With no usable preferences, `personalized` is false and items are empty. With preferences but no matching recipes it is true and items are empty. User-facing fallback is a later task; the endpoint does not silently substitute unrelated recipes.
+### Policy and verification boundary
 
-### Discovery configuration
-
-The following validated settings can be overridden using backend environment variables or `.env`:
-
-| Variable | Initial default | Validation / meaning |
-| --- | --- | --- |
-| `TRENDING_LIKE_WEIGHT` | 3 | Finite and >=0 |
-| `TRENDING_COMMENT_WEIGHT` | 5 | Finite and >=0 |
-| `TRENDING_COMPLETION_WEIGHT` | 4 | Finite and >=0; zero disables its score |
-| `TRENDING_WINDOW_DAYS` | 7 | Integer >=1; inclusive recent-activity window |
-| `TRENDING_DECAY_HOURS` | 24 | Finite and >0; age at which an event has half weight |
-
-The defaults are an initial reviewable policy, not a decision specified by the Sprint Plan. Invalid settings fail startup validation. PostgreSQL ranking execution still needs staging verification; local API tests use SQLite. This task requires no new migration.
+Formula weights (2/3/5), gravity offset (2 hours), and exponent (1.5) are named constants
+from the Sprint 4 specification, not environment settings. The previous `TRENDING_*`
+settings are obsolete and removed. SQLite behavior is covered by API/query tests;
+PostgreSQL execution still requires staging verification. No migration is required.

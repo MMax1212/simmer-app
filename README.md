@@ -155,9 +155,9 @@ See [Sprint 1 setup](docs/SPRINT1_SETUP.md) for database migration, browser test
 
 ## Recipe discovery API (US4.3.2)
 
-- `GET /api/v1/recipes/trending?limit=20&offset=0` is public and returns recent-engagement-ranked recipe summaries plus scores/counts.
-- `GET /api/v1/recipes/recommended?limit=20&offset=0` requires a bearer token and matches the signed-in user's stored culinary preferences.
-- Both return bounded pages with `items`, `limit`, and `offset`; recommended pages also include `personalized`. Neither response claims a total count.
-- Discovery weights and time settings are configurable through the `TRENDING_*` variables documented in `backend/.env.example` and [API documentation](docs/API_README.md).
+- `GET /api/v1/recipes/trending?limit=10&offset=0` is public and ranks recipes with the Sprint 4 gravity formula: `(likes*2 + comments*3 + cooking_logs*5) / (recipe_age_hours+2)^1.5`.
+- `GET /api/v1/recipes/recommended?limit=10&offset=0` requires a bearer token and matches the signed-in user's stored culinary preferences.
+- Both return a JSON list of `TrendingRecipeOut` cards, with `trending_score`, `likes_count`, and `completed_count`. The default page size is 10, maximum 20; optional `offset` supports stable pagination for unchanged data and clock.
+- Empty preferences fall back to highest average cooking rating, then newest recipes. An installation with no engagement gets newest recipes in trending. Real preferences with no matches return an empty list.
 
-These endpoints do not add a discovery UI or implement cold-start fallback presentation. No database migration is required by this task.
+The formula is fixed by the Sprint 4 spec; obsolete `TRENDING_*` overrides are removed. See [API documentation](docs/API_README.md) for exact contracts and fallback ordering. This task adds no discovery UI or database migration.
