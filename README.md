@@ -152,3 +152,12 @@ a repository administrator must configure the `Backend tests` and
 `Frontend tests and build` and `Browser integration tests` checks as required in the branch rules for `main`.
 
 See [Sprint 1 setup](docs/SPRINT1_SETUP.md) for database migration, browser tests, and admin instructions, and [acceptance coverage](docs/SPRINT1_STATUS.md) for requirements and tests.
+
+## Recipe discovery API (US4.3.2)
+
+- `GET /api/v1/recipes/trending?limit=20&offset=0` is public and returns recent-engagement-ranked recipe summaries plus scores/counts.
+- `GET /api/v1/recipes/recommended?limit=20&offset=0` requires a bearer token and matches the signed-in user's stored culinary preferences.
+- Both return bounded pages with `items`, `limit`, and `offset`; recommended pages also include `personalized`. Neither response claims a total count.
+- Discovery weights and time settings are configurable through the `TRENDING_*` variables documented in `backend/.env.example` and [API documentation](docs/API_README.md).
+
+These endpoints do not add a discovery UI or implement cold-start fallback presentation. No database migration is required by this task.

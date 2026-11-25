@@ -316,3 +316,37 @@ All external endpoints follow standard **RESTful HTTP design principles**:
     "version": "1.0.0"
   }
   ```
+
+## US4.3.2 - Recipe discovery endpoints
+
+### GET /api/v1/recipes/trending
+
+Public. Query parameters: `limit` (integer 1-100, default 20), `offset` (integer >=0, default 0). Invalid pagination returns 422. Named routes are registered before `/recipes/{recipe_id}` so they are not parsed as numeric IDs.
+
+Returns 200 with `{ "limit": 20, "offset": 0, "items": [...] }`. Each item contains the existing public RecipeSummaryOut fields (`id`, `title`, `author_username`, `cuisine`, `meal_type`, `difficulty`, `cook_time_mins`, `image_url`, `tags`) plus `score`, `likes_count`, `comments_count`, and `completions_count`. No author email or credentials are serialized. No total count is provided. Out-of-range offsets or no positive-score recipes return an empty `items` array with 200.
+
+Scores reuse the 4.3.1 event-age decay service. Existing recipes can trend through new activity. Future/stale events and unlinked post engagement are excluded. Ties use ascending recipe ID. Results depend on the request clock and current engagement; pagination is not a frozen snapshot across requests.
+
+### GET /api/v1/recipes/recommended
+
+Requires bearer authentication. Missing, invalid or inactive sessions return 401. Accepts the same bounded `limit` and `offset` parameters; invalid pagination returns 422.
+
+Returns 200 with `{ "limit": 20, "offset": 0, "personalized": true, "items": [...] }`. Items use RecipeSummaryOut. Preferences come only from the authenticated user's profile; callers cannot select another user's preferences via query parameters.
+
+The initial deterministic matching rule normalizes case, surrounding whitespace, a leading hashtag, and spaces-to-hyphens. It matches cuisine, meal type and tags exactly after normalization, ordering by the number of matching fields/distinct tags, then newest recipe and descending ID. Multiple matching tags never duplicate recipes. This is culinary-interest matching, not an allergy/nutrition guarantee.
+
+With no usable preferences, `personalized` is false and items are empty. With preferences but no matching recipes it is true and items are empty. User-facing fallback is a later task; the endpoint does not silently substitute unrelated recipes.
+
+### Discovery configuration
+
+The following validated settings can be overridden using backend environment variables or `.env`:
+
+| Variable | Initial default | Validation / meaning |
+| --- | --- | --- |
+| `TRENDING_LIKE_WEIGHT` | 3 | Finite and >=0 |
+| `TRENDING_COMMENT_WEIGHT` | 5 | Finite and >=0 |
+| `TRENDING_COMPLETION_WEIGHT` | 4 | Finite and >=0; zero disables its score |
+| `TRENDING_WINDOW_DAYS` | 7 | Integer >=1; inclusive recent-activity window |
+| `TRENDING_DECAY_HOURS` | 24 | Finite and >0; age at which an event has half weight |
+
+The defaults are an initial reviewable policy, not a decision specified by the Sprint Plan. Invalid settings fail startup validation. PostgreSQL ranking execution still needs staging verification; local API tests use SQLite. This task requires no new migration.
