@@ -67,6 +67,11 @@ class User(Base):
         cascade="all, delete-orphan",
     )
 
+    # --- US4.2: Multi-Recipe Grocery Lists ---
+    grocery_lists: Mapped[list["GroceryList"]] = relationship(  # noqa: F821
+        "GroceryList", back_populates="user", cascade="all, delete-orphan"
+    )
+
 
 # --- US1.1: Unique Case-Insensitive Username Index ---
 Index("uq_users_username_lower", func.lower(User.username), unique=True)
