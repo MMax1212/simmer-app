@@ -3,6 +3,7 @@ id: US3.4.2
 story: US3.4
 sprint: 3
 assignee: Benjamin Ong
+pr: https://github.com/MMax1212/simmer-app/pull/44
 estimate_hours: 4
 ---
 
