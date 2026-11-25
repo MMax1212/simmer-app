@@ -210,6 +210,26 @@ export interface FeedResponse {
   items: FeedPost[];
 }
 
+// --- US4.1: Friend Search & Network (User Search Contract) ---
+export interface UserSearchResultItem {
+  id: number;
+  username: string;
+  bio: string | null;
+  avatar_url: string | null;
+  culinary_preferences: string[];
+  created_at: string;
+  is_following: boolean;
+  followers_count: number;
+  following_count: number;
+}
+
+export interface UserSearchResponse {
+  total: number;
+  limit: number;
+  offset: number;
+  items: UserSearchResultItem[];
+}
+
 export class ApiError extends Error {
   constructor(public status: number, message: string) { super(message); }
 }
@@ -349,6 +369,15 @@ export const api = {
     request<FollowToggleResponse>("/api/v1/users/" + userId + "/follow", {}, false),
   getFeed: (mode: "following" | "global" = "following", offset = 0, limit = 20) =>
     request<FeedResponse>("/api/v1/feed?mode=" + mode + "&offset=" + offset + "&limit=" + limit, {}, mode === "following"),
+
+  // --- US4.1: Friend Search & Network Endpoints ---
+  searchUsers: (q = "", limit = 20, offset = 0) => {
+    const params = new URLSearchParams();
+    if (q.trim()) params.set("q", q.trim());
+    params.set("limit", String(limit));
+    params.set("offset", String(offset));
+    return request<UserSearchResponse>("/api/v1/users/search?" + params.toString(), {}, true);
+  },
 };
 
 export const togglePostLike = (postId: number) => api.togglePostLike(postId);
@@ -357,5 +386,6 @@ export const createPostComment = (postId: number, content: string) => api.create
 export const toggleFollow = (userId: number) => api.toggleFollow(userId);
 export const getFollowStatus = (userId: number) => api.getFollowStatus(userId);
 export const getFeed = (mode: "following" | "global" = "following", offset = 0, limit = 20) => api.getFeed(mode, offset, limit);
+export const searchUsers = (q = "", limit = 20, offset = 0) => api.searchUsers(q, limit, offset);
 
 export const errorText = (e: unknown) => e instanceof Error ? e.message : "Something went wrong";

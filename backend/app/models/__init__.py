@@ -1,5 +1,6 @@
 from app.models.audit import AdminAudit
 from app.models.completed_recipe import CompletedRecipe
+from app.models.grocery import GroceryItem, GroceryList
 from app.models.post import Post
 from app.models.post_comment import PostComment
 from app.models.post_like import PostLike
@@ -22,4 +23,6 @@ __all__ = [
     "PostComment",
     "SavedPost",
     "UserFollow",
+    "GroceryList",
+    "GroceryItem",
 ]

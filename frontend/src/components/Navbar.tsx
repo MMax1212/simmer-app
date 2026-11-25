@@ -1,5 +1,6 @@
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/auth";
+import { UserSearchInput } from "./UserSearchInput";
 
 export function Navbar() {
   const { user, logout } = useAuth();
@@ -7,7 +8,10 @@ export function Navbar() {
 
   return (
     <header className="navbar">
-      <Link to="/" className="brand">Simmer</Link>
+      <div className="flex items-center gap-4">
+        <Link to="/" className="brand">Simmer</Link>
+        <UserSearchInput currentUserId={user?.id} className="w-48 sm:w-64" />
+      </div>
       <nav>
         {/* US2.2: Recipe Search & Discovery Navigation */}
         <NavLink to="/recipes">Explore</NavLink>
