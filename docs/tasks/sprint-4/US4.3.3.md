@@ -38,9 +38,9 @@ repeat assertions. Follow this convention for future tests and test groups.
 The test suite was added before the component and failed because the component was
 absent. Implementation made the behavior cases pass, then coverage was expanded for
 scroll controls and the actual public request. Existing feed mocks were corrected to
-return fresh endpoint-specific Response bodies for parallel requests.
+return fresh endpoint-specific Response bodies for parallel requests, including the admin redirect that mounts Home.
 
-- Full frontend: 85 tests passed.
+- Full frontend after integrating latest main: 98 tests passed.
 - TypeScript/Vite production build passed.
 - Browser integration: 3 tests passed, including a 390px mobile carousel test verifying
   no page overflow, horizontal movement and recipe detail navigation.
