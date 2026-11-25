@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { SlidersHorizontal } from "lucide-react";
 import { ErrorMessage } from "../components/ErrorMessage";
+import { DietaryFilterDrawer } from "../components/DietaryFilterDrawer";
 import { api, errorText, type RecipeSummary } from "../services/api";
 
 const CATEGORIES = ["All", "Italian", "Mexican", "Asian", "American", "Mediterranean", "other"];
@@ -8,19 +10,32 @@ const CATEGORIES = ["All", "Italian", "Mexican", "Asian", "American", "Mediterra
 export function RecipesPage() {
   const [query, setQuery] = useState("");
   const [selectedCuisine, setSelectedCuisine] = useState<string | null>(null);
+  const [selectedDietary, setSelectedDietary] = useState<string[]>([]);
+  const [selectedOccasion, setSelectedOccasion] = useState<string | null>(null);
+  const [selectedMaxTime, setSelectedMaxTime] = useState<number | null>(null);
+  const [isFilterDrawerOpen, setIsFilterDrawerOpen] = useState(false);
   const [recipes, setRecipes] = useState<RecipeSummary[] | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // US2.2 (Task 2.2): 300ms Debounce & live search dispatch
+  // US2.2 & US4.4: 300ms Debounce & live multi-facet search dispatch
   useEffect(() => {
     let active = true;
     setLoading(true);
 
     const timer = setTimeout(() => {
+      const dietaryParam =
+        selectedDietary.length > 0
+          ? selectedDietary.map((t) => t.replace(/^#/, "")).join(",")
+          : undefined;
+      const occasionParam = selectedOccasion ? selectedOccasion.replace(/^#/, "") : undefined;
+
       api.searchRecipes({
         q: query,
         cuisine: selectedCuisine ?? undefined,
+        dietary: dietaryParam,
+        occasion: occasionParam,
+        max_time: selectedMaxTime ?? undefined,
       })
         .then((res) => {
           if (active) {
@@ -40,13 +55,21 @@ export function RecipesPage() {
       active = false;
       clearTimeout(timer); // Cancel timer if user types another letter within 300ms
     };
-  }, [query, selectedCuisine]);
+  }, [query, selectedCuisine, selectedDietary, selectedOccasion, selectedMaxTime]);
 
-  // Handler to clear search and category filters
+  // Handler to clear search, category, and dietary filters
   const handleResetFilters = () => {
     setQuery("");
     setSelectedCuisine(null);
+    setSelectedDietary([]);
+    setSelectedOccasion(null);
+    setSelectedMaxTime(null);
   };
+
+  const activeFiltersCount =
+    selectedDietary.length +
+    (selectedOccasion ? 1 : 0) +
+    (selectedMaxTime !== null ? 1 : 0);
 
   return (
     <section>
@@ -55,15 +78,39 @@ export function RecipesPage() {
         Discover recipes by title, ingredients, or cuisine.
       </p>
 
-      {/* Search Input */}
-      <div style={{ marginBottom: "1rem" }}>
+      {/* Search Input & Filter Button */}
+      <div style={{ display: "flex", gap: "0.5rem", marginBottom: "1rem" }}>
         <input
           type="search"
           placeholder="Search recipes by title or ingredient..."
           value={query}
           onChange={(e) => setQuery(e.target.value)}
+          style={{ flex: 1 }}
         />
+        <button
+          type="button"
+          onClick={() => setIsFilterDrawerOpen(true)}
+          className={`chip ${activeFiltersCount > 0 ? "on" : ""}`}
+          style={{ display: "inline-flex", alignItems: "center", gap: "0.4rem", whiteSpace: "nowrap" }}
+        >
+          <SlidersHorizontal size={16} />
+          <span>Filters {activeFiltersCount > 0 ? `(${activeFiltersCount})` : ""}</span>
+        </button>
       </div>
+
+      {/* Dietary & Occasion Filter Drawer */}
+      <DietaryFilterDrawer
+        isOpen={isFilterDrawerOpen}
+        onClose={() => setIsFilterDrawerOpen(false)}
+        selectedDietary={selectedDietary}
+        onDietaryChange={setSelectedDietary}
+        selectedOccasion={selectedOccasion}
+        onOccasionChange={setSelectedOccasion}
+        selectedMaxTime={selectedMaxTime}
+        onMaxTimeChange={setSelectedMaxTime}
+        onClearAll={handleResetFilters}
+        matchingCount={recipes ? recipes.length : undefined}
+      />
 
       {/* Category Filter Pills (Task 2.3) */}
       <div className="chips" style={{ marginBottom: "1.5rem" }} role="group" aria-label="Category filters">
