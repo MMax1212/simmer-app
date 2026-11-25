@@ -18,6 +18,20 @@ export const MEAL_TYPES = [
 ] as const;
 export const DIFFICULTIES = ["easy", "medium", "hard"] as const;
 
+// US4.3: Keep the discovery card contract aligned with TrendingRecipeOut.
+export interface TrendingRecipe {
+  id: number;
+  title: string;
+  image_url: string | null;
+  cuisine: string | null;
+  difficulty: string;
+  cook_time_mins: number;
+  author_username: string;
+  trending_score: number;
+  likes_count: number;
+  completed_count: number;
+}
+
 // --- US1.1, US1.2, US1.3: User Profile & Authentication Data Model ---
 export interface User {
   id: number;
@@ -280,6 +294,10 @@ export const api = {
       false
     );
   },
+
+  // Public discovery must not send a saved token or trigger session-expiry handling.
+  getTrendingRecipes: (limit = 5) =>
+    request<TrendingRecipe[]>(`/api/v1/recipes/trending?limit=${limit}`, {}, false),
 
   // --- US1.4: Recipe Creation & Update Endpoints ---
   createRecipe: (recipe: RecipeInput) =>

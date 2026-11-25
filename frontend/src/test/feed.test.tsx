@@ -65,6 +65,17 @@ beforeEach(() => {
   localStorage.clear();
 });
 
+// Each endpoint gets a fresh response body; parallel discovery must not consume the feed's.
+function mockHomeRequests(feed: FeedResponse) {
+  fetchMock.mockImplementation(async (url) => {
+    if (String(url).includes("/recipes/trending")) return respond([]);
+    if (String(url).includes("/recipes")) {
+      return respond({ items: [], total: 0, limit: 20, offset: 0 });
+    }
+    return respond(feed);
+  });
+}
+
 function renderHome(currentUser: User | null = mockUser) {
   vi.spyOn(AuthContext, "useAuth").mockReturnValue({
     user: currentUser,
@@ -82,9 +93,11 @@ function renderHome(currentUser: User | null = mockUser) {
   );
 }
 
+// Keep the existing feed regressions alongside discovery: adding a parallel Home
+// request must not change the default tab, login prompt, empty state, or follow actions.
 describe("US3.5.5: Tabbed Home Feed UI (Following Feed vs Global Community Feed)", () => {
   it("renders tabs for 'Following Feed' and 'Global Community Feed' (AC1)", async () => {
-    fetchMock.mockResolvedValue(respond(mockFeedResponse));
+    mockHomeRequests(mockFeedResponse);
     renderHome(mockUser);
 
     expect(screen.getByRole("tab", { name: /following/i })).toBeInTheDocument();
@@ -92,7 +105,7 @@ describe("US3.5.5: Tabbed Home Feed UI (Following Feed vs Global Community Feed)
   });
 
   it("loads Following Feed by default for logged-in user and displays feed card (AC2)", async () => {
-    fetchMock.mockResolvedValue(respond(mockFeedResponse));
+    mockHomeRequests(mockFeedResponse);
     renderHome(mockUser);
 
     await waitFor(() => {
@@ -108,7 +121,7 @@ describe("US3.5.5: Tabbed Home Feed UI (Following Feed vs Global Community Feed)
   });
 
   it("displays empty state when Following Feed has no posts with prompt to explore global (AC3)", async () => {
-    fetchMock.mockResolvedValue(respond(mockEmptyFeedResponse));
+    mockHomeRequests(mockEmptyFeedResponse);
     renderHome(mockUser);
 
     expect(await screen.findByText(/your following feed is empty/i)).toBeInTheDocument();
@@ -117,7 +130,7 @@ describe("US3.5.5: Tabbed Home Feed UI (Following Feed vs Global Community Feed)
 
   it("switches to Global Community Feed when clicking the Global tab (AC4)", async () => {
     const actor = userEvent.setup();
-    fetchMock.mockResolvedValue(respond(mockFeedResponse));
+    mockHomeRequests(mockFeedResponse);
     renderHome(mockUser);
 
     const globalTab = screen.getByRole("tab", { name: /global/i });
@@ -133,7 +146,7 @@ describe("US3.5.5: Tabbed Home Feed UI (Following Feed vs Global Community Feed)
 
   it("prompts unauthenticated visitors to log in when viewing Following Feed (AC5)", async () => {
     const actor = userEvent.setup();
-    fetchMock.mockResolvedValue(respond(mockFeedResponse));
+    mockHomeRequests(mockFeedResponse);
     renderHome(null); // Anonymous visitor
 
     // Default for unauthenticated is Global Community Feed
@@ -153,7 +166,7 @@ describe("US3.5.5: Tabbed Home Feed UI (Following Feed vs Global Community Feed)
   });
 
   it("renders interactive FollowButton on feed cards for post author (AC6)", async () => {
-    fetchMock.mockResolvedValue(respond(mockFeedResponse));
+    mockHomeRequests(mockFeedResponse);
     renderHome(mockUser);
 
     const followButton = await screen.findByRole("button", { name: /follow mario_bakes/i });
