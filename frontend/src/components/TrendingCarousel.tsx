@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { DiscoveryEmptyState } from "./DiscoveryEmptyState";
 import { DiscoveryRecipeCard } from "./DiscoveryRecipeCard";
 import { api, errorText, type TrendingRecipe } from "../services/api";
 
@@ -24,6 +25,11 @@ export function TrendingCarousel() {
     return () => { active = false; };
   }, [attempt]);
 
+  // The API includes only positive scores in active rankings; an all-zero nonempty
+  // result therefore identifies its global cold-start fallback without changing the DTO.
+  // Do not infer cold start from page size: active pages can legitimately be short.
+  const isColdStart = recipes.length > 0 && recipes.every((recipe) => recipe.trending_score === 0);
+
   function scrollPage(direction: number) {
     const element = list.current;
     // No timed or smooth motion: scrolling remains under the reader's control.
@@ -42,9 +48,17 @@ export function TrendingCarousel() {
           </button>
         </div>
       )}
-      {!loading && !error && recipes.length === 0 && <p>No recipes to discover yet.</p>}
+      {!loading && !error && recipes.length === 0 && (
+        <DiscoveryEmptyState message="No recipes to discover yet." />
+      )}
       {!loading && !error && recipes.length > 0 && (
         <>
+          {isColdStart && (
+            <div className="discovery-guidance">
+              <span className="chip">Fresh picks</span>
+              <p>Not enough community activity yet. Here are fresh recipes to try.</p>
+            </div>
+          )}
           <div className="row">
             <button type="button" aria-label="Previous trending recipes"
               onClick={() => scrollPage(-1)}>Previous</button>

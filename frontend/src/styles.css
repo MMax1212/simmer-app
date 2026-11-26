@@ -136,3 +136,6 @@ th, td { text-align: left; padding: 0.55rem; border-bottom: 1px solid var(--bord
 
 /* Semantic recommendation lists share the existing responsive recipe grid. */
 .recommendation-list { list-style: none; padding: 0; margin: 1rem 0; }
+
+/* Guidance stays in the reading flow without animated or modal onboarding. */
+.discovery-guidance { margin: 1rem 0; padding: 1rem; background: var(--accent-soft); }

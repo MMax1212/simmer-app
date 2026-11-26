@@ -1,6 +1,6 @@
 // These tests focus on UI/session boundaries; backend tests own preference matching.
 // Deferred responses deliberately model account changes while a request is in flight.
-import { act, fireEvent, render, screen } from "@testing-library/react";
+import { act, fireEvent, render, screen, within } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import { afterEach, expect, it, vi } from "vitest";
 import { RecommendedRecipes } from "../components/RecommendedRecipes";
@@ -41,7 +41,7 @@ it("loads authenticated cards in server order with detail links", async () => {
     card, { ...card, id: 13, title: "Soup" },
   ]);
   render(tree(user));
-  const links = await screen.findAllByRole("link");
+  const links = within(await screen.findByRole("list")).getAllByRole("link");
   expect(api.getRecommendedRecipes).toHaveBeenCalledWith(5);
   expect(links.map((link) => link.getAttribute("href"))).toEqual(["/recipes/12", "/recipes/13"]);
 });
@@ -52,7 +52,7 @@ it("shows pending then empty states without claiming a preference match", async 
   vi.spyOn(api, "getRecommendedRecipes").mockReturnValue(
     new Promise((done) => { resolve = done; }),
   );
-  render(tree(user));
+  render(tree({ ...user, culinary_preferences: ["Italian"] }));
   expect(screen.getByRole("status")).toHaveTextContent("Loading recommendations");
   await act(async () => resolve([]));
   expect(screen.getByText("No recommendations found for your preferences.")).toBeInTheDocument();
@@ -66,7 +66,8 @@ it("retries a failed request", async () => {
   render(tree(user));
   expect(await screen.findByRole("alert")).toHaveTextContent("Offline");
   fireEvent.click(screen.getByRole("button", { name: "Retry recommendations" }));
-  expect(await screen.findByRole("link")).toHaveAttribute("href", "/recipes/12");
+  const recipeLink = await screen.findByRole("link", { name: /Garden pasta/ });
+  expect(recipeLink).toHaveAttribute("href", "/recipes/12");
   expect(screen.queryByRole("alert")).not.toBeInTheDocument();
 });
 
@@ -78,7 +79,8 @@ it("ignores an old account response and clears cards on logout", async () => {
     .mockResolvedValueOnce([{ ...card, id: 20, title: "Other user's soup" }]);
   const view = render(tree(user));
   view.rerender(tree({ ...user, id: 99 }));
-  expect(await screen.findByRole("link")).toHaveAttribute("href", "/recipes/20");
+  const recipeLink = await screen.findByRole("link", { name: /Other user/ });
+  expect(recipeLink).toHaveAttribute("href", "/recipes/20");
   await act(async () => oldResult([card]));
   expect(screen.queryByText("Garden pasta")).not.toBeInTheDocument();
   view.rerender(tree(null));
@@ -106,4 +108,46 @@ it("sends the saved bearer token to the recommendations endpoint", async () => {
   const [url, options] = request.mock.calls[0];
   expect(String(url)).toContain("/api/v1/recipes/recommended?limit=5");
   expect(new Headers(options?.headers).get("Authorization")).toBe("Bearer saved-token");
+});
+
+// New users should understand why suggestions appear before selecting preferences.
+// These are server fallback results, not an excuse to label arbitrary recipes a match.
+it("labels empty-preference suggestions and links to profile setup", async () => {
+  vi.spyOn(api, "getRecommendedRecipes").mockResolvedValue([card]);
+  render(tree({ ...user, culinary_preferences: ["# "] }));
+  expect(await screen.findByText("Community picks")).toBeInTheDocument();
+  expect(screen.getByRole("link", { name: "Choose your preferences" }))
+    .toHaveAttribute("href", "/profile");
+  expect(screen.getByRole("link", { name: /Garden pasta/ })).toBeInTheDocument();
+});
+
+// An empty catalog and an unsuccessful preference match need different guidance.
+it("gives a new user an actionable empty-community state", async () => {
+  vi.spyOn(api, "getRecommendedRecipes").mockResolvedValue([]);
+  render(tree(user));
+  expect(await screen.findByText("The community is just getting started."))
+    .toBeInTheDocument();
+  expect(screen.getByRole("link", { name: "Share a recipe" }))
+    .toHaveAttribute("href", "/recipes/new");
+  expect(screen.queryByText("No recommendations found for your preferences."))
+    .not.toBeInTheDocument();
+});
+
+it("offers browsing for genuine nonmatches without claiming community fallback", async () => {
+  vi.spyOn(api, "getRecommendedRecipes").mockResolvedValue([]);
+  render(tree({ ...user, culinary_preferences: ["Italian"] }));
+  await screen.findByText("No recommendations found for your preferences.");
+  expect(screen.getByRole("link", { name: "Browse all recipes" }))
+    .toHaveAttribute("href", "/recipes");
+  expect(screen.queryByText("Community picks")).not.toBeInTheDocument();
+});
+
+// Service outages must stay distinguishable from a successful cold-start response.
+it("does not show cold-start guidance for a failed request", async () => {
+  vi.spyOn(api, "getRecommendedRecipes").mockRejectedValue(new Error("Offline"));
+  render(tree(user));
+  await screen.findByRole("alert");
+  expect(screen.queryByText("Community picks")).not.toBeInTheDocument();
+  expect(screen.queryByText("The community is just getting started."))
+    .not.toBeInTheDocument();
 });
