@@ -3,7 +3,7 @@ from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 
-from app.api import admin, auth, discovery, feed, posts, recipes, users
+from app.api import admin, auth, discovery, feed, grocery, posts, recipes, users
 from app.core.config import settings
 
 app = FastAPI(title="Simmer API", version="1.0.0")
@@ -30,6 +30,7 @@ app.include_router(admin.router)
 app.include_router(posts.router)
 app.include_router(posts.comments_router)
 app.include_router(feed.router)
+app.include_router(grocery.router)
 
 
 @app.get("/api/health")

@@ -308,12 +308,14 @@ def classify_department(ingredient_name: str) -> str:
         One of 'Produce', 'Meat & Seafood', 'Dairy & Refrigerated',
         'Pantry & Baking', or 'Other'.
     """
-    name_lower = ingredient_name.lower()
+    stemmed = stem_ingredient_name(ingredient_name)
+    targets = [stemmed, ingredient_name.lower()] if stemmed else [ingredient_name.lower()]
 
     for dept, keywords in DEPARTMENT_MAP.items():
         for keyword in keywords:
-            if re.search(r"\b" + re.escape(keyword) + r"\b", name_lower):
-                return dept
+            for target in targets:
+                if re.search(r"\b" + re.escape(keyword) + r"\b", target):
+                    return dept
 
     return "Other"
 
