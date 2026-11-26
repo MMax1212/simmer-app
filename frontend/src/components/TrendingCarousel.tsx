@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { Link } from "react-router-dom";
+import { DiscoveryRecipeCard } from "./DiscoveryRecipeCard";
 import { api, errorText, type TrendingRecipe } from "../services/api";
 
 const TRENDING_CARD_LIMIT = 5;
@@ -55,22 +55,7 @@ export function TrendingCarousel() {
           <ul ref={list} className="trending-list" aria-label="Trending recipes" tabIndex={0}>
             {recipes.map((recipe) => (
               <li key={recipe.id} className="trending-item">
-                <Link to={`/recipes/${recipe.id}`} className="recipe-card trending-card">
-                  {recipe.image_url ? (
-                    <img src={recipe.image_url} alt="" loading="lazy"
-                      onError={(event) => {
-                        // Hide unavailable photos without hiding the recipe's readable title.
-                        event.currentTarget.hidden = true;
-                      }} />
-                  ) : <span className="trending-placeholder">No photo yet</span>}
-                  <h3>{recipe.title}</h3>
-                  <p className="small muted">
-                    By {recipe.author_username} · {recipe.cook_time_mins}
-                    {" min cook"}</p>
-                  <p className="small">{recipe.cuisine ? `${recipe.cuisine} · ` : ""}
-                    {recipe.difficulty}</p>
-                  <p className="small">{recipe.likes_count} likes · {recipe.completed_count} cooked</p>
-                </Link>
+                <DiscoveryRecipeCard recipe={recipe} />
               </li>
             ))}
           </ul>

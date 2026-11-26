@@ -82,7 +82,7 @@ describe("authentication", () => {
     // Reusing the auth Response can consume its stream twice and mask RBAC behavior.
     fetchMock.mockImplementation(async (url) => {
       if (String(url).endsWith("/auth/me")) return respond(user);
-      if (String(url).includes("/recipes/trending")) return respond([]);
+      if (/\/recipes\/(trending|recommended)/.test(String(url))) return respond([]);
       return respond({ items: [], total: 0, limit: 20, offset: 0 });
     });
     open("/admin", true);

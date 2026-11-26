@@ -319,6 +319,10 @@ export const api = {
   getTrendingRecipes: (limit = 5) =>
     request<TrendingRecipe[]>(`/api/v1/recipes/trending?limit=${limit}`, {}, false),
 
+  // Private recommendations use the shared token and session-expiry handling.
+  getRecommendedRecipes: (limit = 5) =>
+    request<TrendingRecipe[]>(`/api/v1/recipes/recommended?limit=${limit}`),
+
   // --- US1.4: Recipe Creation & Update Endpoints ---
   createRecipe: (recipe: RecipeInput) =>
     request<Recipe>("/api/v1/recipes", { method: "POST", body: json(recipe) }),

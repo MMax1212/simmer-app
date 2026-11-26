@@ -133,3 +133,6 @@ th, td { text-align: left; padding: 0.55rem; border-bottom: 1px solid var(--bord
   border-radius: 0.5rem;
 }
 .trending-placeholder { display: grid; place-items: center; background: var(--bg); }
+
+/* Semantic recommendation lists share the existing responsive recipe grid. */
+.recommendation-list { list-style: none; padding: 0; margin: 1rem 0; }

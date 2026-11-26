@@ -68,7 +68,7 @@ beforeEach(() => {
 // Each endpoint gets a fresh response body; parallel discovery must not consume the feed's.
 function mockHomeRequests(feed: FeedResponse) {
   fetchMock.mockImplementation(async (url) => {
-    if (String(url).includes("/recipes/trending")) return respond([]);
+    if (/\/recipes\/(trending|recommended)/.test(String(url))) return respond([]);
     if (String(url).includes("/recipes")) {
       return respond({ items: [], total: 0, limit: 20, offset: 0 });
     }
