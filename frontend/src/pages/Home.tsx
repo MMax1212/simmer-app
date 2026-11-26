@@ -3,6 +3,8 @@ import { Link, useLocation } from "react-router-dom";
 import { useAuth } from "../context/auth";
 import { api, errorText, type FeedResponse, type RecipeSummary } from "../services/api";
 import { ErrorMessage } from "../components/ErrorMessage";
+import { RecommendedRecipes } from "../components/RecommendedRecipes";
+import { TrendingCarousel } from "../components/TrendingCarousel";
 import { FeedCard } from "../components/FeedCard";
 import { BookOpen } from "lucide-react";
 
@@ -120,6 +122,10 @@ export function Home() {
           )}
         </div>
       </section>
+
+      {/* Discovery loads independently so a failure cannot block the timeline. */}
+      <TrendingCarousel />
+      <RecommendedRecipes />
 
       {/* --- US3.5 Task 3.5.5: Tabbed Feed Navigation --- */}
       <section className="feed-section">

@@ -152,3 +152,12 @@ a repository administrator must configure the `Backend tests` and
 `Frontend tests and build` and `Browser integration tests` checks as required in the branch rules for `main`.
 
 See [Sprint 1 setup](docs/SPRINT1_SETUP.md) for database migration, browser tests, and admin instructions, and [acceptance coverage](docs/SPRINT1_STATUS.md) for requirements and tests.
+
+## Recipe discovery API (US4.3.2)
+
+- `GET /api/v1/recipes/trending?limit=10&offset=0` is public and ranks recipes with the Sprint 4 gravity formula: `(likes*2 + comments*3 + cooking_logs*5) / (recipe_age_hours+2)^1.5`.
+- `GET /api/v1/recipes/recommended?limit=10&offset=0` requires a bearer token and matches the signed-in user's stored culinary preferences.
+- Both return a JSON list of `TrendingRecipeOut` cards, with `trending_score`, `likes_count`, and `completed_count`. The default page size is 10, maximum 20; optional `offset` supports stable pagination for unchanged data and clock.
+- Empty preferences fall back to highest average cooking rating, then newest recipes. An installation with no engagement gets newest recipes in trending. Real preferences with no matches return an empty list.
+
+The formula is fixed by the Sprint 4 spec; obsolete `TRENDING_*` overrides are removed. See [API documentation](docs/API_README.md) for exact contracts and fallback ordering. This task adds no discovery UI or database migration.

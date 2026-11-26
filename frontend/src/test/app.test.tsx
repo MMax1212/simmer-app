@@ -78,7 +78,13 @@ describe("authentication", () => {
 
   // --- US1.2: Admin Account & RBAC (Unauthorized Access to Admin Route Blocked) ---
   it("prevents ordinary users opening the admin screen", async () => {
-    fetchMock.mockResolvedValue(respond(user));
+    // The redirect mounts Home, whose parallel requests need distinct valid bodies.
+    // Reusing the auth Response can consume its stream twice and mask RBAC behavior.
+    fetchMock.mockImplementation(async (url) => {
+      if (String(url).endsWith("/auth/me")) return respond(user);
+      if (/\/recipes\/(trending|recommended)/.test(String(url))) return respond([]);
+      return respond({ items: [], total: 0, limit: 20, offset: 0 });
+    });
     open("/admin", true);
     await waitFor(() => expect(window.location.pathname).toBe("/"));
     expect(fetchMock.mock.calls.every(([url]) => !String(url).includes("/admin/users"))).toBe(true);
