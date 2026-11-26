@@ -121,6 +121,9 @@ export interface SearchFilters {
   meal_type?: string;
   difficulty?: string;
   ingredient?: string;
+  dietary?: string;
+  occasion?: string;
+  max_time?: number;
   offset?: number;
   limit?: number;
 }
@@ -291,6 +294,9 @@ export const api = {
     if (filters.meal_type?.trim()) params.set("meal_type", filters.meal_type.trim());
     if (filters.difficulty?.trim()) params.set("difficulty", filters.difficulty.trim());
     if (filters.ingredient?.trim()) params.set("ingredient", filters.ingredient.trim());
+    if (filters.dietary?.trim()) params.set("dietary", filters.dietary.trim());
+    if (filters.occasion?.trim()) params.set("occasion", filters.occasion.trim());
+    if (filters.max_time !== undefined && filters.max_time !== null) params.set("max_time", String(filters.max_time));
     if (filters.offset !== undefined) params.set("offset", String(filters.offset));
     if (filters.limit !== undefined) params.set("limit", String(filters.limit));
     const queryString = params.toString();
