@@ -107,6 +107,26 @@ button:disabled { opacity: 0.6; cursor: wait; }
 .dietary-badge.badge-occasion { background: #f5f3ff; color: #6d28d9; border-color: #ddd6fe; }
 .dietary-badge.badge-general { background: var(--surface); color: var(--muted); border-color: var(--border); }
 
+/* US4.4.5: Quick-Filter Preset Cards */
+.quick-presets-section { margin-bottom: 1.5rem; }
+.quick-presets-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 0.75rem; }
+.quick-preset-card {
+  display: flex; align-items: flex-start; gap: 0.65rem; padding: 0.75rem; background: var(--surface);
+  border: 1px solid var(--border); border-radius: var(--radius); text-align: left; color: var(--text);
+  cursor: pointer; transition: all 0.15s ease;
+}
+.quick-preset-card:hover { border-color: var(--accent); background: var(--accent-soft); }
+.quick-preset-card.active { background: var(--accent-soft); border-color: var(--accent); color: var(--accent-hover); box-shadow: 0 0 0 1px var(--accent); }
+.quick-preset-icon-wrap {
+  display: flex; align-items: center; justify-content: center; width: 32px; height: 32px; border-radius: 8px;
+  background: var(--surface); color: var(--accent); flex-shrink: 0; border: 1px solid var(--border);
+}
+.quick-preset-card.active .quick-preset-icon-wrap { background: var(--accent); color: #fff; border-color: var(--accent); }
+.quick-preset-content { display: flex; flex-direction: column; gap: 0.15rem; min-width: 0; }
+.quick-preset-title { font-weight: 600; font-size: 0.88rem; line-height: 1.2; }
+.quick-preset-desc { font-size: 0.72rem; color: var(--muted); line-height: 1.3; }
+.quick-preset-card.active .quick-preset-desc { color: var(--accent-hover); }
+
 .table-wrap { overflow-x: auto; }
 table { width: 100%; border-collapse: collapse; font-size: 0.92rem; }
 th, td { text-align: left; padding: 0.55rem; border-bottom: 1px solid var(--border); }
