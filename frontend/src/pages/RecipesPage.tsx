@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
 import { SlidersHorizontal } from "lucide-react";
-import { ErrorMessage } from "../components/ErrorMessage";
 import { DietaryFilterDrawer } from "../components/DietaryFilterDrawer";
+import { ErrorMessage } from "../components/ErrorMessage";
+import { RecipeCard } from "../components/RecipeCard";
 import { api, errorText, type RecipeSummary } from "../services/api";
 
 const CATEGORIES = ["All", "Italian", "Mexican", "Asian", "American", "Mediterranean", "other"];
@@ -153,13 +153,7 @@ export function RecipesPage() {
       {recipes && recipes.length > 0 && (
         <div className="recipe-grid">
           {recipes.map((recipe) => (
-            <Link to={"/recipes/" + recipe.id} key={recipe.id} className="recipe-card">
-              <h3>{recipe.title}</h3>
-              {recipe.cuisine && <span className="small muted">Cuisine: {recipe.cuisine}</span>}
-              <p className="small muted">
-                By {recipe.author_username} · {recipe.cook_time_mins} min · {recipe.difficulty}
-              </p>
-            </Link>
+            <RecipeCard key={recipe.id} recipe={recipe} />
           ))}
         </div>
       )}
