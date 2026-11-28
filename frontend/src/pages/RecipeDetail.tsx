@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
+import { AddToGroceryModal } from "../components/AddToGroceryModal";
 import { ErrorMessage } from "../components/ErrorMessage";
 import { FollowButton } from "../components/FollowButton";
 import { RecipeBadges } from "../components/RecipeBadges";
@@ -15,6 +16,9 @@ export function RecipeDetail() {
   // Cooking progress is local UI state, not a change to the saved recipe.
   const [checked, setChecked] = useState<number[]>([]);
   const [error, setError] = useState<string | null>(null);
+
+  // --- US4.2 Task 4.2.4: Grocery List Modal State ---
+  const [showGroceryModal, setShowGroceryModal] = useState(false);
 
   // --- US2.3 Task 2.3.3: "I Cooked This!" Modal State ---
   const [showLogModal, setShowLogModal] = useState(false);
@@ -125,8 +129,15 @@ export function RecipeDetail() {
         </p>
       )}
 
-      {user && (
-        <div className="row" style={{ marginTop: "1rem" }}>
+      <div className="row" style={{ marginTop: "1rem" }}>
+        <button
+          type="button"
+          className="button secondary"
+          onClick={() => setShowGroceryModal(true)}
+        >
+          + Add to Grocery List
+        </button>
+        {user && (
           <button
             type="button"
             className="button secondary"
@@ -137,14 +148,14 @@ export function RecipeDetail() {
           >
             I Cooked This
           </button>
-          {canEdit && (
-            <>
-              <Link to={`/recipes/${recipe.id}/edit`} className="button">Edit</Link>
-              <button className="danger" onClick={onDelete}>Delete</button>
-            </>
-          )}
-        </div>
-      )}
+        )}
+        {canEdit && (
+          <>
+            <Link to={`/recipes/${recipe.id}/edit`} className="button">Edit</Link>
+            <button className="danger" onClick={onDelete}>Delete</button>
+          </>
+        )}
+      </div>
 
       {showLogModal && (
         <div role="dialog" aria-label="I Cooked This" className="modal-backdrop">
@@ -199,6 +210,13 @@ export function RecipeDetail() {
           </div>
         </div>
       )}
+
+      <AddToGroceryModal
+        isOpen={showGroceryModal}
+        onClose={() => setShowGroceryModal(false)}
+        initialRecipeId={recipe.id}
+        initialRecipeTitle={recipe.title}
+      />
     </article>
   );
 }
