@@ -3,6 +3,7 @@ import { Navbar } from "./components/Navbar";
 import { ProtectedRoute } from "./components/ProtectedRoute";
 import { AuthProvider } from "./context/AuthProvider";
 import { Admin } from "./pages/Admin";
+import { GroceryPage } from "./pages/GroceryPage";
 import { Home } from "./pages/Home";
 import { Login } from "./pages/Login";
 import { MyRecipes } from "./pages/MyRecipes";
@@ -30,6 +31,8 @@ export default function App() {
             <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
             {/* US1.5: Personal Recipe Tab ("My Recipes") */}
             <Route path="/recipes/my-recipes" element={<ProtectedRoute><MyRecipes /></ProtectedRoute>} />
+            {/* US4.2: Grocery Checklist Generator */}
+            <Route path="/grocery" element={<ProtectedRoute><GroceryPage /></ProtectedRoute>} />
             {/* US1.4: Recipe Creation & Saving */}
             <Route path="/recipes/new" element={<ProtectedRoute><RecipeForm /></ProtectedRoute>} />
             <Route path="/recipes/:id/edit" element={<ProtectedRoute><RecipeForm /></ProtectedRoute>} />
