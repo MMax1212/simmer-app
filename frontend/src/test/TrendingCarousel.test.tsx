@@ -104,3 +104,31 @@ it("uses the public list endpoint without sending a saved bearer token", async (
     vi.unstubAllGlobals();
   }
 });
+
+// Trending only returns zero-score cards when the backend selects global cold start.
+// Mixed/positive scores must not be relabeled just because a page has fewer than five cards.
+it("labels successful zero-score cards as fresh picks", async () => {
+  vi.spyOn(api, "getTrendingRecipes").mockResolvedValue([{ ...card, trending_score: 0 }]);
+  openCarousel();
+  expect(await screen.findByText("Fresh picks")).toBeInTheDocument();
+  expect(screen.getByRole("link", { name: /Garden pasta/ })).toBeInTheDocument();
+});
+
+it("does not label an active but short trending page as fallback", async () => {
+  vi.spyOn(api, "getTrendingRecipes").mockResolvedValue([card]);
+  openCarousel();
+  await screen.findByRole("list");
+  expect(screen.queryByText("Fresh picks")).not.toBeInTheDocument();
+});
+
+// A healthy empty installation needs a path forward, not an error/retry loop.
+it("offers browsing and sharing when no trending or fallback recipes exist", async () => {
+  vi.spyOn(api, "getTrendingRecipes").mockResolvedValue([]);
+  openCarousel();
+  await screen.findByText("No recipes to discover yet.");
+  expect(screen.getByRole("link", { name: "Browse all recipes" }))
+    .toHaveAttribute("href", "/recipes");
+  expect(screen.getByRole("link", { name: "Share a recipe" }))
+    .toHaveAttribute("href", "/recipes/new");
+  expect(screen.queryByRole("alert")).not.toBeInTheDocument();
+});

@@ -1,4 +1,6 @@
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import { DiscoveryEmptyState } from "./DiscoveryEmptyState";
 import { useAuth } from "../context/auth";
 import { api, errorText, type TrendingRecipe } from "../services/api";
 import { DiscoveryRecipeCard } from "./DiscoveryRecipeCard";
@@ -13,10 +15,14 @@ export function RecommendedRecipes() {
   // Key the request state to its profile, not just its user ID. This synchronously
   // removes old cards on preference edits/account changes before the next effect runs.
   const profileKey = JSON.stringify([user.id, [...user.culinary_preferences].sort()]);
-  return <RecommendationResults key={profileKey} />;
+  // Match the backend's definition of usable preferences, including hashtag-only input.
+  const hasPreferences = user.culinary_preferences.some((value) =>
+    value.trim().replace(/^#+/, "").trim().length > 0
+  );
+  return <RecommendationResults key={profileKey} hasPreferences={hasPreferences} />;
 }
 
-function RecommendationResults() {
+function RecommendationResults({ hasPreferences }: { hasPreferences: boolean }) {
   const [recipes, setRecipes] = useState<TrendingRecipe[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -49,8 +55,18 @@ function RecommendationResults() {
           </button>
         </div>
       )}
+      {!loading && !error && !hasPreferences && (
+        <div className="discovery-guidance">
+          {/* Empty preferences invoke rated/newest fallback, not personalized matching. */}
+          {recipes.length > 0 && <span className="chip">Community picks</span>}
+          <p>Choose your favorite cuisines and interests to personalize these suggestions.</p>
+          <Link to="/profile">Choose your preferences</Link>
+        </div>
+      )}
       {!loading && !error && recipes.length === 0 && (
-        <p>No recommendations found for your preferences.</p>
+        <DiscoveryEmptyState message={hasPreferences
+          ? "No recommendations found for your preferences."
+          : "The community is just getting started."} />
       )}
       {!loading && !error && recipes.length > 0 && (
         <ul className="recipe-grid recommendation-list" aria-label="Recommended recipes">
