@@ -20,6 +20,8 @@ export function Navbar() {
           <>
             {/* US1.5: Personal Recipe Tab Navigation */}
             <NavLink to="/recipes/my-recipes">My Recipes</NavLink>
+            {/* US4.2: Grocery Checklist Navigation */}
+            <NavLink to="/grocery">Grocery</NavLink>
             {/* US1.4: Recipe Creation Navigation */}
             <NavLink to="/recipes/new">New Recipe</NavLink>
             {/* US1.3: User Profile Navigation */}
