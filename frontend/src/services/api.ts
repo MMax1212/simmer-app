@@ -142,6 +142,47 @@ export interface SearchFilters {
   limit?: number;
 }
 
+// --- US4.2: Grocery Checklist Interfaces ---
+export interface GroceryItem {
+  id: number;
+  grocery_list_id: number;
+  name: string;
+  amount: number;
+  unit: string;
+  department: string;
+  is_checked: boolean;
+  source_recipe_id?: number | null;
+  created_at: string;
+}
+
+export interface GroceryList {
+  id: number;
+  user_id: number;
+  title: string;
+  items: GroceryItem[];
+  created_at: string;
+  updated_at: string;
+}
+
+export interface GroceryListGeneratePayload {
+  recipe_ids: number[];
+  title?: string;
+}
+
+export interface GroceryItemCreatePayload {
+  name: string;
+  amount: number;
+  unit: string;
+  department?: string;
+  source_recipe_id?: number | null;
+}
+
+export interface GroceryItemUpdatePayload {
+  is_checked?: boolean;
+  amount?: number;
+  name?: string;
+}
+
 // --- US3.3: Likes & Comments (Like Toggle Contract) ---
 export interface LikeToggleResponse {
   liked: boolean;
@@ -388,6 +429,29 @@ export const api = {
     params.set("offset", String(offset));
     return request<UserSearchResponse>("/api/v1/users/search?" + params.toString(), {}, true);
   },
+
+  // --- US4.2: Grocery Checklist Endpoints ---
+  generateGroceryList: (payload: GroceryListGeneratePayload) =>
+    request<GroceryList>("/api/v1/grocery-list/generate", {
+      method: "POST",
+      body: json(payload),
+    }),
+  getGroceryList: () =>
+    request<GroceryList>("/api/v1/grocery-list"),
+  updateGroceryItem: (id: number, payload: GroceryItemUpdatePayload) =>
+    request<GroceryItem>(`/api/v1/grocery-items/${id}`, {
+      method: "PATCH",
+      body: json(payload),
+    }),
+  addGroceryItem: (payload: GroceryItemCreatePayload) =>
+    request<GroceryItem>("/api/v1/grocery-items", {
+      method: "POST",
+      body: json(payload),
+    }),
+  deleteGroceryItem: (id: number) =>
+    request<void>(`/api/v1/grocery-items/${id}`, {
+      method: "DELETE",
+    }),
 };
 
 export const togglePostLike = (postId: number) => api.togglePostLike(postId);
