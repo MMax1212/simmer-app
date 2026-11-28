@@ -39,9 +39,12 @@ h2 { font-size: 1.15rem; margin: 1.25rem 0 0.5rem; }
 .hero h1 { font-size: 2.2rem; }
 
 label { display: flex; flex-direction: column; gap: 0.3rem; font-weight: 500; font-size: 0.92rem; }
-input, textarea, select {
+input:not([type="checkbox"]):not([type="radio"]), textarea, select {
   font: inherit; font-weight: 400; padding: 0.55rem 0.7rem; border: 1px solid var(--border);
   border-radius: 8px; background: #fff; width: 100%;
+}
+input[type="checkbox"], input[type="radio"] {
+  width: auto;
 }
 input:focus, textarea:focus, select:focus { outline: 2px solid var(--accent-soft); border-color: var(--accent); }
 fieldset { border: 1px solid var(--border); border-radius: var(--radius); padding: 0.9rem; display: flex; flex-direction: column; gap: 0.6rem; }
@@ -148,3 +151,31 @@ th, td { text-align: left; padding: 0.55rem; border-bottom: 1px solid var(--bord
 
 /* Semantic recommendation lists share the existing responsive recipe grid. */
 .recommendation-list { list-style: none; padding: 0; margin: 1rem 0; }
+
+/* US4.2: Grocery multi-recipe selector */
+.recipe-select-row {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  width: 100% !important;
+}
+.recipe-checkbox {
+  width: 1.15rem !important;
+  height: 1.15rem !important;
+  min-width: 1.15rem !important;
+  min-height: 1.15rem !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  flex-shrink: 0 !important;
+}
+.modal-close-btn {
+  background: transparent !important;
+  border: none !important;
+  color: #64748b !important;
+  padding: 0.25rem !important;
+}
+.modal-close-btn:hover {
+  background: #f1f5f9 !important;
+  color: #1e293b !important;
+}

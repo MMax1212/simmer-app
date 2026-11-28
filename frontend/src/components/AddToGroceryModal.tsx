@@ -130,7 +130,7 @@ export function AddToGroceryModal({
       aria-label="Add to Grocery List"
       className="modal-backdrop fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm p-4"
     >
-      <div className="card modal-content bg-white w-full max-w-lg rounded-xl shadow-xl border border-slate-200 overflow-hidden flex flex-col max-h-[90vh]">
+      <div className="modal-content bg-white w-full max-w-lg rounded-xl shadow-xl border border-slate-200 overflow-hidden flex flex-col max-h-[90vh]">
         {/* Header */}
         <div className="flex items-center justify-between p-4 border-b border-slate-100">
           <div className="flex items-center gap-2">
@@ -141,7 +141,7 @@ export function AddToGroceryModal({
             type="button"
             onClick={onClose}
             aria-label="Close modal"
-            className="p-1 rounded-lg hover:bg-slate-100 text-slate-500 transition-colors"
+            className="modal-close-btn rounded-lg transition-colors cursor-pointer"
           >
             <X className="w-5 h-5" />
           </button>
@@ -195,22 +195,51 @@ export function AddToGroceryModal({
                   return (
                     <label
                       key={r.id}
-                      className={`flex items-center justify-between p-2 rounded-lg cursor-pointer transition-colors text-sm border ${
+                      className={`recipe-select-row p-2.5 rounded-lg cursor-pointer transition-colors text-sm border ${
                         isChecked
                           ? "bg-amber-50 border-amber-300 text-amber-950 font-medium"
                           : "bg-white border-slate-200 hover:bg-slate-50 text-slate-800"
                       }`}
+                      style={{
+                        display: "flex",
+                        flexDirection: "row",
+                        alignItems: "center",
+                        justifyContent: "space-between",
+                        width: "100%",
+                      }}
                     >
-                      <div className="flex items-center gap-2.5 min-w-0">
+                      <div
+                        className="flex flex-row items-center gap-2.5 min-w-0 flex-1 mr-3"
+                        style={{
+                          display: "flex",
+                          flexDirection: "row",
+                          alignItems: "center",
+                          minWidth: 0,
+                          flex: 1,
+                        }}
+                      >
                         <input
                           type="checkbox"
                           checked={isChecked}
                           onChange={() => toggleRecipe(r.id)}
-                          className="rounded border-slate-300 text-amber-600 focus:ring-amber-500"
+                          className="recipe-checkbox rounded border-slate-300 text-amber-600 focus:ring-amber-500"
                         />
-                        <span className="truncate">{r.title}</span>
+                        <span
+                          className="truncate block font-medium"
+                          title={r.title}
+                          style={{
+                            overflow: "hidden",
+                            textOverflow: "ellipsis",
+                            whiteSpace: "nowrap",
+                          }}
+                        >
+                          {r.title}
+                        </span>
                       </div>
-                      <span className="text-xs text-slate-500 ml-2 whitespace-nowrap">
+                      <span
+                        className="text-xs text-slate-500 whitespace-nowrap shrink-0"
+                        style={{ whiteSpace: "nowrap", flexShrink: 0 }}
+                      >
                         {r.cook_time_mins}m · {r.difficulty}
                       </span>
                     </label>
@@ -220,18 +249,28 @@ export function AddToGroceryModal({
             )}
           </div>
 
-          <div className="pt-2 flex items-center justify-end gap-2 border-t border-slate-100">
+          <div className="pt-3 flex items-center justify-end gap-2 border-t border-slate-100">
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 text-sm text-slate-600 hover:text-slate-800 rounded-lg hover:bg-slate-100 transition-colors"
+              className="px-4 py-2 text-sm font-medium rounded-lg transition-colors cursor-pointer"
+              style={{
+                background: "#f1f5f9",
+                borderColor: "#cbd5e1",
+                color: "#334155",
+              }}
             >
               Cancel
             </button>
             <button
               type="submit"
               disabled={selectedIds.length === 0 || isSubmitting}
-              className="px-4 py-2 text-sm font-medium text-white bg-amber-600 hover:bg-amber-700 disabled:opacity-50 disabled:cursor-not-allowed rounded-lg shadow-sm transition-colors flex items-center gap-1.5"
+              className="px-4 py-2 text-sm font-medium text-white rounded-lg shadow-sm transition-colors flex items-center gap-1.5 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+              style={{
+                background: "#d97706",
+                borderColor: "#d97706",
+                color: "#ffffff",
+              }}
             >
               {isSubmitting ? "Generating…" : "Generate Shopping List"}
             </button>
