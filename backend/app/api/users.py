@@ -1,5 +1,5 @@
 from fastapi import APIRouter, HTTPException, Query
-from sqlalchemy import func, select
+from sqlalchemy import case, func, select
 
 from app.api.deps import CurrentUser, DbSession, OptionalUser
 from app.models import CompletedRecipe, Post, Recipe, SavedPost, User, UserFollow
@@ -141,6 +141,90 @@ def get_follow_status(user_id: int, db: DbSession, current_user: OptionalUser = 
         followers_count=followers_count,
         following_count=following_count,
     )
+
+
+# --- US4.1 Task 4.1.5: Suggested Cooks to Follow Endpoint ---
+# Placed before /{username} so /suggested is not captured as a dynamic username
+@router.get("/suggested", response_model=list[UserSearchResultItem])
+def get_suggested_cooks(
+    db: DbSession,
+    limit: int = Query(10, ge=1, le=50, description="Maximum number of suggested cooks"),
+    current_user: OptionalUser = None,
+):
+    excluded_ids: set[int] = set()
+    followed_ids: set[int] = set()
+
+    if current_user is not None:
+        excluded_ids.add(current_user.id)
+        already_followed = db.scalars(
+            select(UserFollow.following_id).where(UserFollow.follower_id == current_user.id)
+        ).all()
+        followed_ids = set(already_followed)
+        excluded_ids.update(followed_ids)
+
+    base_filter = [User.is_active.is_(True)]
+    if excluded_ids:
+        base_filter.append(User.id.not_in(excluded_ids))
+
+    if followed_ids:
+        mutual_score = func.coalesce(
+            func.sum(case((UserFollow.follower_id.in_(followed_ids), 1), else_=0)), 0
+        ).label("mutual_score")
+        total_followers = func.count(UserFollow.follower_id).label("total_followers")
+
+        stmt = (
+            select(User)
+            .outerjoin(UserFollow, User.id == UserFollow.following_id)
+            .where(*base_filter)
+            .group_by(User.id)
+            .order_by(mutual_score.desc(), total_followers.desc(), User.username.asc())
+            .limit(limit)
+        )
+    else:
+        total_followers = func.count(UserFollow.follower_id).label("total_followers")
+        stmt = (
+            select(User)
+            .outerjoin(UserFollow, User.id == UserFollow.following_id)
+            .where(*base_filter)
+            .group_by(User.id)
+            .order_by(total_followers.desc(), User.username.asc())
+            .limit(limit)
+        )
+
+    users = db.scalars(stmt).all()
+    if not users:
+        return []
+
+    user_ids = [u.id for u in users]
+
+    follower_counts_rows = db.execute(
+        select(UserFollow.following_id, func.count(UserFollow.follower_id))
+        .where(UserFollow.following_id.in_(user_ids))
+        .group_by(UserFollow.following_id)
+    ).all()
+    follower_counts_map = dict(follower_counts_rows)
+
+    following_counts_rows = db.execute(
+        select(UserFollow.follower_id, func.count(UserFollow.following_id))
+        .where(UserFollow.follower_id.in_(user_ids))
+        .group_by(UserFollow.follower_id)
+    ).all()
+    following_counts_map = dict(following_counts_rows)
+
+    return [
+        UserSearchResultItem(
+            id=u.id,
+            username=u.username,
+            bio=u.bio,
+            avatar_url=u.avatar_url,
+            culinary_preferences=u.culinary_preferences or [],
+            created_at=u.created_at,
+            is_following=False,
+            followers_count=follower_counts_map.get(u.id, 0),
+            following_count=following_counts_map.get(u.id, 0),
+        )
+        for u in users
+    ]
 
 
 # --- US4.1 Task 4.1.1 & 4.1.2: User Search Endpoint ---

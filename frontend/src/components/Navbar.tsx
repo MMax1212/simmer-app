@@ -15,6 +15,8 @@ export function Navbar() {
       <nav>
         {/* US2.2: Recipe Search & Discovery Navigation */}
         <NavLink to="/recipes">Explore</NavLink>
+        {/* US4.1: Friend Search & Network Navigation */}
+        <NavLink to="/friends">Find Friends</NavLink>
 
         {user ? (
           <>

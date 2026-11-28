@@ -5,6 +5,7 @@ import { api, errorText, type FeedResponse, type RecipeSummary, type SearchFilte
 import { ErrorMessage } from "../components/ErrorMessage";
 import { RecommendedRecipes } from "../components/RecommendedRecipes";
 import { TrendingCarousel } from "../components/TrendingCarousel";
+import { SuggestedCooksCarousel } from "../components/SuggestedCooksCarousel";
 import { FeedCard } from "../components/FeedCard";
 import { RecipeCard } from "../components/RecipeCard";
 import {
@@ -139,6 +140,7 @@ export function Home() {
       {/* Discovery loads independently so a failure cannot block the timeline. */}
       <TrendingCarousel />
       <RecommendedRecipes />
+      <SuggestedCooksCarousel />
 
       {/* --- US3.5 Task 3.5.5: Tabbed Feed Navigation --- */}
       <section className="feed-section">
