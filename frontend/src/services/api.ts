@@ -388,6 +388,8 @@ export const api = {
     params.set("offset", String(offset));
     return request<UserSearchResponse>("/api/v1/users/search?" + params.toString(), {}, true);
   },
+  getSuggestedCooks: (limit = 10) =>
+    request<UserSearchResultItem[]>("/api/v1/users/suggested?limit=" + limit, {}, true),
 };
 
 export const togglePostLike = (postId: number) => api.togglePostLike(postId);
@@ -397,5 +399,6 @@ export const toggleFollow = (userId: number) => api.toggleFollow(userId);
 export const getFollowStatus = (userId: number) => api.getFollowStatus(userId);
 export const getFeed = (mode: "following" | "global" = "following", offset = 0, limit = 20) => api.getFeed(mode, offset, limit);
 export const searchUsers = (q = "", limit = 20, offset = 0) => api.searchUsers(q, limit, offset);
+export const getSuggestedCooks = (limit = 10) => api.getSuggestedCooks(limit);
 
 export const errorText = (e: unknown) => e instanceof Error ? e.message : "Something went wrong";
