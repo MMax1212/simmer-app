@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import { SlidersHorizontal } from "lucide-react";
 import { DietaryFilterDrawer } from "../components/DietaryFilterDrawer";
 import { ErrorMessage } from "../components/ErrorMessage";
@@ -8,11 +9,24 @@ import { api, errorText, type RecipeSummary } from "../services/api";
 const CATEGORIES = ["All", "Italian", "Mexican", "Asian", "American", "Mediterranean", "other"];
 
 export function RecipesPage() {
-  const [query, setQuery] = useState("");
-  const [selectedCuisine, setSelectedCuisine] = useState<string | null>(null);
-  const [selectedDietary, setSelectedDietary] = useState<string[]>([]);
-  const [selectedOccasion, setSelectedOccasion] = useState<string | null>(null);
-  const [selectedMaxTime, setSelectedMaxTime] = useState<number | null>(null);
+  const [searchParams] = useSearchParams();
+
+  const [query, setQuery] = useState(() => searchParams.get("q") || "");
+  const [selectedCuisine, setSelectedCuisine] = useState<string | null>(
+    () => searchParams.get("cuisine") || null
+  );
+  const [selectedDietary, setSelectedDietary] = useState<string[]>(() => {
+    const d = searchParams.get("dietary");
+    return d ? d.split(",").map((s) => (s.startsWith("#") ? s : `#${s.trim()}`)) : [];
+  });
+  const [selectedOccasion, setSelectedOccasion] = useState<string | null>(() => {
+    const o = searchParams.get("occasion");
+    return o ? (o.startsWith("#") ? o : `#${o.trim()}`) : null;
+  });
+  const [selectedMaxTime, setSelectedMaxTime] = useState<number | null>(() => {
+    const m = searchParams.get("max_time");
+    return m ? Number(m) : null;
+  });
   const [isFilterDrawerOpen, setIsFilterDrawerOpen] = useState(false);
   const [recipes, setRecipes] = useState<RecipeSummary[] | null>(null);
   const [loading, setLoading] = useState(false);
