@@ -11,6 +11,7 @@ import { RecipeDetail } from "./pages/RecipeDetail";
 import { RecipeForm } from "./pages/RecipeForm";
 import { Register } from "./pages/Register";
 import { RecipesPage } from "./pages/RecipesPage";
+import { FindFriends } from "./pages/FindFriends";
 import "./styles.css";
 
 export default function App() {
@@ -23,6 +24,8 @@ export default function App() {
             <Route path="/" element={<Home />} />
             {/* US2.2: Recipe Search & Discovery */}
             <Route path="/recipes" element={<RecipesPage />} />
+            {/* US4.1: Friend Search & Network Directory */}
+            <Route path="/friends" element={<FindFriends />} />
             {/* US1.1: User Account Registration & Login */}
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
