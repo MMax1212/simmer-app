@@ -1,9 +1,16 @@
 import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useAuth } from "../context/auth";
-import { api, errorText, type FeedResponse, type RecipeSummary } from "../services/api";
+import { api, errorText, type FeedResponse, type RecipeSummary, type SearchFilters } from "../services/api";
 import { ErrorMessage } from "../components/ErrorMessage";
+import { RecommendedRecipes } from "../components/RecommendedRecipes";
+import { TrendingCarousel } from "../components/TrendingCarousel";
 import { FeedCard } from "../components/FeedCard";
+import { RecipeCard } from "../components/RecipeCard";
+import {
+  QuickFilterPresets,
+  QUICK_FILTER_PRESETS,
+} from "../components/QuickFilterPresets";
 import { BookOpen } from "lucide-react";
 
 // Filter pills configuration
@@ -65,6 +72,7 @@ export function Home() {
   }, [feedMode, user]);
 
   // Recipe discovery state
+  const [selectedPresetId, setSelectedPresetId] = useState<string | null>(null);
   const [activeFilter, setActiveFilter] = useState({ type: "all", value: "" });
   const [recipes, setRecipes] = useState<RecipeSummary[] | null>(null);
   const [recipesLoading, setRecipesLoading] = useState(true);
@@ -75,14 +83,21 @@ export function Home() {
     let active = true;
     setRecipesLoading(true);
     setRecipesError(null);
-    const filterParam =
-      activeFilter.type === "cuisine"
-        ? { cuisine: activeFilter.value }
-        : activeFilter.type === "meal_type"
-        ? { meal_type: activeFilter.value }
-        : activeFilter.type === "tag"
-        ? { tag: activeFilter.value }
-        : {};
+
+    let filterParam: SearchFilters = {};
+    if (selectedPresetId) {
+      const preset = QUICK_FILTER_PRESETS.find((p) => p.id === selectedPresetId);
+      if (preset) {
+        filterParam = { ...preset.filters };
+      }
+    } else if (activeFilter.type === "cuisine") {
+      filterParam = { cuisine: activeFilter.value };
+    } else if (activeFilter.type === "meal_type") {
+      filterParam = { meal_type: activeFilter.value };
+    } else if (activeFilter.type === "tag") {
+      filterParam = { tag: activeFilter.value };
+    }
+
     api
       .searchRecipes(filterParam)
       .then((res) => {
@@ -97,7 +112,7 @@ export function Home() {
     return () => {
       active = false;
     };
-  }, [activeFilter]);
+  }, [activeFilter, selectedPresetId]);
 
   return (
     <div className="flex flex-col gap-6">
@@ -120,6 +135,10 @@ export function Home() {
           )}
         </div>
       </section>
+
+      {/* Discovery loads independently so a failure cannot block the timeline. */}
+      <TrendingCarousel />
+      <RecommendedRecipes />
 
       {/* --- US3.5 Task 3.5.5: Tabbed Feed Navigation --- */}
       <section className="feed-section">
@@ -210,6 +229,17 @@ export function Home() {
         )}
       </section>
 
+      {/* --- US4.4.5: Quick-Filter Preset Cards --- */}
+      <QuickFilterPresets
+        selectedPresetId={selectedPresetId}
+        onSelectPreset={(preset) => {
+          setSelectedPresetId(preset ? preset.id : null);
+          if (preset) {
+            setActiveFilter({ type: "all", value: "" });
+          }
+        }}
+      />
+
       {/* --- US2.1 (Task 2.1.4): Category Filter Pills Bar --- */}
       <section className="card">
         <div className="flex flex-col gap-2">
@@ -217,6 +247,7 @@ export function Home() {
           <div className="chips" role="group" aria-label="Category and tag filter">
             {FILTER_PRESETS.map((preset) => {
               const isSelected =
+                !selectedPresetId &&
                 activeFilter.type === preset.type &&
                 activeFilter.value.toLowerCase() === preset.value.toLowerCase();
               return (
@@ -224,13 +255,14 @@ export function Home() {
                   key={preset.label}
                   type="button"
                   className={`chip ${isSelected ? "on" : ""}`}
-                  onClick={() =>
+                  onClick={() => {
+                    setSelectedPresetId(null);
                     setActiveFilter(
                       isSelected && preset.type !== "all"
                         ? { type: "all", value: "" }
                         : { type: preset.type, value: preset.value }
-                    )
-                  }
+                    );
+                  }}
                 >
                   {preset.label}
                   {isSelected && preset.type !== "all" && <span className="ml-1 font-bold">×</span>}
@@ -253,12 +285,15 @@ export function Home() {
           >
             <BookOpen size={48} className="text-stone-400" />
             <h3 className="text-lg font-semibold">No recipes found</h3>
-            <p className="muted">No recipes match the selected category filter.</p>
-            {activeFilter.type !== "all" && (
+            <p className="muted">No recipes match the selected filter criteria.</p>
+            {(activeFilter.type !== "all" || selectedPresetId) && (
               <button
                 type="button"
                 className="secondary small mt-2"
-                onClick={() => setActiveFilter({ type: "all", value: "" })}
+                onClick={() => {
+                  setSelectedPresetId(null);
+                  setActiveFilter({ type: "all", value: "" });
+                }}
               >
                 Reset Filter
               </button>
@@ -275,26 +310,7 @@ export function Home() {
             }}
           >
             {recipes.map((r) => (
-              <Link to={`/recipes/${r.id}`} key={r.id} className="recipe-card">
-                <h3>{r.title}</h3>
-                <div className="row text-xs gap-1.5 my-1">
-                  {r.cuisine && <span className="chip text-xs py-0.5 px-2">{r.cuisine}</span>}
-                  {r.meal_type && <span className="chip text-xs py-0.5 px-2">{r.meal_type}</span>}
-                  <span className="muted">· {r.difficulty}</span>
-                </div>
-                {r.tags && r.tags.length > 0 && (
-                  <div className="row gap-1 my-1">
-                    {r.tags.map((t) => (
-                      <span key={t} className="chip on text-xs py-0.5 px-2 font-semibold">
-                        {t}
-                      </span>
-                    ))}
-                  </div>
-                )}
-                <p className="small muted">
-                  By {r.author_username} · {r.cook_time_mins} min cook
-                </p>
-              </Link>
+              <RecipeCard key={r.id} recipe={r} />
             ))}
           </div>
         )}

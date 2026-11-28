@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { ErrorMessage } from "../components/ErrorMessage";
 import { FollowButton } from "../components/FollowButton";
+import { RecipeBadges } from "../components/RecipeBadges";
 import { useAuth } from "../context/auth";
 import { api, errorText, type Recipe } from "../services/api";
 
@@ -94,13 +95,7 @@ export function RecipeDetail() {
       {recipe.image_url && <img src={recipe.image_url} alt={recipe.title} className="max-h-80 w-full rounded-lg object-cover" />}
       <p className="muted">{[recipe.cuisine, recipe.meal_type, recipe.difficulty].filter(Boolean).join(" · ")}</p>
       {recipe.tags && recipe.tags.length > 0 && (
-        <div className="chips my-2">
-          {recipe.tags.map((t) => (
-            <span key={t} className="chip on font-semibold">
-              {t}
-            </span>
-          ))}
-        </div>
+        <RecipeBadges tags={recipe.tags} className="my-2" ariaLabel="Recipe dietary and occasion tags" />
       )}
       {recipe.description && <p>{recipe.description}</p>}
       <ul className="meta">

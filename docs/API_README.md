@@ -319,3 +319,57 @@ All external endpoints follow standard **RESTful HTTP design principles**:
     "version": "1.0.0"
   }
   ```
+
+## US4.3.2 - Recipe discovery endpoints
+
+### Shared response and pagination
+
+Both endpoints return `List[TrendingRecipeOut]` with HTTP 200. Each card exposes exactly
+`id`, `title`, `image_url`, `cuisine`, `difficulty`, `cook_time_mins`, `author_username`,
+`trending_score`, `likes_count`, and `completed_count`. No user credentials or private
+profile fields are serialized. Empty results are `[]`, including offsets beyond the list.
+
+Query parameters: `limit` (integer 1–20, default 10), `offset` (integer >=0, default 0).
+Invalid pagination returns 422. Named discovery routes precede `/recipes/{recipe_id}`.
+The optional offset is a compatible extension to the spec's limit-only examples.
+Pages are deterministic for an unchanged clock and dataset, not frozen across requests.
+
+### GET /api/v1/recipes/trending
+
+Public. Positive-score recipes are ordered by descending gravity score, then ascending ID:
+
+`(likes * 2 + comments * 3 + cooking_logs * 5) / (hours_since_recipe_creation + 2)^1.5`
+
+Counts aggregate all engagement through the UTC request clock, across recipe-linked posts
+and cooking logs. There is no event-age lookback window. Unlinked post engagement, future
+events, and future-dated recipes are excluded. Independent event aggregation prevents count
+multiplication. Scores and pagination execute in SQL; owner/tag metadata uses eager joins.
+
+If **no eligible recipe has engagement**, fallback orders by average non-null cooking
+rating descending, recipe creation descending, then ID ascending. With no ratings, this
+naturally returns newest recipes. Fallback is selected before pagination: running out of
+trending results never switches a later page to unrelated fallback recipes. A partially
+filled trending page is not padded. A user-facing fallback badge remains UI work.
+
+### GET /api/v1/recipes/recommended
+
+Requires bearer authentication. Missing, invalid or inactive sessions return 401.
+Preferences come only from the authenticated profile, never a caller-supplied user ID.
+
+Normalization handles case, surrounding whitespace, leading hashtags, and spaces-to-hyphens.
+Cuisine, meal type and tags match exactly after normalization. Order: matching fields /
+distinct normalized tags descending, gravity score descending, newest recipe, ascending ID.
+Several matching tags never duplicate a card. This is culinary-interest matching, not an
+allergy or nutritional guarantee.
+
+Empty or unusable preferences return highest average cooking rating first, newest recipes
+on ties, then ascending ID. Unrated recipes follow rated ones; with no ratings this becomes
+a newest-recipes list. This reconciles the spec's top-rated requirement with the intent's
+newest/high-rated cold-start language. Real preferences with no matches return `[]`.
+
+### Policy and verification boundary
+
+Formula weights (2/3/5), gravity offset (2 hours), and exponent (1.5) are named constants
+from the Sprint 4 specification, not environment settings. The previous `TRENDING_*`
+settings are obsolete and removed. SQLite behavior is covered by API/query tests;
+PostgreSQL execution still requires staging verification. No migration is required.

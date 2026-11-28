@@ -18,6 +18,20 @@ export const MEAL_TYPES = [
 ] as const;
 export const DIFFICULTIES = ["easy", "medium", "hard"] as const;
 
+// US4.3: Keep the discovery card contract aligned with TrendingRecipeOut.
+export interface TrendingRecipe {
+  id: number;
+  title: string;
+  image_url: string | null;
+  cuisine: string | null;
+  difficulty: string;
+  cook_time_mins: number;
+  author_username: string;
+  trending_score: number;
+  likes_count: number;
+  completed_count: number;
+}
+
 // --- US1.1, US1.2, US1.3: User Profile & Authentication Data Model ---
 export interface User {
   id: number;
@@ -121,6 +135,9 @@ export interface SearchFilters {
   meal_type?: string;
   difficulty?: string;
   ingredient?: string;
+  dietary?: string;
+  occasion?: string;
+  max_time?: number;
   offset?: number;
   limit?: number;
 }
@@ -291,6 +308,9 @@ export const api = {
     if (filters.meal_type?.trim()) params.set("meal_type", filters.meal_type.trim());
     if (filters.difficulty?.trim()) params.set("difficulty", filters.difficulty.trim());
     if (filters.ingredient?.trim()) params.set("ingredient", filters.ingredient.trim());
+    if (filters.dietary?.trim()) params.set("dietary", filters.dietary.trim());
+    if (filters.occasion?.trim()) params.set("occasion", filters.occasion.trim());
+    if (filters.max_time !== undefined && filters.max_time !== null) params.set("max_time", String(filters.max_time));
     if (filters.offset !== undefined) params.set("offset", String(filters.offset));
     if (filters.limit !== undefined) params.set("limit", String(filters.limit));
     const queryString = params.toString();
@@ -300,6 +320,14 @@ export const api = {
       false
     );
   },
+
+  // Public discovery must not send a saved token or trigger session-expiry handling.
+  getTrendingRecipes: (limit = 5) =>
+    request<TrendingRecipe[]>(`/api/v1/recipes/trending?limit=${limit}`, {}, false),
+
+  // Private recommendations use the shared token and session-expiry handling.
+  getRecommendedRecipes: (limit = 5) =>
+    request<TrendingRecipe[]>(`/api/v1/recipes/recommended?limit=${limit}`),
 
   // --- US1.4: Recipe Creation & Update Endpoints ---
   createRecipe: (recipe: RecipeInput) =>
